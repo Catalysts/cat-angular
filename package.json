@@ -1,45 +1,44 @@
 {
-    "name": "cat-angular",
-    "version": "0.0.1",
-    "description": "Common Catalysts angular js code",
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/Catalysts/cat-angular.git"
-    },
-    "keywords": [
-        "angular",
-        "angularJS",
-        "js",
-        "javascript"
-    ],
-    "author": "Thomas Scheinecker <thomas.scheinecker@catalysts.cc>, Stefan Unterhofer <stefan.unterhofer@catalysts.cc>",
-    "bugs": {
-        "url": "https://github.com/Catalysts/cat-angular/issues"
-    },
-    "homepage": "https://github.com/Catalysts/cat-angular",
-    "devDependencies": {
-        "bower": "^1.3.4",
-        "gulp": "^3.7.0",
-        "gulp-bower-files": "^0.2.4",
-        "gulp-clean": "^0.3.0",
-        "gulp-concat": "^2.2.0",
-        "gulp-footer": "^1.0.4",
-        "gulp-header": "^1.0.2",
-        "gulp-jshint": "^1.6.2",
-        "gulp-less": "^1.2.3",
-        "gulp-newer": "^0.3.0",
-        "gulp-ng-html2js": "^0.1.7",
-        "gulp-uglify": "^0.3.0",
-        "gulp-rename": "^1.2.0",
-        "gulp-replace": "^0.3.0",
-        "lodash": "^2.4.1",
-        "karma": "^0.12.16",
-        "phantomjs": "^1.9.7-8",
-        "lazypipe": "^0.2.1",
-        "karma-jasmine": "^0.1.5",
-        "karma-phantomjs-launcher": "^0.1.4",
-        "karma-coverage": "^0.2.4",
-        "karma-ng-html2js-preprocessor": "^0.1.0",
-        "jshint-stylish": "^0.2.0"
-    }
+  "name": "cat-angular",
+  "version": "0.0.1",
+  "description": "Common Catalysts angular js code",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Catalysts/cat-angular.git"
+  },
+  "keywords": [
+    "angular",
+    "angularJS",
+    "js",
+    "javascript"
+  ],
+  "author": "Thomas Scheinecker <thomas.scheinecker@catalysts.cc>, Stefan Unterhofer <stefan.unterhofer@catalysts.cc>",
+  "bugs": {
+    "url": "https://github.com/Catalysts/cat-angular/issues"
+  },
+  "homepage": "https://github.com/Catalysts/cat-angular",
+  "devDependencies": {
+    "bower": "^1.3.4",
+    "gulp": "^3.7.0",
+    "gulp-bower-files": "^0.2.4",
+    "gulp-clean": "^0.3.0",
+    "gulp-concat": "^2.2.0",
+    "gulp-footer": "^1.0.4",
+    "gulp-header": "^1.0.2",
+    "gulp-jshint": "^1.6.2",
+    "gulp-less": "^1.2.3",
+    "gulp-ng-html2js": "^0.1.7",
+    "gulp-uglify": "^0.3.0",
+    "gulp-rename": "^1.2.0",
+    "gulp-replace": "^0.3.0",
+    "lodash": "^2.4.1",
+    "karma": "^0.12.16",
+    "phantomjs": "^1.9.7-8",
+    "lazypipe": "^0.2.1",
+    "karma-jasmine": "^0.1.5",
+    "karma-phantomjs-launcher": "^0.1.4",
+    "karma-coverage": "^0.2.4",
+    "karma-ng-html2js-preprocessor": "^0.1.0",
+    "jshint-stylish": "^0.2.0"
+  }
 }

@@ -1,11 +1,12 @@
 {
     "name": "cat-angular",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "homepage": "https://github.com/Catalysts/cat-angular",
     "authors": [
         "Thomas Scheinecker <thomas.scheinecker@catalysts.cc>",
         "Stefan Unterhofer <stefan.unterhofer@catalysts.cc>"
     ],
+    "license": "Apache License, Version 2.0",
     "description": "Common Catalysts angular js code",
     "main": [
         "cat-angular.css",

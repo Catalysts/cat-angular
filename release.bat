@@ -5,3 +5,9 @@ cd ..
 git commit -a -m %*
 git tag %*
 git submodule update
+cd dist
+git push
+git push origin tags/%*
+cd ..
+git push
+git push origin tags/%*
