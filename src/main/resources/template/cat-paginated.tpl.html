@@ -1,0 +1,25 @@
+<div ng-cloak>
+    <div ng-if="searchProps" class="row search">
+        <div class="col-sm-3 pull-right" ng-repeat="prop in searchProps">
+            <input class="form-control" placeholder="Search by {{prop}}" ng-model="search[prop]"
+                   cat-focus-on-shortcut="alt+f">
+        </div>
+    </div>
+    <div class="row text-center" ng-if="!isSinglePageList && count !== 0">
+        <pagination total-items="count" items-per-page="pagination.size" page="pagination.page" max-size="10"
+                    class="pagination-sm" boundary-links="true" rotate="false"></pagination>
+    </div>
+    <div class="row text-center">
+        <div class="alert alert-info" style="margin: 20px 0;" ng-if="count !== 0">
+            {{count}} Einträge gefunden. Einträge {{firstResult}}-{{lastResult}}
+        </div>
+        <div class="alert alert-info" style="margin: 20px 0;" ng-if="count === 0">
+            Keine Einträge gefunden
+        </div>
+    </div>
+    <div class="row" ng-transclude ng-show="count !== 0"></div>
+    <div class="row text-center" ng-if="!isSinglePageList && count !== 0">
+        <pagination total-items="count" items-per-page="pagination.size" page="pagination.page" max-size="10"
+                    class="pagination-sm" boundary-links="true" rotate="false"></pagination>
+    </div>
+</div>

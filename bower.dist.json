@@ -1,0 +1,26 @@
+{
+    "name": "cat-angular",
+    "version": "0.0.1",
+    "homepage": "https://github.com/Catalysts/cat-angular",
+    "authors": [
+        "Thomas Scheinecker <thomas.scheinecker@catalysts.cc>",
+        "Stefan Unterhofer <stefan.unterhofer@catalysts.cc>"
+    ],
+    "description": "Common Catalysts angular js code",
+    "main": [
+        "cat-angular.css",
+        "cat-angular.min.js",
+        "cat-angular.tpl.min.js"
+    ],
+    "keywords": [
+        "angular",
+        "angularJS",
+        "js",
+        "javascript"
+    ],
+    "dependencies": {
+        "angular": "1.2.16",
+        "lodash": "2.4.1",
+        "angular-spinner": "0.5.0"
+    }
+}

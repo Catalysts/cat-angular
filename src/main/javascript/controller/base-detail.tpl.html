@@ -1,0 +1,38 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="pull-right edit-buttons" ng-if="!editDetail && !!editTemplate">
+            <div class="btn-group">
+                <button type="button" class="btn btn-xs btn-default" cat-confirm-click cat-on-confirm="remove()"><span
+                        class="glyphicon glyphicon-trash"></span> Delete
+                </button>
+                <button type="button" class="btn btn-xs btn-default" ng-click="edit()"
+                        cat-activate-on-shortcut="alt+e"><span class="glyphicon glyphicon-edit"></span> Edit
+                </button>
+            </div>
+            &nbsp;
+            <a ng-href="#{{baseUrl}}/new" class="btn btn-xs btn-default" cat-activate-on-shortcut="alt+n"><span
+                    class="glyphicon glyphicon-plus"></span> New</a>
+        </div>
+        <h5 ng-if="exists">{{title}}</h5>
+        <h5 ng-if="!exists">New</h5>
+    </div>
+    <!-- create form element if editing -->
+    <div class="panel-body">
+        <form name="form" cat-warn-on-nav-if-dirty novalidate class="form-horizontal"
+              ng-if="!!editDetail && !!editTemplate">
+            <div ng-include="editTemplate"></div>
+        </form>
+
+        <div ng-include="mainViewTemplate" ng-if="!editDetail"></div>
+    </div>
+    <div class="panel-footer text-right" ng-if="!!editDetail">
+        <button type="button" class="btn btn-xs btn-default" ng-click="cancelEdit()"
+                cat-activate-on-shortcut="alt+esc"><span class="glyphicon glyphicon-remove"></span> Cancel
+        </button>
+        <button type="submit" class="btn btn-xs btn-primary" ng-click="save()"
+                ng-disabled="form.$pristine"><span class="glyphicon glyphicon-floppy-disk"></span>
+            Save
+        </button>
+    </div>
+</div>
+<div ng-if="!!additionalViewTemplate" ng-include="additionalViewTemplate"></div>
