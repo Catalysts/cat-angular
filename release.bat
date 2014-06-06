@@ -4,7 +4,7 @@ git tag %*
 cd ..
 git commit -a -m %*
 git tag %*
-git submodule update
+git submodule update --remote
 cd dist
 git push
 git push origin tags/%*
