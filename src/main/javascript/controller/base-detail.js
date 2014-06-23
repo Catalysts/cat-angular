@@ -1,28 +1,58 @@
 'use strict';
-window.BaseDetailController = function ($scope, $routeParams, $breadcrumbs, $location, $window, endpoint, tempalteUrls, baseUrl, Model, $globalMessages) {
+window.BaseDetailController = function ($injector, $scope, endpoint, templateUrls, baseUrl, Model) {
+    $injector.invoke(window.BaseDetailController2, this, {
+        $scope: $scope,
+        config: {
+            endpoint: endpoint,
+            Model: Model,
+            templateUrls: templateUrls,
+            baseUrl: baseUrl
+        }
+    });
+};
+window.BaseDetailController.$inject = ['$injector', '$scope', 'endpoint', 'templateUrls', 'baseUrl', 'Model'];
 
-    $scope.detail = undefined;
+window.BaseDetailController2 = function ($scope, $routeParams, $breadcrumbs, $location, $window, $globalMessages, config) {
+
     $scope.editDetail = undefined;
     $scope.$fieldErrors = {};
 
-    $scope.editTemplate = tempalteUrls.edit;
+    var endpoint = config.endpoint;
+    var baseUrl = config.baseUrl;
+    var templateUrls = config.templateUrls;
+    var Model = config.Model;
 
-    if (_.isObject(tempalteUrls.view)) {
-        $scope.mainViewTemplate = tempalteUrls.view.main;
-        $scope.additionalViewTemplate = tempalteUrls.view.additional;
+    $scope.uiStack = config.uiStack;
+
+    $scope.editTemplate = templateUrls.edit;
+
+    if (_.isObject(templateUrls.view)) {
+        $scope.mainViewTemplate = templateUrls.view.main;
+        $scope.additionalViewTemplate = templateUrls.view.additional;
     } else {
-        $scope.mainViewTemplate = tempalteUrls.view;
+        $scope.mainViewTemplate = templateUrls.view;
     }
 
     $scope.baseUrl = baseUrl;
 
+    $scope.title = function () {
+        var data = $scope.detail;
+        if (_.isUndefined(data)) {
+            return '';
+        }
+        return !!data.breadcrumbTitle ? data.breadcrumbTitle() : (!!data.name ? data.name : data.id);
+    };
+
+    var update = function () {
+        $breadcrumbs.replaceLast({
+            title: $scope.title()
+        });
+    };
+
     var reload = function () {
         endpoint.get($routeParams.id).then(function (data) {
-            $scope.title = !!data.breadcrumbTitle ? data.breadcrumbTitle() : (!!data.name ? data.name : data.id);
             $scope.detail = data;
-            $breadcrumbs.replaceLast({
-                title: $scope.title
-            });
+            update();
         });
     };
 
@@ -64,8 +94,8 @@ window.BaseDetailController = function ($scope, $routeParams, $breadcrumbs, $loc
                 $location.path(baseUrl + '/' + data.id);
             } else {
                 $scope.editDetail = undefined;
-                $scope.title = !!data.breadcrumbTitle ? data.breadcrumbTitle() : data.name;
                 $scope.detail = data;
+                update();
             }
         }, function (response) {
             if (!response.data.fieldErrors) {
@@ -85,10 +115,18 @@ window.BaseDetailController = function ($scope, $routeParams, $breadcrumbs, $loc
     };
 
     if ($scope.exists) {
-        reload();
+        if (_.isUndefined($scope.detail)) {
+            reload();
+        } else {
+            update();
+        }
     } else {
-        $scope.add();
+        if (_.isUndefined($scope.detail)) {
+            $scope.add();
+        } else {
+            $scope.edit();
+        }
     }
 };
 
-window.BaseDetailController.$inject = ['$scope', '$routeParams', '$breadcrumbs', '$location', '$window', 'endpoint', 'templateUrls', 'baseUrl', 'Model', '$globalMessages'];
+window.BaseDetailController2.$inject = ['$scope', '$routeParams', '$breadcrumbs', '$location', '$window', '$globalMessages', 'config'];
