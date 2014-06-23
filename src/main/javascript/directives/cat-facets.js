@@ -13,13 +13,21 @@ angular.module('cat')
                 if (scope.facets === undefined) throw 'Attribute facets must be set!';
             },
             controller: function ($scope, $location, $rootScope) {
+
                 $scope.isActive = function (facet, term) {
                     var search = $location.search();
                     var name = 'search.' + facet.name;
                     if (!!search[name]) {
-                        return search[name] === term.name;
+                        return !!term && search[name] === term.id;
+                    } else {
+                        return true;
                     }
+                };
 
+                $scope.showAll = function (facet) {
+                    var search = new window.cat.SearchRequest($location.search()).search();
+                    delete search[facet.name];
+                    $rootScope.$broadcast('SearchChanged', search);
                 };
 
                 $scope.facetName = function (facet) {
@@ -31,15 +39,21 @@ angular.module('cat')
                 };
 
                 $scope.setActive = function (facet, term) {
+                    facet.activeTerm = term;
                     var search = new window.cat.SearchRequest($location.search()).search();
-                    search[facet.name] = term.name;
+                    search[facet.name] = term.id;
                     $rootScope.$broadcast('SearchChanged', search);
+
                 };
 
                 $scope.remove = function (facet) {
                     var search = new window.cat.SearchRequest($location.search()).search();
                     delete search[facet.name];
                     $rootScope.$broadcast('SearchChanged', search);
+                };
+
+                $scope.showItem = function (facet, term) {
+                    return $scope.isActive(facet) || $scope.isActive(facet, term);
                 };
             }
         };

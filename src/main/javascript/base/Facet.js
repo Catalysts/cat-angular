@@ -5,6 +5,7 @@ window.cat = window.cat || {};
 window.cat.FacetTerm = function (data) {
     if (data === undefined) data = {};
 
+    this.id = data.id;
     this.name = data.name;
     this.count = data.count;
 };

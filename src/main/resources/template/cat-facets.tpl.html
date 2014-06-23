@@ -1,17 +1,19 @@
 <div class="sidebar">
     <ul class="nav sidenav">
         <li ng-repeat="facet in facets">
-            <h4>{{facetName(facet)}}</h4>
+            <h4>{{facetName(facet)}}
+                <small ng-if="!isActive(facet)">
+                    <a ng-click="showAll(facet)" href="">See all</a>
+                </small>
+            </h4>
             <ul class="nav">
-                <li ng-repeat="term in facet.terms" ng-class="{'active': isActive(facet,term)}">
-                    <span>
-                        <a ng-if="!isActive(facet,term)" href="" ng-click="setActive(facet, term)">{{term.name}}</a>
-                        <span ng-if="isActive(facet,term)">{{term.name}} <a href="" ng-click="remove(facet)"><span
-                                class="glyphicon glyphicon-remove"></span></a></span>
+                <li ng-repeat="term in facet.terms" ng-class="{'active': isActive(facet,term)}" cat-load-more="5">
+                    <a ng-if="showItem(facet,term)" href="" ng-click="setActive(facet,term)">{{term.name}}
                         <span class="text-muted">({{term.count}})</span>
-                    </span>
+                    </a>
                 </li>
             </ul>
         </li>
     </ul>
+
 </div>
