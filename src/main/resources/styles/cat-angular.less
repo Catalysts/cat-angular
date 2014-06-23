@@ -1,3 +1,9 @@
+.opacity(@opacity) {
+  opacity: @opacity;
+  @msOpacity: @opacity * 100;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=@{msOpacity})";
+}
+
 .cat-input + .label {
   float: left;
   margin-bottom: 4px;
@@ -9,4 +15,58 @@
     -moz-padding-start: 0;
     list-style-type: none;
   }
+}
+
+// fade animation
+.ng-hide-animation(@opacity) {
+  &.fade-in {
+    &.ng-hide {
+      &-add, &-remove {
+        transition: 0.2s ease all;
+        display: block !important;
+      }
+      &-add {
+        .opacity(@opacity);
+        &.ng-hide-add-active {
+          .opacity(0);
+        }
+      }
+      &-remove {
+        &.ng-hide-remove-active {
+          .opacity(@opacity);
+        }
+      }
+    }
+  }
+}
+
+.spinner-background {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -30px;
+  margin-left: -30px;
+  background: black;
+  border: 2px solid white;
+  height: 60px;
+  width: 60px;
+  z-index: 4000;
+  border-radius: 5px;
+}
+
+.spinner-backdrop {
+  z-index: 3000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #000;
+  .opacity(0.5);
+  .ng-hide-animation(0.5);
+}
+
+.spinner {
+  /* important is needed to override element style attribute set by spin.js */
+  position: fixed !important;
 }

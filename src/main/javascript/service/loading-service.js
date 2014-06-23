@@ -5,28 +5,40 @@
 
 angular.module('cat.service')
     .factory('loadingService', function ($rootScope, usSpinnerService, $timeout) {
+        var timeout = 50;
+        var animationDuration = 200;
         var activeCount = 0;
-        var timer;
+        var startTime;
+        var startTimer, stopTimer;
 
         var start = function () {
-            if (!activeCount) {
-                timer = $timeout(function () {
+            if (!activeCount && !startTimer) {
+                if (!!stopTimer) {
+                    $timeout.cancel(stopTimer);
+                    stopTimer = undefined;
+                }
+                startTimer = $timeout(function () {
                     usSpinnerService.spin('loading-spinner');
                     $rootScope.loading = true;
-                }, 50);
+                    startTime = new Date().getTime();
+                }, timeout);
             }
             activeCount++;
         };
 
         var stop = function () {
             activeCount--;
-            if (!activeCount) {
-                if (!!timer) {
-                    $timeout.cancel(timer);
-                    timer = undefined;
+            if (!activeCount && !stopTimer) {
+                if (!!startTimer) {
+                    $timeout.cancel(startTimer);
+                    startTimer = undefined;
                 }
-                usSpinnerService.stop('loading-spinner');
-                $rootScope.loading = false;
+                var now = new Date().getTime();
+                var stopTimeout = timeout + (Math.max((animationDuration - (now - startTime)), 0));
+                stopTimer = $timeout(function () {
+                    usSpinnerService.stop('loading-spinner');
+                    $rootScope.loading = false;
+                }, stopTimeout);
             }
         };
 
