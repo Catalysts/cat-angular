@@ -31,7 +31,9 @@ function MenuGroup(groupId, options) {
     };
 
     this.getEntries = function () {
-        return _menuEntries;
+        return _.sortBy(_menuEntries, function (entry) {
+            return entry.getOptions().sortOrder || 10000;
+        });
     };
 
     this.isGroup = function () {
@@ -62,14 +64,18 @@ function Menu(menuId, options) {
     };
 
     this.getGroups = function () {
-        return _.map(_menuGroups, function (menuGroup) {
+        return _.sortBy(_.map(_menuGroups, function (menuGroup) {
             return menuGroup;
+        }), function (menuGroup) {
+            return menuGroup.getOptions().sortOrder || 10000;
         });
     };
 
     this.getEntries = function (groupId) {
         if (_.isUndefined(groupId)) {
-            return _menuEntries;
+            return _.sortBy(_menuEntries, function (entry) {
+                return entry.getOptions().sortOrder || 10000;
+            });
         }
         return _menuGroups[groupId].getEntries();
     };
