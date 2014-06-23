@@ -11,6 +11,8 @@ window.cat.SearchRequest = function (searchUrlParams) {
     var _sort = {};
     var _search = {};
 
+    var lastEncoded;
+
     if (!!searchUrlParams && !_.isEmpty(searchUrlParams)) {
         _pagination.page = searchUrlParams.page || _pagination.page;
         _pagination.size = searchUrlParams.size || _pagination.size;
@@ -24,7 +26,7 @@ window.cat.SearchRequest = function (searchUrlParams) {
     }
 
     var _encodeSort = function () {
-        return (!!_sort.property ? 'sort=' + _sort.property + ':' + (_sort.isDesc ? 'desc' : 'asc') : '');
+        return (!!_sort.property ? 'sort=' + _sort.property + ':' + ((_sort.isDesc === true || _sort.isDesc === 'true') ? 'desc' : 'asc') : '');
     };
 
     var _encodePagination = function () {
@@ -62,6 +64,10 @@ window.cat.SearchRequest = function (searchUrlParams) {
         return '';
     };
 
+    var urlEndoded = function () {
+        return _([_encodePagination(), _encodeSort(), _encodeSearch()]).reduce(_concatenate);
+    };
+
     this.pagination = function (pagination) {
         if (pagination === undefined) {
             return _pagination;
@@ -90,7 +96,12 @@ window.cat.SearchRequest = function (searchUrlParams) {
     };
 
     this.urlEncoded = function () {
-        return _([_encodePagination(), _encodeSort(), _encodeSearch()]).reduce(_concatenate);
+        lastEncoded = urlEndoded();
+        return lastEncoded;
+    };
+
+    this.isDirty = function () {
+        return lastEncoded !== urlEndoded();
     };
 
     this.setSearch = function ($location) {

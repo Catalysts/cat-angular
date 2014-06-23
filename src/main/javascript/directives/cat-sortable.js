@@ -7,7 +7,8 @@ angular.module('cat')
                 var title = element.text();
                 var property = attrs.catSortable || title.toLowerCase().trim();
 
-                scope.sort = { property: undefined, isDesc: false};
+                // todo - make configurable
+                scope.sort = scope.listData.searchRequest.sort();
 
                 var icon = 'glyphicon-sort-by-attributes';
 
