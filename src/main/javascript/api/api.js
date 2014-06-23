@@ -73,6 +73,12 @@ function ApiEndpoint(url, endpointName, settings, $http) {
         });
     };
 
+    this.info = function (id) {
+        return $http.get(_endpointUrl + '/' + id + '?info').then(function (response) {
+            return response.data;
+        });
+    };
+
     this.save = function (object, pathParams) {
         if (!!object.id) {
             return $http.put(_endpointUrl + '/' + object.id, removeEndpoints(object)).then(function (response) {
