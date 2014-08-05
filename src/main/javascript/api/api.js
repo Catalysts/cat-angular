@@ -32,6 +32,10 @@ function ApiEndpoint(url, endpointName, settings, $http) {
         return object;
     };
 
+    this.getEndpointUrl = function () {
+        return _endpointUrl;
+    };
+
     this.list = function (searchRequest) {
         var searchQuery = !!searchRequest && searchRequest instanceof window.cat.SearchRequest ? '?' + searchRequest.urlEncoded() : '';
         return $http.get(_endpointUrl + searchQuery).then(function (response) {
