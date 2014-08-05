@@ -6,6 +6,7 @@
     },
     "dependencies": {
         "angular": "1.2.16",
+        "angular-route": "1.2.16",
         "lodash": "2.4.1",
         "angular-spinner": "0.5.0"
     }
