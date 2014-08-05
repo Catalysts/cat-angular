@@ -1,19 +1,7 @@
 'use strict';
-window.BaseDetailController = function ($injector, $scope, endpoint, templateUrls, baseUrl, Model) {
-    $injector.invoke(window.BaseDetailController2, this, {
-        $scope: $scope,
-        config: {
-            endpoint: endpoint,
-            Model: Model,
-            templateUrls: templateUrls,
-            baseUrl: baseUrl
-        }
-    });
-};
-window.BaseDetailController.$inject = ['$injector', '$scope', 'endpoint', 'templateUrls', 'baseUrl', 'Model'];
 
-window.BaseDetailController2 = function ($scope, $routeParams, $breadcrumbs, $location, $window, $globalMessages, config) {
-
+function CatBaseDetailController($scope, $routeParams, $breadcrumbs, $location, $window, $globalMessages, $controller, config, detail, parent) {
+    $scope.detail = detail;
     $scope.editDetail = undefined;
     $scope.$fieldErrors = {};
 
@@ -127,6 +115,9 @@ window.BaseDetailController2 = function ($scope, $routeParams, $breadcrumbs, $lo
             $scope.edit();
         }
     }
-};
 
-window.BaseDetailController2.$inject = ['$scope', '$routeParams', '$breadcrumbs', '$location', '$window', '$globalMessages', 'config'];
+    // extend with custom controller
+    $controller(config.controller, {$scope: $scope, detail: detail, parent: parent, config: config});
+}
+
+angular.module('cat').controller('CatBaseDetailController', CatBaseDetailController);
