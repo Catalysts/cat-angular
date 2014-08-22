@@ -40,12 +40,12 @@ var listRoute = function (config) {
 };
 
 var detailRoute = function (config) {
-    var endpointName, parentEndpointName;
+    var endpointName, parentEndpointNames;
 
     if (_.isString(config.endpoint)) {
         endpointName = config.endpoint;
     } else if (_.isObject(config.endpoint)) {
-        parentEndpointName = config.endpoint.parent;
+        parentEndpointNames = config.endpoint.parents;
         endpointName = config.endpoint.name;
     } else {
         endpointName = toLowerCaseName(config.name);
@@ -53,8 +53,19 @@ var detailRoute = function (config) {
 
     var Model = config.model || window.cat.util.defaultModelResolver(config.name);
 
-    var parentUrl = (parentEndpointName ? parentEndpointName + '/' : '');
-    var parentTemplateNamePrefix = (parentEndpointName ? parentEndpointName + '-' : '');
+    var parentUrl = '';
+    var parentTemplateNamePrefix = '';
+
+
+    if (_.isArray(parentEndpointNames)) {
+        _.forEach(parentEndpointNames, function (parentEndpointName) {
+            parentUrl += parentEndpointName;
+            parentUrl += '/';
+
+            parentTemplateNamePrefix += parentEndpointName;
+            parentTemplateNamePrefix += '-';
+        });
+    }
 
     var templateUrls = {
         edit: parentUrl + endpointName + '/' + parentTemplateNamePrefix + endpointName + '-details-edit.tpl.html',
@@ -68,55 +79,105 @@ var detailRoute = function (config) {
         };
     }
 
+    var resolvedConfig;
+
+    function getConfig(catApiService, $route) {
+        if (!_.isUndefined(resolvedConfig)) {
+            return resolvedConfig;
+        }
+
+        var currentRoute = $route.current.originalPath;
+        var endpoint = catApiService[endpointName];
+
+        if (_.isArray(parentEndpointNames)) {
+            _.forEach(parentEndpointNames, function (parentEndpointName, idx) {
+                var currentEndpoint;
+                if (idx === 0) {
+                    // root api endpoint
+                    currentEndpoint = catApiService[parentEndpointName];
+                } else {
+                    // child api endpoint
+                    currentEndpoint = endpoint[parentEndpointName];
+                }
+                endpoint = currentEndpoint.res($route.current.params[parentEndpointName + 'Id']);
+            });
+
+            endpoint = endpoint[endpointName];
+        }
+
+        var baseUrl = config.baseUrl;
+
+        if (_.isUndefined(baseUrl)) {
+            var baseUrlTemplate = currentRoute.substring(0, currentRoute.lastIndexOf('/'));
+            if (_.isArray(parentEndpointNames)) {
+                _.forEach(parentEndpointNames, function (parentEndpointName) {
+                    var idName = parentEndpointName + 'Id';
+                    baseUrl = baseUrlTemplate.replace(':' + idName, $route.current.params[idName]);
+                });
+            } else {
+                baseUrl = baseUrlTemplate;
+            }
+        }
+
+        resolvedConfig = {
+            controller: config.controller || config.name + 'DetailsController',
+            endpoint: endpoint,
+            Model: Model,
+            templateUrls: templateUrls,
+            baseUrl: baseUrl
+        };
+
+        return resolvedConfig;
+    }
+
+    function getParentInfo($q, endpoint) {
+        if (!_.isUndefined(endpoint) && !_.isUndefined(endpoint.parentInfo)) {
+            var deferred = $q.defer();
+            var parents = [];
+            endpoint.parentInfo().then(
+                function (parent) {
+                    parents.push(parent);
+                    getParentInfo($q, endpoint.parentEndpoint).then(
+                        function (response) {
+                            parents.push(response);
+                            parents = _.flatten(parents);
+                            deferred.resolve(parents);
+                        },
+                        function (error) {
+                            deferred.reject(error);
+                        }
+                    );
+                }, function (error) {
+                    deferred.reject(error);
+                });
+            return deferred.promise;
+        } else {
+            return $q.when([]);
+        }
+    }
+
     return {
         templateUrl: config.templateUrl || 'template/base-detail.tpl.html',
         controller: 'CatBaseDetailController',
         reloadOnSearch: config.reloadOnSearch,
         resolve: {
             config: function (catApiService, $route) {
-                var currentRoute = $route.current.originalPath;
-                var endpoint = catApiService[endpointName];
-
-                if (!_.isUndefined(parentEndpointName)) {
-                    endpoint = catApiService[parentEndpointName].res($route.current.params[config.endpoint.id])[endpointName];
-                }
-
-                var baseUrl = config.baseUrl;
-
-                if (_.isUndefined(baseUrl)) {
-                    var baseUrlTemplate = currentRoute.substring(0, currentRoute.lastIndexOf('/'));
-                    if (!_.isUndefined(parentEndpointName)) {
-                        baseUrl = baseUrlTemplate.replace(':' + config.endpoint.id, $route.current.params[config.endpoint.id]);
-                    } else {
-                        baseUrl = baseUrlTemplate;
-                    }
-                }
-
-                return {
-                    controller: config.controller || config.name + 'DetailsController',
-                    endpoint: endpoint,
-                    Model: Model,
-                    templateUrls: templateUrls,
-                    baseUrl: baseUrl
-                };
+                return getConfig(catApiService, $route);
             },
-            parent: ['catApiService', '$route', function (catApiService, $route) {
-                if (_.isUndefined(parentEndpointName)) {
+            parents: ['catApiService', '$route', '$q', function (catApiService, $route, $q) {
+                if (_.isUndefined(parentEndpointNames)) {
                     return null;
                 }
 
-                return catApiService[parentEndpointName].info($route.current.params[config.endpoint.id]);
+                return getParentInfo($q, getConfig(catApiService, $route).endpoint);
             }],
             detail: ['catApiService', '$route', function (catApiService, $route) {
                 var detailId = $route.current.params.id;
                 if (detailId === 'new') {
                     return new Model();
                 }
-                if (_.isUndefined(parentEndpointName)) {
-                    return catApiService[endpointName].get(detailId);
-                } else {
-                    return catApiService[parentEndpointName].res($route.current.params[config.endpoint.id])[endpointName].get(detailId);
-                }
+
+                return getConfig(catApiService, $route).endpoint.get(detailId);
             }]
         }
     };
