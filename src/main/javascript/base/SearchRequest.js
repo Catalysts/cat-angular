@@ -2,6 +2,15 @@
 
 window.cat = window.cat || {};
 
+/**
+ * A 'SearchRequest' model used by the catApiService to provide the backend with certain filter, order, page and size
+ * parameters.
+ *
+ *
+ * @param {Object} [searchUrlParams] an object representing the search parameters of the current url, which are
+ * used to initialize the properties of the SearchRequest
+ * @constructor
+ */
 window.cat.SearchRequest = function (searchUrlParams) {
 
     var _pagination = {
@@ -46,19 +55,7 @@ window.cat.SearchRequest = function (searchUrlParams) {
 
     var _encodeSearch = function () {
         if (!!_search && !_.isEmpty(_search)) {
-            return _.reduce(_.map(_.keys(_search), function (key) {
-                var value = _search[key];
-                if (_.isUndefined(value) || _.isNull(value)) {
-                    return undefined;
-                }
-                if (_.isString(value)) {
-                    value = value.trim();
-                    if (value.length === 0) {
-                        return undefined;
-                    }
-                }
-                return key + '=' + value;
-            }), _concatenate);
+            return $.param(_search);
         }
 
         return '';
@@ -68,6 +65,10 @@ window.cat.SearchRequest = function (searchUrlParams) {
         return _([_encodePagination(), _encodeSort(), _encodeSearch()]).reduce(_concatenate);
     };
 
+    /**
+     * @param {Object} [pagination] if given this object overrides the current 'pagination' state
+     * @returns {{}} the object representing the current pagination state
+     */
     this.pagination = function (pagination) {
         if (pagination === undefined) {
             return _pagination;
@@ -77,6 +78,11 @@ window.cat.SearchRequest = function (searchUrlParams) {
         }
     };
 
+
+    /**
+     * @param {Object} [sort] if given this object overrides the current 'sort' state
+     * @returns {{}} the object representing the current sort state
+     */
     this.sort = function (sort) {
         if (sort === undefined) {
             return _sort;
@@ -86,6 +92,10 @@ window.cat.SearchRequest = function (searchUrlParams) {
         }
     };
 
+    /**
+     * @param {Object} [search] if given this object overrides the current 'search' state
+     * @returns {{}} the object representing the current search state
+     */
     this.search = function (search) {
         if (search === undefined) {
             return _search;
@@ -95,15 +105,27 @@ window.cat.SearchRequest = function (searchUrlParams) {
         }
     };
 
+    /**
+     * @returns {String} a string representation of the current SearchRequest which can be used as part of the request
+     * url
+     */
     this.urlEncoded = function () {
         lastEncoded = urlEndoded();
         return lastEncoded;
     };
 
+    /**
+     * @returns {boolean} <code>true</code> if something changed since the last time {@link this#urlEncoded} was called
+     */
     this.isDirty = function () {
         return lastEncoded !== urlEndoded();
     };
 
+    /**
+     * A small helper function to update the current url to correctly reflect all properties set within this
+     * SearchRequest
+     * @param $location the angular $location service
+     */
     this.setSearch = function ($location) {
         var ret = {};
         ret.page = _pagination.page;
