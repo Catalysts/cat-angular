@@ -73,12 +73,12 @@ var detailRoute = function (config) {
         controller: 'CatBaseDetailController',
         reloadOnSearch: config.reloadOnSearch,
         resolve: {
-            config: function ($api, $route) {
+            config: function (catApiService, $route) {
                 var currentRoute = $route.current.originalPath;
-                var endpoint = $api[endpointName];
+                var endpoint = catApiService[endpointName];
 
                 if (!_.isUndefined(parentEndpointName)) {
-                    endpoint = $api[parentEndpointName].res($route.current.params[config.endpoint.id])[endpointName];
+                    endpoint = catApiService[parentEndpointName].res($route.current.params[config.endpoint.id])[endpointName];
                 }
 
                 var baseUrl = config.baseUrl;
@@ -100,22 +100,22 @@ var detailRoute = function (config) {
                     baseUrl: baseUrl
                 };
             },
-            parent: ['$api', '$route', function ($api, $route) {
+            parent: ['catApiService', '$route', function (catApiService, $route) {
                 if (_.isUndefined(parentEndpointName)) {
                     return null;
                 }
 
-                return $api[parentEndpointName].info($route.current.params[config.endpoint.id]);
+                return catApiService[parentEndpointName].info($route.current.params[config.endpoint.id]);
             }],
-            detail: ['$api', '$route', function ($api, $route) {
+            detail: ['catApiService', '$route', function (catApiService, $route) {
                 var detailId = $route.current.params.id;
                 if (detailId === 'new') {
                     return new Model();
                 }
                 if (_.isUndefined(parentEndpointName)) {
-                    return $api[endpointName].get(detailId);
+                    return catApiService[endpointName].get(detailId);
                 } else {
-                    return $api[parentEndpointName].res($route.current.params[config.endpoint.id])[endpointName].get(detailId);
+                    return catApiService[parentEndpointName].res($route.current.params[config.endpoint.id])[endpointName].get(detailId);
                 }
             }]
         }

@@ -4,7 +4,7 @@
 
 'use strict';
 
-function CatViewServiceProvider(catRouteServiceProvider, $apiProvider) {
+function CatViewServiceProvider(catRouteServiceProvider, catApiServiceProvider) {
     var viewNames = [];
     var endpointNames = [];
 
@@ -31,7 +31,7 @@ function CatViewServiceProvider(catRouteServiceProvider, $apiProvider) {
         viewNames.push(name);
         endpointNames.push(endpointName);
 
-        $apiProvider.endpoint(name.toLowerCase(), endpoint);
+        catApiServiceProvider.endpoint(name.toLowerCase(), endpoint);
         catRouteServiceProvider.listAndDetailRoute(baseUrl, name, config);
     };
 

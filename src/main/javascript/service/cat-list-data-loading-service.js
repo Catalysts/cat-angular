@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('cat.service')
-    .factory('catListDataLoadingService', ['$api', '$route', '$q', function CatListDataLoadingService($api, $route, $q) {
+    .factory('catListDataLoadingService', ['catApiService', '$route', '$q', function CatListDataLoadingService(catApiService, $route, $q) {
         var load = function (endpoint, searchRequest) {
             var deferred = $q.defer();
             endpoint.list(searchRequest).then(
@@ -38,7 +38,7 @@ angular.module('cat.service')
             if (!!defaultSort && !$route.current.params.sort) {
                 searchRequest.sort(defaultSort);
             }
-            return load($api[endpointName], searchRequest);
+            return load(catApiService[endpointName], searchRequest);
         };
 
         return {

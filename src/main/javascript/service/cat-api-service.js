@@ -1,16 +1,23 @@
 'use strict';
 
-function ApiEndpoint(url, endpointName, settings, $http) {
-    var _endpointUrl = url + (settings.url || endpointName);
-    var ModelClass = settings.model;
-    var _childEndpointSettings = settings.children;
+function CatApiEndpoint(url, endpointConfig, $http) {
+    var that = this;
+
+    var _endpointName = endpointConfig.name;
+    var _endpointUrl = url + (endpointConfig.config.url || endpointConfig.name);
+    var ModelClass = endpointConfig.config.model;
+    var _childEndpointSettings = endpointConfig.children;
 
     var _res = _.memoize(function (id) {
         var url = _endpointUrl + '/' + id + '/';
         var ret = {};
         _.forEach(_.keys(_childEndpointSettings), function (path) {
-            var settings = _childEndpointSettings[path];
-            ret[path] = new ApiEndpoint(url, path, settings, $http);
+            ret[path] = new CatApiEndpoint(url, _childEndpointSettings[path], $http);
+            ret[path].parentEndpoint = that;
+            ret[path].parentId = id;
+            ret[path].parentInfo = function () {
+                return that.info(id);
+            };
         });
         return ret;
     });
@@ -34,6 +41,10 @@ function ApiEndpoint(url, endpointName, settings, $http) {
 
     this.getEndpointUrl = function () {
         return _endpointUrl;
+    };
+
+    this.getEndpointName = function () {
+        return _endpointName;
     };
 
     this.list = function (searchRequest) {
@@ -71,7 +82,7 @@ function ApiEndpoint(url, endpointName, settings, $http) {
         });
     };
 
-    this.get = function (id, pathParams) {
+    this.get = function (id) {
         return $http.get(_endpointUrl + '/' + id).then(function (response) {
             return mapResponse(response.data);
         });
@@ -83,7 +94,7 @@ function ApiEndpoint(url, endpointName, settings, $http) {
         });
     };
 
-    this.save = function (object, pathParams) {
+    this.save = function (object) {
         if (!!object.id) {
             return $http.put(_endpointUrl + '/' + object.id, removeEndpoints(object)).then(function (response) {
                 return mapResponse(response.data);
@@ -95,29 +106,59 @@ function ApiEndpoint(url, endpointName, settings, $http) {
         }
     };
 
-    this.remove = function (id, pathParams) {
+    this.remove = function (id) {
         return $http({method: 'DELETE', url: _endpointUrl + '/' + id});
     };
 }
 
-function ApiProvider() {
+function EndpointConfig(name, config) {
+    var that = this;
+    this.config = config || {};
+    this.children = {};
+    this.name = name;
+
+    this.child = function (childName, childConfig) {
+        if (!_.isUndefined(childConfig)) {
+            this.children[childName] = new EndpointConfig(childName, childConfig);
+            this.children[childName].parent = this;
+        }
+
+        return this.children[childName];
+    };
+
+    // this takes care of mapping the 'old' config style to the new builder style
+    if (!_.isUndefined(this.config.children)) {
+        var childrenConfig = this.config.children;
+        delete this.config.children;
+        _.forEach(_.keys(childrenConfig), function (childName) {
+            that.child(childName, childrenConfig[childName]);
+        });
+    }
+}
+
+// this is saved outside so that both $api and catApiService use the same config
+var _endpoints = {};
+
+function CatApiServiceProvider() {
     var _urlPrefix = '/api/';
-    var _endpoints = {};
 
     this.endpoint = function (path, settings) {
-        _endpoints[path] = settings;
+        if (!_.isUndefined(settings)) {
+            _endpoints[path] = new EndpointConfig(path, settings);
+        }
+        return _endpoints[path];
     };
 
     this.$get = ['$http', function ($http) {
-        var $api = {};
+        var catApiService = {};
 
         _.forEach(_.keys(_endpoints), function (path) {
-            var settings = _endpoints[path];
-            $api[path] = new ApiEndpoint(_urlPrefix, path, settings, $http);
+            catApiService[path] = new CatApiEndpoint(_urlPrefix, _endpoints[path], $http);
         });
 
-        return $api;
+        return catApiService;
     }];
 }
-
-angular.module('cat.api').provider('$api', ApiProvider);
+angular.module('cat.service.api').provider('catApiService', CatApiServiceProvider);
+// $api is deprecated, will be removed in a future release
+angular.module('cat.service.api').provider('$api', CatApiServiceProvider);
