@@ -1,6 +1,6 @@
 'use strict';
-angular.module('cat').
-    filter('replaceText', function () {
+angular.module('cat')
+    .filter('replaceText', function CatReplaceTetFilter() {
         return function (text, pattern, options, replacement) {
             if (pattern === undefined)
                 pattern = '\n';

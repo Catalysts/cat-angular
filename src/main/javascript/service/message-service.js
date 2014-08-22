@@ -3,7 +3,7 @@
  */
 'use strict';
 
-angular.module('cat.service').service('$globalMessages', function ($rootScope) {
+angular.module('cat.service').service('$globalMessages', function CatGlobalMessages($rootScope) {
     var messages = {};
 
     var self = this;

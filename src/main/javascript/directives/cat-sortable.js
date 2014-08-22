@@ -1,9 +1,9 @@
 'use strict';
 angular.module('cat')
-    .directive('catSortable', function ($compile, $log) {
+    .directive('catSortable', function CatSortableDirective($compile) {
         return {
             restrict: 'AC',
-            link: function (scope, element, attrs) {
+            link: function CatSortableLink(scope, element, attrs) {
                 var title = element.text();
                 var property = attrs.catSortable || title.toLowerCase().trim();
 
@@ -23,7 +23,7 @@ angular.module('cat')
                 element.text('');
                 element.append($compile('<a class="sort-link" href="" ng-click="toggleSort(\'' + property + '\')">' + title + ' <span class="glyphicon" ng-class="{\'' + icon + '\': sort.property == \'' + property + '\' && !sort.isDesc, \'' + icon + '-alt\': sort.property == \'' + property + '\' && sort.isDesc}"></span></a>')(scope));
             },
-            controller: function ($scope) {
+            controller: function CatSortableController($scope) {
                 $scope.toggleSort = function (property) {
                     if ($scope.sort.property === property) {
                         $scope.sort.isDesc = !$scope.sort.isDesc;

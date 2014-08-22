@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('cat')
-    .directive('catFieldErrors', function () {
+    .directive('catFieldErrors', function CatFieldErrorsDirective() {
         return {
             replace: 'true',
             restrict: 'E',

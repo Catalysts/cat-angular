@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('cat.service')
-    .factory('errorHttpInterceptor', function ($q, $globalMessages, loadingService) {
+    .factory('errorHttpInterceptor', function CatErrorHttpInterceptor($q, $globalMessages, loadingService) {
         return {
             'request': function (config) {
                 loadingService.start();

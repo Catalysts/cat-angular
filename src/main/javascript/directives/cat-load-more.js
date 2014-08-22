@@ -1,10 +1,10 @@
 'use strict';
 angular.module('cat')
-    .directive('catLoadMore', function () {
+    .directive('catLoadMore', function CatLoadMoreDirective() {
         return {
             replace: true,
             restrict: 'A',
-            link: function (scope, element, attrs) {
+            link: function CatLoadMoreLink(scope, element, attrs) {
                 var initialCount = parseInt(attrs.catLoadMore);
                 scope.$parent.elementsCount = scope.$parent.elementsCount || initialCount;
                 scope.$parent.elements = scope.$parent.elements || [];

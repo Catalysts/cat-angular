@@ -1,11 +1,11 @@
 'use strict';
 angular.module('cat')
-    .directive('catMainMenu', ['$mainMenu', '$rootScope', function ($mainMenu, $rootScope) {
+    .directive('catMainMenu', ['$mainMenu', '$rootScope', function CatMainMenuDirective($mainMenu, $rootScope) {
         return {
             restrict: 'E',
             scope: {
             },
-            link: function (scope, element, attrs) {
+            link: function CatMainMenuLink(scope) {
                 scope.menus = $mainMenu.getMenus();
                 scope.isVisible = function (entry) {
                     var visible = false;

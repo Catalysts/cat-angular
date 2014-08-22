@@ -1,11 +1,11 @@
 'use strict';
 angular.module('cat')
-    .directive('form', ['$timeout', function ($timeout) {
+    .directive('form', ['$timeout', function CatFormDirective($timeout) {
         return {
             restrict: 'E',
             scope: true,
             require: 'form',
-            link: function (scope, element, attrs, formCtrl) {
+            link: function CatFormLink(scope, element, attrs, formCtrl) {
                 var warningMessage = attrs.eocsWarnOnNavIfDirty || 'You have unsaved changes. Leave the page?';
 
                 // TODO - remove this ugly hack if ui-select2 fixes this problem...

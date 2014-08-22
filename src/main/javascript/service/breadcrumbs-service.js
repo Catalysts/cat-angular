@@ -1,5 +1,5 @@
 'use strict';
-angular.module('cat.service').service('$breadcrumbs', function () {
+angular.module('cat.service').service('$breadcrumbs', function CatBreadcrumbsService() {
     var _bc = [];
 
     this.clear = function (bc) {

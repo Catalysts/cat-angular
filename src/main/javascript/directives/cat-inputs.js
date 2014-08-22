@@ -4,11 +4,11 @@
 'use strict';
 
 angular.module('cat')
-    .directive('input', function () {
+    .directive('input', function CatInputDirective() {
         return {
             require: 'ngModel',
             restrict: 'E',
-            link: function (scope, element, attrs, ctrl) {
+            link: function CatInputLink(scope, element, attrs, ctrl) {
                 scope.$on('fieldErrors', function (event, fieldErrors) {
                     if (!fieldErrors || !attrs.id) {
                         return;
@@ -19,7 +19,7 @@ angular.module('cat')
             }
         };
     })
-    .directive('catInputGroup', function () {
+    .directive('catInputGroup', function CatInputGroupDirective() {
         return {
             restrict: 'A',
             transclude: true,
@@ -28,7 +28,7 @@ angular.module('cat')
                 label: '@',
                 name: '@'
             },
-            link: function (scope, element, attrs) {
+            link: function CatInputGroupLink(scope, element) {
                 element.addClass('form-group');
             },
             templateUrl: 'template/cat-input.tpl.html'

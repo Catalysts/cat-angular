@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('cat.service')
-    .factory('loadingService', function ($rootScope, usSpinnerService, $timeout) {
+    .factory('loadingService', function CatLoadingService($rootScope, usSpinnerService, $timeout) {
         var timeout = 50;
         var animationDuration = 200;
         var activeCount = 0;

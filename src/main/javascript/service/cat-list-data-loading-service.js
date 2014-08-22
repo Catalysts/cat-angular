@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('cat.service')
-    .factory('catListDataLoadingService', ['$api', '$route', '$q', function ($api, $route, $q) {
+    .factory('catListDataLoadingService', ['$api', '$route', '$q', function CatListDataLoadingService($api, $route, $q) {
         var load = function (endpoint, searchRequest) {
             var deferred = $q.defer();
             endpoint.list(searchRequest).then(

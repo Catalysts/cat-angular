@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('cat')
-    .directive('numbersOnly', function () {
+    .directive('numbersOnly', function CatNumbersOnlyDirective() {
         return {
             require: 'ngModel',
-            link: function (scope, element, attrs, modelCtrl) {
+            link: function CatNumbersOnlyLink(scope, element, attrs, modelCtrl) {
                 modelCtrl.$parsers.push(function (inputValue) {
                     if (!inputValue) return '';
 

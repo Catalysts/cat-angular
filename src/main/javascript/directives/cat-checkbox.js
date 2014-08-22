@@ -1,17 +1,16 @@
 'use strict';
 angular.module('cat')
-    .directive('catCheckbox', function () {
+    .directive('catCheckbox', function CatCheckboxDirective() {
         return {
             replace: true,
             restrict: 'E',
             scope: {
                 checked: '='
             },
-            link: function (scope, element, attrs) {
+            link: function CatCheckboxLink(scope, element) {
                 if (!!scope.checked) {
                     element.addClass('glyphicon glyphicon-check');
-                }
-                else {
+                } else {
                     element.addClass('glyphicon glyphicon-unchecked');
                 }
             }

@@ -1,22 +1,23 @@
 'use strict';
 angular.module('cat')
-    .directive('catPaginated', function () {
+    .directive('catPaginated', function CatPaginatedDirective() {
         return {
             replace: true,
             restrict: 'E',
             transclude: true,
             scope: {
-                listData: '=?'
+                listData: '=?',
+                syncLocation: '=?'
             },
             templateUrl: 'template/cat-paginated.tpl.html',
-            link: function (scope, element, attrs) {
+            link: function CatPaginatedLink(scope, element, attrs) {
                 if (!!attrs.searchProps) {
                     scope.searchProps = _.filter(attrs.searchProps.split(','), function (prop) {
                         return !!prop;
                     });
                 }
             },
-            controller: function ($scope, $location, catListDataLoadingService, $timeout, $rootScope) {
+            controller: function CatPaginatedController($scope, $location, catListDataLoadingService, $timeout, $rootScope) {
                 var searchTimeout = null, DELAY_ON_SEARCH = 500;
 
                 if (_.isUndefined($scope.listData)) {
@@ -24,6 +25,10 @@ angular.module('cat')
                     if (_.isUndefined($scope.listData)) {
                         throw new Error('listData was not defined and couldn\'t be found with default value');
                     }
+                }
+
+                if (_.isUndefined($scope.syncLocation)) {
+                    $scope.syncLocation = _.isUndefined($scope.$parent.detail);
                 }
 
                 $scope.listData.search = $scope.listData.search || $scope.listData.searchRequest.search() || {};
@@ -43,7 +48,7 @@ angular.module('cat')
                     }, delay || 0);
                 };
 
-                $scope.$watch('listData.sort', function (newVal, oldVal) {
+                $scope.$watch('listData.sort', function (newVal) {
                     if (!!newVal) {
                         console.log('broadcasting sort changed: ' + angular.toJson(newVal));
                         $scope.$parent.$broadcast('SortChanged', newVal);
@@ -54,14 +59,21 @@ angular.module('cat')
                     searchChanged(value, delay);
                 });
 
+                function updateLocation() {
+                    if ($scope.syncLocation !== false) {
+                        searchRequest.setSearch($location);
+                        $location.replace();
+                    }
+                }
+
                 $scope.$watch('listData.pagination', function () {
-                    searchRequest.setSearch($location);
+                    updateLocation();
                     reload();
                 }, true);
 
                 var searchChanged = function (value, delay) {
                     searchRequest.search(value);
-                    searchRequest.setSearch($location);
+                    updateLocation();
                     $scope.listData.pagination.page = 1;
                     reload(delay);
                 };
@@ -76,7 +88,7 @@ angular.module('cat')
 
                 $scope.$on('SortChanged', function (event, value) {
                     searchRequest.sort(value);
-                    searchRequest.setSearch($location);
+                    updateLocation();
                     $scope.listData.pagination.page = 1;
                     reload();
                 });

@@ -1,6 +1,6 @@
 'use strict';
 angular.module('cat')
-    .directive('catFacets', function () {
+    .directive('catFacets', function CatFacetsDirective() {
         return {
             replace: true,
             restrict: 'E',
@@ -9,7 +9,7 @@ angular.module('cat')
                 names: '='
             },
             templateUrl: 'template/cat-facets.tpl.html',
-            link: function (scope, element, attrs) {
+            link: function CatFacetsLink(scope) {
                 if (scope.facets === undefined) throw 'Attribute facets must be set!';
             },
             controller: function ($scope, $location, $rootScope) {
