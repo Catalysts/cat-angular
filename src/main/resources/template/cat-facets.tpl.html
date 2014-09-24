@@ -1,14 +1,14 @@
 <div class="sidebar">
     <ul class="nav sidenav">
-        <li ng-repeat="facet in facets">
+        <li ng-repeat="facet in listData.facets">
             <h4>{{facetName(facet)}}
                 <small ng-if="!isActive(facet)">
                     <a ng-click="showAll(facet)" href="">See all</a>
                 </small>
             </h4>
             <ul class="nav">
-                <li ng-repeat="term in facet.terms" ng-class="{'active': isActive(facet,term)}" cat-load-more="5">
-                    <a ng-if="showItem(facet,term)" href="" ng-click="setActive(facet,term)">{{term.name}}
+                <li ng-repeat="term in facet.terms" cat-load-more="5">
+                    <a href="" ng-click="setActive(facet,term)">{{term.name}}
                         <span class="text-muted">({{term.count}})</span>
                     </a>
                 </li>

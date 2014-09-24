@@ -1,33 +1,48 @@
 'use strict';
 angular.module('cat')
     .directive('catFacets', function CatFacetsDirective() {
+        function _initDefaults(scope) {
+            if (_.isUndefined(scope.listData)) {
+                scope.listData = scope.$parent.listData;
+            }
+        }
+
+        function _checkConditions(scope) {
+            if (_.isUndefined(scope.listData)) {
+                throw new Error('listData was not defined and couldn\'t be found with default value');
+            }
+
+            if (_.isUndefined(scope.listData.facets)) {
+                throw new Error('No facets are available within given listData');
+            }
+        }
+
         return {
             replace: true,
             restrict: 'E',
             scope: {
-                facets: '=',
+                listData: '=?',
                 names: '='
             },
             templateUrl: 'template/cat-facets.tpl.html',
             link: function CatFacetsLink(scope) {
-                if (scope.facets === undefined) throw 'Attribute facets must be set!';
+                _initDefaults(scope);
+                _checkConditions(scope);
             },
-            controller: function ($scope, $location, $rootScope) {
+            controller: function CatFacetsController($scope) {
 
-                $scope.isActive = function (facet, term) {
-                    var search = $location.search();
-                    var name = 'search.' + facet.name;
-                    if (!!search[name]) {
-                        return !!term && search[name] === term.id;
-                    } else {
-                        return true;
-                    }
+                function _search(search) {
+                    return $scope.listData.searchRequest.search(search);
+                }
+
+                $scope.isActive = function (facet) {
+                    return !_search()[facet.name];
                 };
 
                 $scope.showAll = function (facet) {
-                    var search = new window.cat.SearchRequest($location.search()).search();
+                    var search = _search();
                     delete search[facet.name];
-                    $rootScope.$broadcast('SearchChanged', search);
+                    _search(search);
                 };
 
                 $scope.facetName = function (facet) {
@@ -40,20 +55,9 @@ angular.module('cat')
 
                 $scope.setActive = function (facet, term) {
                     facet.activeTerm = term;
-                    var search = new window.cat.SearchRequest($location.search()).search();
+                    var search = _search();
                     search[facet.name] = term.id;
-                    $rootScope.$broadcast('SearchChanged', search);
-
-                };
-
-                $scope.remove = function (facet) {
-                    var search = new window.cat.SearchRequest($location.search()).search();
-                    delete search[facet.name];
-                    $rootScope.$broadcast('SearchChanged', search);
-                };
-
-                $scope.showItem = function (facet, term) {
-                    return $scope.isActive(facet) || $scope.isActive(facet, term);
+                    _search(search);
                 };
             }
         };
