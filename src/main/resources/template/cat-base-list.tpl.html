@@ -1,0 +1,10 @@
+<h2>
+    {{catBaseListController.title}}
+    <a ng-href="{{catBaseListController.getUrlForNewPage()}}" class="btn btn-primary pull-right">
+        <span class="glyphicon glyphicon-plus"></span> New
+    </a>
+</h2>
+
+<cat-paginated search-props="{{catBaseListController.searchProps}}">
+    <ng-include src="catBaseListController.config.listTemplateUrl"></ng-include>
+</cat-paginated>
