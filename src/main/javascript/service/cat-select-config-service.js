@@ -32,7 +32,11 @@ function CatSelectConfigServiceProvider() {
     var configs = {};
 
     this.config = function (name, config) {
-        configs[name] = config;
+        if (!_.isUndefined(config)) {
+            configs[name] = config;
+        }
+
+        return configs[name];
     };
 
     this.$get = function () {
