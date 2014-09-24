@@ -4,21 +4,21 @@
             <input class="form-control" placeholder="Search by {{prop}}" ng-model="listData.search[prop]">
         </div>
     </div>
-    <div class="row text-center" ng-if="!listData.isSinglePageList && listData.count !== 0">
-        <pagination total-items="listData.count" items-per-page="listData.pagination.size"
+    <div class="text-center" ng-if="!listData.isSinglePageList && listData.count !== 0">
+    <pagination total-items="listData.count" items-per-page="listData.pagination.size"
                     page="listData.pagination.page" max-size="10"
                     class="pagination-sm" boundary-links="true" rotate="false"></pagination>
     </div>
-    <div class="row text-center">
-        <div class="alert alert-info" style="margin: 20px 0;" ng-if="listData.count !== 0">
+    <div class="text-center">
+    <div class="alert alert-info" style="margin: 20px 0;" ng-if="listData.count !== 0">
             {{listData.count}} Einträge gefunden. Einträge {{listData.firstResult}}-{{listData.lastResult}}
         </div>
         <div class="alert alert-info" style="margin: 20px 0;" ng-if="listData.count === 0">
         Keine Einträge gefunden
         </div>
     </div>
-    <div class="row" ng-transclude ng-show="listData.count !== 0"></div>
-    <div class="row text-center" ng-if="!listData.isSinglePageList && istData.count !== 0">
+    <div ng-transclude ng-show="listData.count !== 0"></div>
+    <div class="text-center" ng-if="!listData.isSinglePageList && istData.count !== 0">
     <pagination total-items="listData.count" items-per-page="listData.pagination.size" page="listData.pagination.page" max-size="10"
                     class="pagination-sm" boundary-links="true" rotate="false"></pagination>
     </div>
