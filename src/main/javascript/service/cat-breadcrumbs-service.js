@@ -1,5 +1,5 @@
 'use strict';
-angular.module('cat.service').service('$breadcrumbs', function CatBreadcrumbsService() {
+function CatBreadcrumbsService() {
     var _bc = [];
 
     this.clear = function (bc) {
@@ -29,4 +29,9 @@ angular.module('cat.service').service('$breadcrumbs', function CatBreadcrumbsSer
     this.replaceLast = function (newVal) {
         _bc[_bc.length - 1] = newVal;
     };
-});
+}
+
+angular.module('cat.service').service('catBreadcrumbsService', CatBreadcrumbsService);
+
+// TODO remove in future release
+angular.module('cat.service').service('$breadcrumbs', CatBreadcrumbsService);
