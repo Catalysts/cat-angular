@@ -28,18 +28,17 @@
  *
  * @param $scope
  * @param $routeParams
- * @param $breadcrumbs
  * @param $location
  * @param $window
  * @param $globalMessages
  * @param $controller
+ * @param $log
+ * @param catBreadcrumbsService
  * @param {Object} config holds data like the current api endpoint, template urls, base url, the model constructor, etc.
- * @param {Object} detail the actual object which is shown / edited
- * @param {Array} parents the list of 'parent' objects used for breadcrumb / ui stack generation
  * @constructor
  */
-function CatBaseDetailController($scope, $routeParams, $breadcrumbs, $location, $window, $globalMessages, $controller, config, detail, parents) {
-    $scope.detail = detail;
+function CatBaseDetailController($scope, $routeParams, $location, $window, $globalMessages, $controller, $log, catBreadcrumbsService, config) {
+    $scope.detail = config.detail;
     $scope.editDetail = undefined;
     $scope.$fieldErrors = {};
 
@@ -48,59 +47,11 @@ function CatBaseDetailController($scope, $routeParams, $breadcrumbs, $location, 
     var templateUrls = config.templateUrls;
     var Model = config.Model;
 
-    var breadcrumbs = [];
+    $scope.uiStack = catBreadcrumbsService.generateFromConfig(config);
 
-    function capitalize(string) {
-        return string.charAt(0).toUpperCase() + string.substring(1);
-    }
-
-    $scope.uiStack = [];
-
-    function splitShiftAndJoin(path, amount) {
-        return _.initial(path.split('/'), amount).join('/');
-    }
-
-    if (!_.isUndefined(config.endpoint.parentEndpoint)) {
-        var currentEndpoint = config.endpoint;
-        var parentEndpoint = currentEndpoint.parentEndpoint;
-        var parentUrl = baseUrl;
-        var count = 0;
-
-        while (!_.isUndefined(parentEndpoint)) {
-            var parent = parents[count++];
-            parentUrl = splitShiftAndJoin(parentUrl, 1);
-
-            var detailBreadcrumb = {
-                url: '#' + parentUrl + '?tab=' + currentEndpoint.getEndpointName() + 's',
-                title: parent.name
-            };
-            $scope.uiStack.unshift(detailBreadcrumb);
-            breadcrumbs.unshift(detailBreadcrumb);
-
-            parentUrl = splitShiftAndJoin(parentUrl, 1);
-            var breadcrumb = {
-                title: capitalize(parentEndpoint.getEndpointName()) + 's',
-                url: '#' + parentUrl
-            };
-            breadcrumbs.unshift(breadcrumb);
-
-            currentEndpoint = parentEndpoint;
-            parentEndpoint = currentEndpoint.parentEndpoint;
-        }
-    } else {
-        breadcrumbs.push({
-            title: capitalize(config.endpoint.getEndpointName()) + 's',
-            url: '#' + baseUrl
-        });
-    }
-
-    breadcrumbs.push(
-        {
-            title: $routeParams.id === 'new' ? 'New' : ''
-        }
-    );
-
-    $breadcrumbs.set(breadcrumbs);
+    catBreadcrumbsService.push({
+        title: $routeParams.id === 'new' ? 'New' : ''
+    });
 
     $scope.editTemplate = templateUrls.edit;
 
@@ -125,7 +76,7 @@ function CatBaseDetailController($scope, $routeParams, $breadcrumbs, $location, 
     };
 
     var update = function () {
-        $breadcrumbs.replaceLast({
+        catBreadcrumbsService.replaceLast({
             title: $scope.title()
         });
     };
@@ -151,7 +102,7 @@ function CatBaseDetailController($scope, $routeParams, $breadcrumbs, $location, 
     $scope.add = function () {
         $scope.editDetail = new Model();
         if (_.isFunction($scope.editDetail.setParent)) {
-            $scope.editDetail.setParent(parents[0]);
+            $scope.editDetail.setParent(config.parents[0]);
         }
     };
 
@@ -161,7 +112,7 @@ function CatBaseDetailController($scope, $routeParams, $breadcrumbs, $location, 
     $scope.edit = function () {
         $scope.editDetail = angular.copy($scope.detail);
         if (_.isFunction($scope.editDetail.setParent)) {
-            $scope.editDetail.setParent(parents[0]);
+            $scope.editDetail.setParent(config.parents[0]);
         }
     };
 
@@ -185,7 +136,13 @@ function CatBaseDetailController($scope, $routeParams, $breadcrumbs, $location, 
      */
     $scope.remove = function () {
         endpoint.remove($scope.detail.id).then(function () {
-            $location.path(baseUrl);
+            if (_.isEmpty($scope.uiStack)) {
+                $location.path(baseUrl);
+            } else {
+                var parentUrl = $scope.uiStack[$scope.uiStack.length - 1].url;
+                $location.path(parentUrl.substring(1, parentUrl.indexOf('?')));
+                $location.search('tab', window.cat.util.pluralize(endpoint.getEndpointName()));
+            }
         });
     };
 
@@ -238,8 +195,13 @@ function CatBaseDetailController($scope, $routeParams, $breadcrumbs, $location, 
         }
     }
 
-    // extend with custom controller
-    $controller(config.controller, {$scope: $scope, detail: detail, parents: parents, config: config});
+
+    try {
+        // extend with custom controller
+        $controller(config.controller, {$scope: $scope, detail: config.detail, parents: config.parents, config: config});
+    } catch (unused) {
+        $log.info('Couldn\'t instantiate controller with name ' + config.controller);
+    }
 }
 
 angular.module('cat').controller('CatBaseDetailController', CatBaseDetailController);
