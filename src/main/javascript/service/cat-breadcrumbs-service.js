@@ -1,8 +1,20 @@
 'use strict';
+
+/**
+ * @ngdoc service
+ * @description
+ *
+ * This service is a simple wrapper around a list of Objects.
+ * It provides some convenience methods for manipulating the list.
+ * It's main purpose is to make breadcrumb handling less cumbersome.
+ *
+ * @constructor
+ */
 function CatBreadcrumbsService() {
     var _bc = [];
+    var that = this;
 
-    this.clear = function (bc) {
+    this.clear = function () {
         _bc = [];
     };
 
@@ -12,6 +24,10 @@ function CatBreadcrumbsService() {
 
     this.get = function () {
         return _bc;
+    };
+
+    this.addFirst = function (entry) {
+        _bc.unshift(entry);
     };
 
     this.push = function (entry) {
@@ -26,8 +42,60 @@ function CatBreadcrumbsService() {
         return _bc.length;
     };
 
+    function capitalize(string) {
+        return string.charAt(0).toUpperCase() + string.substring(1);
+    }
+
     this.replaceLast = function (newVal) {
         _bc[_bc.length - 1] = newVal;
+    };
+
+    function splitShiftAndJoin(path, amount) {
+        return _.initial(path.split('/'), amount).join('/');
+    }
+
+    /**
+     * This method auto-generates the breadcrumbs from a given view configuration
+     * @param {Object} config a config object as provided to CatBaseDetailController
+     * @return {Array} an array which represents the 'ui stack' of directly related parents
+     */
+    this.generateFromConfig = function (config) {
+        that.clear();
+        var uiStack = [];
+        if (!_.isUndefined(config.endpoint.parentEndpoint)) {
+            var currentEndpoint = config.endpoint;
+            var parentEndpoint = currentEndpoint.parentEndpoint;
+            var parentUrl = config.baseUrl;
+            var count = 0;
+
+            while (!_.isUndefined(parentEndpoint)) {
+                var parent = config.parents[count++];
+                parentUrl = splitShiftAndJoin(parentUrl, 1);
+
+                var detailBreadcrumb = {
+                    url: '#' + parentUrl + '?tab=' + window.cat.util.pluralize(currentEndpoint.getEndpointName()),
+                    title: parent.name
+                };
+                uiStack.unshift(detailBreadcrumb);
+                that.addFirst(detailBreadcrumb);
+
+                parentUrl = splitShiftAndJoin(parentUrl, 1);
+                var breadcrumb = {
+                    title: capitalize(window.cat.util.pluralize(parentEndpoint.getEndpointName())),
+                    url: '#' + parentUrl
+                };
+                that.addFirst(breadcrumb);
+
+                currentEndpoint = parentEndpoint;
+                parentEndpoint = currentEndpoint.parentEndpoint;
+            }
+        } else {
+            that.push({
+                title: capitalize(window.cat.util.pluralize(config.endpoint.getEndpointName())),
+                url: '#' + config.baseUrl
+            });
+        }
+        return uiStack;
     };
 }
 
