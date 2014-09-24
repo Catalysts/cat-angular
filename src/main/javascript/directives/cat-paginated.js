@@ -86,11 +86,15 @@ angular.module('cat')
 
                 $scope.$watch('listData.search', updateSearch, true);
 
-                $scope.$on('SortChanged', function (event, value) {
+                this.sort = function (value) {
                     searchRequest.sort(value);
                     updateLocation();
                     $scope.listData.pagination.page = 1;
                     reload();
+                };
+
+                $scope.$on('SortChanged', function (event, value) {
+                    this.sort(value);
                 });
             }
         };

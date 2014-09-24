@@ -3,13 +3,14 @@ angular.module('cat')
     .directive('catSortable', function CatSortableDirective($compile) {
         return {
             restrict: 'AC',
-            link: function CatSortableLink(scope, element, attrs) {
+            require: '^catPaginated',
+            link: function CatSortableLink(scope, element, attrs, catPaginatedController) {
                 var title = element.text();
                 var property = attrs.catSortable || title.toLowerCase().trim();
 
                 // todo - make configurable
                 scope.sort = scope.listData.searchRequest.sort();
-
+                scope.catPaginatedController = catPaginatedController;
                 var icon = 'glyphicon-sort-by-attributes';
 
                 if (!!attrs.sortMode) {
@@ -31,7 +32,8 @@ angular.module('cat')
                         $scope.sort.property = property;
                         $scope.sort.isDesc = false;
                     }
-                    $scope.$parent.$broadcast('SortChanged', $scope.sort); // broadcast from the parent scope (= controller or transclude scope)
+
+                    $scope.catPaginatedController.sort($scope.sort);
                 };
 
                 $scope.$on('SortChanged', function (event, value) {
