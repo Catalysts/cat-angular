@@ -38,6 +38,9 @@ function CatSelectController($scope, $log, catApiService, catSelectConfigService
             });
         };
         quietMillis = 0;
+    } else if (_.isFunction(options.endpoint)) {
+        transport = options.endpoint;
+        quietMillis = 500;
     } else if (_.isObject(options.endpoint)) {
         transport = fetchElements(options.endpoint, options.sort);
         quietMillis = 500;
@@ -51,7 +54,7 @@ function CatSelectController($scope, $log, catApiService, catSelectConfigService
         transport = fetchElements(api, options.sort);
         quietMillis = 500;
     } else {
-        $log.error('The given endpoint has to be one of the following types: array, object, string - but was ' + (typeof options.endpoint));
+        $log.error('The given endpoint has to be one of the following types: array, object, string or function - but was ' + (typeof options.endpoint));
         $scope.elements = [];
         return;
     }
@@ -101,7 +104,8 @@ function CatSelectController($scope, $log, catApiService, catSelectConfigService
  * values which are provided via the options object will be overridden.
  *
  * An config / options object has the following properties:
- * - endpoint: This can either be an array, in which case it will directly be treated as the source, an endpoint name, or an endpoint object
+ * - endpoint: This can either be an array, in which case it will directly be treated as the source, an endpoint name
+ * or an endpoint object to call the given endpoint, or a function which is used as the 'transport' function
  * - sort: An object which defines the 'sort' property and direction used when retrieving the list from an endpoint
  * - ui-select2: An config object which supports all options provided by the 'ui-select2' directive
  *
