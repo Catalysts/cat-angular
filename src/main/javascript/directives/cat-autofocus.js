@@ -5,7 +5,11 @@ angular.module('cat')
             restrict: 'A',
             link: function CatAutofocusLink(scope, element) {
                 $timeout(function () {
-                    element[0].focus();
+                    if (!_.isUndefined(element.data('select2'))) {
+                        element.select2('open');
+                    } else {
+                        element[0].focus();
+                    }
                 }, 100);
             }
         };
