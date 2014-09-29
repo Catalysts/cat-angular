@@ -64,6 +64,16 @@ function CatApiEndpoint(url, endpointConfig, $http) {
     };
 
     /**
+     * This helper method turns a cat.SearchRequest in to en url encoded search query
+     * @param {window.cat.SearchRequest} [searchRequest] the search request which should be url encoded
+     * @return {string} either the url encoded search query or an empty string if no search request is given or it is not a instance of cat.SearchRequest
+     * @private
+     */
+    var _getSearchQuery = function (searchRequest) {
+        return !!searchRequest && searchRequest instanceof window.cat.SearchRequest ? '?' + searchRequest.urlEncoded() : '';
+    };
+
+    /**
      * This method is used to instantiate actual child api endpoints which are dependent on a certain parent id
      * @param id the id for which to 'resolve' the child endpoints.
      * @return {object} a object which maps all child endpoint names to the actual endpoints where the url was resolved
@@ -101,8 +111,7 @@ function CatApiEndpoint(url, endpointConfig, $http) {
      * as well
      */
     this.list = function (searchRequest) {
-        var searchQuery = !!searchRequest && searchRequest instanceof window.cat.SearchRequest ? '?' + searchRequest.urlEncoded() : '';
-        return $http.get(_endpointUrl + searchQuery).then(function (response) {
+        return $http.get(_endpointUrl + _getSearchQuery(searchRequest)).then(function (response) {
             if (!!response.data.totalCount || response.data.totalCount === 0) {
                 var facets = [];
 
@@ -142,7 +151,7 @@ function CatApiEndpoint(url, endpointConfig, $http) {
     };
 
     /**
-     * This method makes a GET request the url available via #getEndpointUrl with the addition of the provided id at the end.
+     * This method makes a GET request to the url available via #getEndpointUrl with the addition of the provided id at the end.
      * @param id the id which will be appended as '/:id' to the url
      * @return {object} a promise wrapping a new instance of the configured model initialized with the data retrieved
      * from the backend
@@ -189,12 +198,51 @@ function CatApiEndpoint(url, endpointConfig, $http) {
     };
 
     /**
-     *
-     * @param id
-     * @return {object}
+     * This method executes a DELETE request to the url available via #getEndpointUrl with the addition of the provided url at the end.
+     * @param url the url to be appended to the endpoint url - usually only the id of the object to delete
+     * @return {*} The promise returned by the $http 'DELETE' call
      */
-    this.remove = function (id) {
-        return $http({method: 'DELETE', url: _endpointUrl + '/' + id});
+    this.remove = function (url) {
+        return $http({method: 'DELETE', url: _endpointUrl + '/' + url});
+    };
+
+    /**
+     * Simple wrapper object which contains the custom get, put and post methods
+     * @type {{}}
+     */
+    this.custom = {};
+
+    /**
+     * This method executes a GET request to the url available via #getEndpointUrl joined with the provided one.
+     * Be aware that the result of the promise will not be mapped to the configured model but instead will be passed on directly.
+     * @param url the url to be appended to the endpoint url
+     * @param searchRequest an optional cat.SearchRequest to be applied to the request
+     * @return {*} The promise returned by the $http.get call
+     */
+    this.custom.get = function (url, searchRequest) {
+        return $http.get([_endpointUrl, url].join('/') + _getSearchQuery(searchRequest));
+    };
+
+    /**
+     * This method executes a POST request to the url available via #getEndpointUrl joined with the provided one.
+     * Be aware that the result of the promise will not be mapped to the configured model but instead will be passed on directly.
+     * @param url the url to be appended to the endpoint url
+     * @param object hte object to send as payload - not that it will be used as is for this request
+     * @return {*} The promise returned by the $http.post call
+     */
+    this.custom.post = function (url, object) {
+        return $http.post([_endpointUrl, url].join('/'), object);
+    };
+
+    /**
+     * This method executes a PUT request to the url available via #getEndpointUrl joined with the provided one.
+     * Be aware that the result of the promise will not be mapped to the configured model but instead will be passed on directly.
+     * @param url the url to be appended to the endpoint url
+     * @param object hte object to send as payload - not that it will be used as is for this request
+     * @return {*} The promise returned by the $http.put call
+     */
+    this.custom.put = function (url, object) {
+        return $http.put([_endpointUrl, url].join('/'), object);
     };
 }
 
