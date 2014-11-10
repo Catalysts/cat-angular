@@ -1,24 +1,27 @@
 <div ng-repeat="parent in uiStack" class="alert alert-info"><a ng-href="{{parent.url}}">
-     {{parent.title}}
-</a> </div>
+    {{parent.title}}
+</a></div>
 
 <div class="panel panel-default">
     <div class="panel-heading">
         <div class="pull-right edit-buttons" ng-if="!editDetail && !!editTemplate">
             <div class="btn-group">
                 <button type="button" class="btn btn-xs btn-default" cat-confirm-click cat-on-confirm="remove()"><span
-                        class="glyphicon glyphicon-trash"></span> Delete
+                        class="glyphicon glyphicon-trash"></span>
+                    <span cat-i18n="cc.catalysts.general.delete">Delete</span>
                 </button>
                 <button type="button" class="btn btn-xs btn-default" ng-click="edit()"
-                        cat-activate-on-shortcut="alt+e"><span class="glyphicon glyphicon-edit"></span> Edit
+                        cat-activate-on-shortcut="alt+e"><span class="glyphicon glyphicon-edit"></span>
+                    <span cat-i18n="cc.catalysts.general.edit">Edit</span>
                 </button>
             </div>
             &nbsp;
             <a ng-href="#{{baseUrl}}/new" class="btn btn-xs btn-default" cat-activate-on-shortcut="alt+n"><span
-                    class="glyphicon glyphicon-plus"></span> New</a>
+                    class="glyphicon glyphicon-plus"></span>
+                <span cat-i18n="cc.catalysts.general.new">New</span></a>
         </div>
         <h5 ng-if="exists">{{title()}}</h5>
-        <h5 ng-if="!exists">New</h5>
+        <h5 ng-if="!exists" cat-i18n="cc.catalysts.general.new">New</h5>
     </div>
     <!-- create form element if editing -->
     <div class="panel-body">
@@ -31,12 +34,14 @@
     </div>
     <div class="panel-footer text-right" ng-if="!!editDetail">
         <button type="button" class="btn btn-xs btn-default" ng-click="cancelEdit()"
-                cat-activate-on-shortcut="alt+esc"><span class="glyphicon glyphicon-remove"></span> Cancel
+                cat-activate-on-shortcut="alt+esc"><span class="glyphicon glyphicon-remove"></span>
+            <span cat-i18n="cc.catalysts.general.cancel">Cancel</span>
         </button>
         <button type="submit" class="btn btn-xs btn-primary" ng-click="save()"
                 ng-disabled="form.$pristine"><span class="glyphicon glyphicon-floppy-disk"></span>
-            Save
+            <span cat-i18n="cc.catalysts.general.save">Save</span>
         </button>
     </div>
 </div>
-<div ng-if="!editDetail && !!additionalViewTemplate" ng-include="additionalViewTemplate"></div>
+<div ng-if="!editDetail && !!additionalViewTemplate" ng-include="additionalViewTemplate"
+     ng-controller="baseTabsController"></div>

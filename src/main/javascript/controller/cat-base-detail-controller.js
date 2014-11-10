@@ -49,9 +49,14 @@ function CatBaseDetailController($scope, $routeParams, $location, $window, $glob
 
     $scope.uiStack = catBreadcrumbsService.generateFromConfig(config);
 
-    catBreadcrumbsService.push({
-        title: $routeParams.id === 'new' ? 'New' : ''
-    });
+    if ($routeParams.id === 'new') {
+        catBreadcrumbsService.push({
+            title: 'New',
+            key: 'cc.catalysts.general.new'
+        });
+    } else {
+        catBreadcrumbsService.push({});
+    }
 
     $scope.editTemplate = templateUrls.edit;
 
@@ -141,7 +146,7 @@ function CatBaseDetailController($scope, $routeParams, $location, $window, $glob
             } else {
                 var parentUrl = $scope.uiStack[$scope.uiStack.length - 1].url;
                 $location.path(parentUrl.substring(1, parentUrl.indexOf('?')));
-                $location.search('tab', window.cat.util.pluralize(endpoint.getEndpointName()));
+                $location.search('tab', endpoint.getEndpointName());
             }
         });
     };
@@ -196,12 +201,25 @@ function CatBaseDetailController($scope, $routeParams, $location, $window, $glob
     }
 
 
+    // TABS
+    $scope.baseTabsController = ['$scope', function ($tabsScope) {
+        $controller('CatBaseTabsController', {
+            $scope: $tabsScope,
+            config: config
+        });
+    }];
+
     try {
         // extend with custom controller
-        $controller(config.controller, {$scope: $scope, detail: config.detail, parents: config.parents, config: config});
+        $controller(config.controller, {
+            $scope: $scope,
+            detail: config.detail,
+            parents: config.parents,
+            config: config
+        });
     } catch (unused) {
         $log.info('Couldn\'t instantiate controller with name ' + config.controller);
     }
 }
 
-angular.module('cat').controller('CatBaseDetailController', CatBaseDetailController);
+angular.module('cat.controller.base.detail').controller('CatBaseDetailController', CatBaseDetailController);

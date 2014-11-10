@@ -100,7 +100,7 @@ var listRoute = function (config) {
 /**
  * A helper function for detail routes which applies a few optimizations and some auto configuration.
  * The actual instantiated controller will be 'CatBaseDetailController' with a default templateUrl
- * 'template/base-detail.tpl.html'. As the CatBaseDetailController expects a config object with several properties
+ * 'template/cat-base-detail.tpl.html'. As the CatBaseDetailController expects a config object with several properties
  * (templateUrls, parents, detail, endpoint, etc.) this function also takes care of providing the correct 'resolve'
  * object which pre-loads all the necessary data.
  * @param {Object} config the route config object which will be used to generate the actual route configuration
@@ -134,6 +134,8 @@ var detailRoute = function (config) {
         });
     }
 
+    var tabs;
+
     var templateUrls = {
         edit: parentUrl + endpointName + '/' + parentTemplateNamePrefix + endpointName + '-details-edit.tpl.html',
         view: parentUrl + endpointName + '/' + parentTemplateNamePrefix + endpointName + '-details-view.tpl.html'
@@ -144,6 +146,12 @@ var detailRoute = function (config) {
             main: templateUrls.view,
             additional: parentUrl + endpointName + '/' + parentTemplateNamePrefix + endpointName + '-additional-details-view.tpl.html'
         };
+    } else if (config.additionalViewTemplate === 'tabs') {
+        templateUrls.view = {
+            main: templateUrls.view,
+            additional: 'template/cat-base-additional-details-tabs-view.tpl.html'
+        };
+        tabs = config.additionalViewTemplateTabs;
     }
 
     function getEndpoint($route, catApiService) {
@@ -190,6 +198,7 @@ var detailRoute = function (config) {
             endpoint: endpoint,
             Model: Model,
             templateUrls: templateUrls,
+            tabs: tabs,
             baseUrl: baseUrl
         };
 
@@ -243,7 +252,7 @@ var detailRoute = function (config) {
     }
 
     return {
-        templateUrl: config.templateUrl || 'template/base-detail.tpl.html',
+        templateUrl: config.templateUrl || 'template/cat-base-detail.tpl.html',
         controller: 'CatBaseDetailController',
         reloadOnSearch: config.reloadOnSearch,
         resolve: {

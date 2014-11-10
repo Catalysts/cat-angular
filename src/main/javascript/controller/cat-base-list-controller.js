@@ -2,6 +2,8 @@
 
 /**
  * @ngdoc function
+ * @name CatBaseListController
+ * @controller
  *
  * @description
  * The CatBaseListController takes care of providing several common properties to the scope
@@ -23,14 +25,20 @@
  * @constructor
  */
 function CatBaseListController($scope, $controller, $log, catBreadcrumbsService, config) {
+    if (!_.isUndefined(config.listData)) {
+        this.titleKey = 'cc.catalysts.cat-breadcrumbs.entry.' + config.listData.endpoint.getEndpointName();
 
-    catBreadcrumbsService.set([
-        {
-            title: config.title
-        }
-    ]);
+        catBreadcrumbsService.set([
+            {
+                title: config.title,
+                key: this.titleKey
+            }
+        ]);
 
-    $scope.listData = config.listData;
+        $scope.listData = config.listData;
+    } else {
+        $log.warn('No listData available!');
+    }
 
     this.title = config.title;
     this.searchProps = config.searchProps;
@@ -53,4 +61,6 @@ function CatBaseListController($scope, $controller, $log, catBreadcrumbsService,
     }
 }
 
-angular.module('cat').controller('CatBaseListController', CatBaseListController);
+angular.module('cat.controller.base.list')
+    .controller('CatBaseListController',
+    ['$scope', '$controller', '$log', 'catBreadcrumbsService', 'config', CatBaseListController]);

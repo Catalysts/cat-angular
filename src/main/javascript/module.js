@@ -1,6 +1,10 @@
 window.cat = {};
 
-angular.module('cat.controller', []);
+angular.module('cat.controller.base.list', []);
+angular.module('cat.controller.base.tabs', []);
+angular.module('cat.controller.base.detail', ['cat.controller.base.tabs']);
+angular.module('cat.controller', ['cat.controller.base.detail', 'cat.controller.base.list']);
+
 angular.module('cat.template', []);
 
 angular.module('cat.service.api', []);
