@@ -34,8 +34,6 @@ function CatViewServiceProvider(catRouteServiceProvider, catApiServiceProvider) 
             url = config.url || url;
         }
 
-        var listUrl = baseUrl + '/' + url;
-
         var endpoint = {
             model: window.cat.util.defaultModelResolver(name),
             url: url
