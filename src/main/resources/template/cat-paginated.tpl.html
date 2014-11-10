@@ -1,25 +1,38 @@
 <div ng-cloak>
     <div ng-if="searchProps" class="row search">
         <div class="col-sm-3 pull-right" ng-repeat="prop in searchProps">
-            <input class="form-control" placeholder="Search by {{prop}}" ng-model="listData.search[prop]">
+            <input class="form-control" placeholder="{{searchPropertyPlaceholders[prop]}}"
+                   ng-model="listData.search[prop]">
         </div>
     </div>
     <div class="text-center" ng-if="!listData.isSinglePageList && listData.count !== 0">
-    <pagination total-items="listData.count" items-per-page="listData.pagination.size"
-                    page="listData.pagination.page" max-size="10"
-                    class="pagination-sm" boundary-links="true" rotate="false"></pagination>
+        <pagination total-items="listData.count" items-per-page="listData.pagination.size"
+                    ng-model="listData.pagination.page" max-size="10"
+                    class="pagination-sm" boundary-links="true" rotate="false"
+                    previous-text="{{paginationText.previous}}"
+                    next-text="{{paginationText.next}}"
+                    first-text="{{paginationText.first}}"
+                    last-text="{{paginationText.last}}">
     </div>
     <div class="text-center">
-    <div class="alert alert-info" style="margin: 20px 0;" ng-if="listData.count !== 0">
+        <div class="alert alert-info" style="margin: 20px 0;" ng-if="listData.count !== 0"
+             cat-i18n="cc.catalysts.cat-paginated.itemsFound" i18n-watch-params="true"
+             i18n-params="{count: listData.count, firstResult: listData.firstResult, lastResult:listData.lastResult}">
             {{listData.count}} Einträge gefunden. Einträge {{listData.firstResult}}-{{listData.lastResult}}
         </div>
         <div class="alert alert-info" style="margin: 20px 0;" ng-if="listData.count === 0">
-        Keine Einträge gefunden
+            <span cat-i18n="cc.catalysts.cat-paginated.noItemsFound">Keine Einträge gefunden</span>
         </div>
     </div>
     <div ng-transclude ng-show="listData.count !== 0"></div>
-    <div class="text-center" ng-if="!listData.isSinglePageList && istData.count !== 0">
-    <pagination total-items="listData.count" items-per-page="listData.pagination.size" page="listData.pagination.page" max-size="10"
-                    class="pagination-sm" boundary-links="true" rotate="false"></pagination>
+    <div class="text-center" ng-if="!listData.isSinglePageList && listData.count !== 0">
+        <pagination total-items="listData.count" items-per-page="listData.pagination.size"
+                    ng-model="listData.pagination.page" max-size="10"
+                    class="pagination-sm" boundary-links="true" rotate="false"
+                    previous-text="{{paginationText.previous}}"
+                    next-text="{{paginationText.next}}"
+                    first-text="{{paginationText.first}}"
+                    last-text="{{paginationText.last}}">
+        </pagination>
     </div>
 </div>

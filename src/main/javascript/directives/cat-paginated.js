@@ -1,6 +1,8 @@
 'use strict';
 angular.module('cat')
-    .directive('catPaginated', function CatPaginatedDirective() {
+    .directive('catPaginated', function CatPaginatedDirective($log, catI18nService) {
+        var SEARCH_PROP_KEY = 'cc.catalysts.cat-paginated.search.prop';
+
         return {
             replace: true,
             restrict: 'E',
@@ -15,10 +17,26 @@ angular.module('cat')
                     scope.searchProps = _.filter(attrs.searchProps.split(','), function (prop) {
                         return !!prop;
                     });
+
+                    scope.searchPropertyPlaceholders = {};
+
+                    _.forEach(scope.searchProps, function (searchProp) {
+                        scope.searchPropertyPlaceholders[searchProp] = 'Search by ' + searchProp;
+                        catI18nService.translate(SEARCH_PROP_KEY, {prop: searchProp})
+                            .then(function (message) {
+                                scope.searchPropertyPlaceholders[searchProp] = message;
+                            });
+                    });
                 }
             },
-            controller: function CatPaginatedController($scope, $location, catListDataLoadingService, $timeout, $rootScope) {
+            controllerAs: 'catPaginatedController',
+            controller: function CatPaginatedController($scope, $location, $timeout, $rootScope, catListDataLoadingService, catI18nService) {
+                var that = this;
                 var searchTimeout = null, DELAY_ON_SEARCH = 500;
+                var PAGINATION_PREVIOUS_KEY = 'cc.catalysts.cat-paginated.pagination.previous';
+                var PAGINATION_NEXT_KEY = 'cc.catalysts.cat-paginated.pagination.next';
+                var PAGINATION_FIRST_KEY = 'cc.catalysts.cat-paginated.pagination.first';
+                var PAGINATION_LAST_KEY = 'cc.catalysts.cat-paginated.pagination.last';
 
                 if (_.isUndefined($scope.listData)) {
                     $scope.listData = $scope.$parent.listData;
@@ -30,6 +48,34 @@ angular.module('cat')
                 if (_.isUndefined($scope.syncLocation)) {
                     $scope.syncLocation = _.isUndefined($scope.$parent.detail);
                 }
+
+                $scope.paginationText = {
+                    previous: 'Previous',
+                    next: 'Next',
+                    first: 'First',
+                    last: 'Last'
+                };
+
+                function handlePaginationTextResponse(prop) {
+                    return function (message) {
+                        $scope.paginationText[prop] = message;
+                    };
+                }
+
+
+                function _loadPaginationTranslations() {
+                    catI18nService.translate(PAGINATION_PREVIOUS_KEY).then(handlePaginationTextResponse('previous'));
+                    catI18nService.translate(PAGINATION_NEXT_KEY).then(handlePaginationTextResponse('next'));
+                    catI18nService.translate(PAGINATION_FIRST_KEY).then(handlePaginationTextResponse('first'));
+                    catI18nService.translate(PAGINATION_LAST_KEY).then(handlePaginationTextResponse('last'));
+                }
+
+                _loadPaginationTranslations();
+
+                $rootScope.$on('cat-i18n-refresh', function () {
+                    _loadPaginationTranslations();
+                });
+
 
                 $scope.listData.search = $scope.listData.search || $scope.listData.searchRequest.search() || {};
 
@@ -93,8 +139,16 @@ angular.module('cat')
                     reload();
                 };
 
+                this.getSearch = function () {
+                    return searchRequest.search();
+                };
+
+                this.getSearchRequest = function () {
+                    return searchRequest;
+                };
+
                 $scope.$on('SortChanged', function (event, value) {
-                    this.sort(value);
+                    that.sort(value);
                 });
             }
         };
