@@ -2,6 +2,9 @@
 
 /**
  * @ngdoc service
+ * @name catBreadcrumbService
+ * @service
+ *
  * @description
  *
  * This service is a simple wrapper around a list of Objects.
@@ -30,12 +33,16 @@ function CatBreadcrumbsService() {
         _bc.unshift(entry);
     };
 
+    this.removeFirst = function () {
+        return _bc.shift();
+    };
+
     this.push = function (entry) {
         _bc.push(entry);
     };
 
     this.pop = function () {
-        _bc.pop();
+        return _bc.pop();
     };
 
     this.length = function () {
@@ -73,7 +80,7 @@ function CatBreadcrumbsService() {
                 parentUrl = splitShiftAndJoin(parentUrl, 1);
 
                 var detailBreadcrumb = {
-                    url: '#' + parentUrl + '?tab=' + window.cat.util.pluralize(currentEndpoint.getEndpointName()),
+                    url: '#' + parentUrl + '?tab=' + currentEndpoint.getEndpointName(),
                     title: parent.name
                 };
                 uiStack.unshift(detailBreadcrumb);
@@ -82,6 +89,7 @@ function CatBreadcrumbsService() {
                 parentUrl = splitShiftAndJoin(parentUrl, 1);
                 var breadcrumb = {
                     title: capitalize(window.cat.util.pluralize(parentEndpoint.getEndpointName())),
+                    key: 'cc.catalysts.cat-breadcrumbs.entry.' + config.endpoint.getEndpointName(),
                     url: '#' + parentUrl
                 };
                 that.addFirst(breadcrumb);
@@ -92,6 +100,7 @@ function CatBreadcrumbsService() {
         } else {
             that.push({
                 title: capitalize(window.cat.util.pluralize(config.endpoint.getEndpointName())),
+                key: 'cc.catalysts.cat-breadcrumbs.entry.' + config.endpoint.getEndpointName(),
                 url: '#' + config.baseUrl
             });
         }
