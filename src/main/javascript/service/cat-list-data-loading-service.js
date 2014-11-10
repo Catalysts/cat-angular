@@ -8,7 +8,7 @@ angular.module('cat.service')
                 function success(data) {
                     var pagination = searchRequest.pagination();
 
-                    deferred.resolve({
+                    var result = {
                         count: data.totalCount,
                         collection: data.elements,
                         pagination: pagination,
@@ -18,7 +18,13 @@ angular.module('cat.service')
                         isSinglePageList: data.totalCount <= pagination.size,
                         endpoint: endpoint,
                         searchRequest: searchRequest
-                    });
+                    };
+
+                    delete data.totalCount;
+                    delete data.elements;
+                    delete data.facets;
+
+                    deferred.resolve(_.assign(result, data));
                 },
                 function error(reason) {
                     deferred.reject(reason);
