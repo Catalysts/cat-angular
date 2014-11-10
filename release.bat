@@ -1,4 +1,3 @@
-call gulpw
 cd dist
 git commit -a -m %*
 git tag %*

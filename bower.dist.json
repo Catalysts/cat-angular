@@ -3,8 +3,7 @@
     "version": "0.0.10",
     "homepage": "https://github.com/Catalysts/cat-angular",
     "authors": [
-        "Thomas Scheinecker <thomas.scheinecker@catalysts.cc>",
-        "Stefan Unterhofer <stefan.unterhofer@catalysts.cc>"
+        "Thomas Scheinecker <thomas.scheinecker@catalysts.cc>"
     ],
     "license": "Apache License, Version 2.0",
     "description": "Common Catalysts angular js code",
@@ -20,8 +19,10 @@
         "javascript"
     ],
     "dependencies": {
-        "angular": "1.2.16",
+        "angular": "1.2.26",
+        "angular-route": "1.2.26",
         "lodash": "2.4.1",
-        "angular-spinner": "0.5.0"
+        "angular-spinner": "0.5.0",
+        "angular-bootstrap": "0.11.2"
     }
 }
