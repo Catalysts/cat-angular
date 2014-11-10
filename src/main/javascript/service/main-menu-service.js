@@ -1,7 +1,8 @@
 'use strict';
 
-function MenuEntry(menuEntryId, options) {
+function MenuEntry(menuEntryId, options, parent) {
     this.id = menuEntryId;
+    this.completeId = parent.completeId + '.' + this.id;
     var _options = options;
 
     this.getOptions = function () {
@@ -17,13 +18,15 @@ function MenuEntry(menuEntryId, options) {
     };
 }
 
-function MenuGroup(groupId, options) {
+function MenuGroup(groupId, options, parent) {
+    var that = this;
     this.id = groupId;
+    this.completeId = parent.completeId + '.' + this.id;
     var _menuEntries = [];
     var _options = options;
 
     this.addMenuEntry = function (menuEntryId, options) {
-        _menuEntries.push(new MenuEntry(menuEntryId, options));
+        _menuEntries.push(new MenuEntry(menuEntryId, options, that));
     };
 
     this.getOptions = function () {
@@ -46,18 +49,20 @@ function MenuGroup(groupId, options) {
 }
 
 function Menu(menuId, options) {
+    var that = this;
     this.id = menuId;
+    this.completeId = this.id;
     var _menuEntries = [];
     var _menuGroups = {};
     var _options = options;
 
     this.addMenuGroup = function (groupId, options) {
-        _menuGroups[groupId] = new MenuGroup(groupId, options);
+        _menuGroups[groupId] = new MenuGroup(groupId, options, that);
     };
 
     this.addMenuEntry = function (groupId, menuEntryId, options) {
         if (_.isUndefined(groupId)) {
-            _menuEntries.push(new MenuEntry(menuEntryId, options));
+            _menuEntries.push(new MenuEntry(menuEntryId, options, that));
         } else {
             _menuGroups[groupId].addMenuEntry(menuEntryId, options);
         }

@@ -1,15 +1,23 @@
 <ul class="nav navbar-nav">
     <li class="dropdown" ng-repeat="menu in menus">
-        <a href="" class="dropdown-toggle" data-toggle="dropdown" ng-if="isVisible(menu)">{{menu.getOptions().name}}<b
-                class="caret"></b></a>
+        <a href="" class="dropdown-toggle" ng-if="isVisible(menu)">
+            <span cat-i18n="cc.catalysts.cat-menu.menu.{{menu.completeId}}">{{menu.getOptions().name}}</span> <b
+                class="caret"></b>
+        </a>
         <ul class="dropdown-menu" ng-if="isVisible(menu)">
             <li ng-repeat="entry in menu.getFlattened() track by entry.id" ng-if="isVisible(entry)"
                 ng-class="{'dropdown-header': entry.isGroup()}"
                 ng-switch data-on="entry.isGroup()">
                 <a ng-href="#{{entry.getOptions().path}}" ng-switch-when="false">
-                    {{entry.getOptions().name}} <span ng-if="entry.getOptions().keymap" class="text-muted">{{entry.getOptions().keymap}}</span>
+                    <span cat-i18n="cc.catalysts.cat-menu.entry.{{entry.completeId}}">
+                        {{entry.getOptions().name}}
+                    </span> <span ng-if="entry.getOptions().keymap"
+                                  class="text-muted">{{entry.getOptions().keymap}}</span>
                 </a>
-                <span ng-switch-default>{{entry.getOptions().name}}</span>
+                <span ng-switch-default
+                      cat-i18n="cc.catalysts.cat-menu.group.{{entry.completeId}}">
+                    {{entry.getOptions().name}}
+                </span>
             </li>
         </ul>
     </li>
