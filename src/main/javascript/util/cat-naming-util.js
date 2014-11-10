@@ -21,3 +21,11 @@ window.cat.util.pluralize = function (string) {
     }
 
 };
+
+window.cat.util.capitalize = function (string) {
+    if (_.isUndefined(string) || string.length === 0) {
+        return '';
+    }
+
+    return string.substring(0, 1).toUpperCase() + string.substring(1, string.length);
+};
