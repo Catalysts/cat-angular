@@ -98,4 +98,36 @@ describe('Api Service', function () {
         });
         $httpBackend.flush();
     });
+
+    it('should call custom GET url', function () {
+        $httpBackend.expectGET('/api/test/customGET').respond(200);
+        catApiService.test.custom.get('customGET').then(function (response) {
+            expect(response.status).toBe(200);
+        });
+        $httpBackend.flush();
+    });
+
+    it('should call custom GET url with search request', function () {
+        $httpBackend.expectGET('/api/test/customGET?page=0&size=100').respond(200);
+        catApiService.test.custom.get('customGET', new window.cat.SearchRequest()).then(function (response) {
+            expect(response.status).toBe(200);
+        });
+        $httpBackend.flush();
+    });
+
+    it('should call custom POST url', function () {
+        $httpBackend.expectPOST('/api/test/customPOST', {name: 'NewTestObject'}).respond(200);
+        catApiService.test.custom.post('customPOST', {name: 'NewTestObject'}).then(function (response) {
+            expect(response.status).toBe(200);
+        });
+        $httpBackend.flush();
+    });
+
+    it('should call custom PUT url', function () {
+        $httpBackend.expectPUT('/api/test/customPUT', {id: 100, name: 'NewTestObject'}).respond(200);
+        catApiService.test.custom.put('customPUT', {id: 100, name: 'NewTestObject'}).then(function (response) {
+            expect(response.status).toBe(200);
+        });
+        $httpBackend.flush();
+    });
 });

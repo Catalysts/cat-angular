@@ -121,13 +121,19 @@ function CatApiEndpoint(url, endpointConfig, $http) {
                     });
                 }
 
-                return {
+                var result = {
                     totalCount: response.data.totalCount,
                     facets: facets,
                     elements: _.map(response.data.elements, function (elem) {
                         return _mapResponse(elem);
                     })
                 };
+
+                delete response.data.totalCount;
+                delete response.data.elements;
+                delete response.data.facets;
+
+                return _.assign(result, response.data);
             } else {
                 return _.map(response.data, function (elem) {
                     return _mapResponse(elem);
