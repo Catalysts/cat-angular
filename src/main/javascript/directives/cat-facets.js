@@ -24,26 +24,22 @@ angular.module('cat')
                 listData: '=?',
                 names: '='
             },
+            require: '^catPaginated',
             templateUrl: 'template/cat-facets.tpl.html',
-            link: function CatFacetsLink(scope) {
+            link: function CatFacetsLink(scope, element, attrs, catPaginatedController) {
                 _initDefaults(scope);
                 _checkConditions(scope);
+
+                scope.catPaginatedController = catPaginatedController;
             },
             controller: function CatFacetsController($scope) {
+                $scope.isActive = function (facet) {
+                    return !!$scope.catPaginatedController.getSearch()[facet.name];
+                };
 
                 function _search(search) {
-                    return $scope.listData.searchRequest.search(search);
+                    return $scope.catPaginatedController.getSearchRequest().search(search);
                 }
-
-                $scope.isActive = function (facet) {
-                    return !_search()[facet.name];
-                };
-
-                $scope.showAll = function (facet) {
-                    var search = _search();
-                    delete search[facet.name];
-                    _search(search);
-                };
 
                 $scope.facetName = function (facet) {
                     if ($scope.names !== undefined && $scope.names[facet.name] !== undefined) {
@@ -53,11 +49,28 @@ angular.module('cat')
                     }
                 };
 
-                $scope.setActive = function (facet, term) {
-                    facet.activeTerm = term;
+                $scope.facets = {};
+
+                $scope.facetChanged = function (facet) {
                     var search = _search();
-                    search[facet.name] = term.id;
-                    _search(search);
+                    var value = $scope.facets[facet.name];
+                    if (!!value) {
+                        search[facet.name] = value;
+                    } else {
+                        delete search[facet.name];
+                    }
+                };
+
+                $scope.initFacets = function () {
+                    _.forEach($scope.listData.facets, function (facet) {
+                        if ($scope.isActive(facet)) {
+                            $scope.facets[facet.name] = $scope.catPaginatedController.getSearch()[facet.name];
+                        }
+                    });
+                };
+
+                $scope.facetSelectOptions = {
+                    allowClear: true
                 };
             }
         };

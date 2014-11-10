@@ -1,19 +1,14 @@
-<div class="sidebar">
-    <ul class="nav sidenav">
-        <li ng-repeat="facet in listData.facets">
-            <h4>{{facetName(facet)}}
-                <small ng-if="!isActive(facet)">
-                    <a ng-click="showAll(facet)" href="">See all</a>
-                </small>
-            </h4>
-            <ul class="nav">
-                <li ng-repeat="term in facet.terms" cat-load-more="5">
-                    <a href="" ng-click="setActive(facet,term)">{{term.name}}
-                        <span class="text-muted">({{term.count}})</span>
-                    </a>
-                </li>
-            </ul>
+<div>
+    <ul class="nav">
+        <li ng-repeat="facet in listData.facets" ng-if="listData.facets" ng-init="initFacets()">
+            <label cat-i18n="{{'cc.catalysts.cat-facets.facet.'+facet.name}}" i18n-params="{facet: facet}">{{facetName(facet)}}</label>
+            <select class="form-control" ui-select2="facetSelectOptions" ng-model="facets[facet.name]"
+                    ng-change="facetChanged(facet)">
+                <option></option>
+                <option ng-repeat="term in facet.terms" value="{{term.id}}">{{term.name}} ({{term.count}})
+                </option>
+            </select>
+            <br>
         </li>
     </ul>
-
 </div>
