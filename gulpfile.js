@@ -117,9 +117,9 @@ var _concatenate = function (name) {
     return lazypipe()
         .pipe(ngAnnotate)
         .pipe(concat, name + '.js')
-        .pipe(banner)
-        .pipe(header, license)
-        .pipe(header, license)
+        //.pipe(banner)
+        //.pipe(header, license)
+        //.pipe(header, license)
         .pipe(sourcemaps.write, '.')
         .pipe(gulp.dest, config.paths.dist)();
 };
@@ -128,8 +128,8 @@ var _minify = function (name) {
     return lazypipe()
         .pipe(ngAnnotate)
         .pipe(concat, name + '.js')
-        .pipe(banner)
-        .pipe(header, license)
+        //.pipe(banner)
+        //.pipe(header, license)
         .pipe(uglify, {preserveComments: 'some', mangle: false})
         .pipe(rename, name + '.min.js')
         .pipe(sourcemaps.write, '.')
