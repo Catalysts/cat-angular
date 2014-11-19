@@ -156,11 +156,11 @@ var angularJs = function () {
 };
 
 var angularTemplates = function () {
-    var concatenated = gulp.src('<%= paths.resources %>/**/*.tpl.html')
+    var concatenated = gulp.src('<%= paths.resources %>/**/*.html')
         .pipe(sourcemaps.init())
         .pipe(ngHtml2js({moduleName: 'cat', stripPrefix: 'resources/'}))
         .pipe(_concatenate(config.pkg.name + '.tpl'));
-    var minified = gulp.src('<%= paths.resources %>/**/*.tpl.html')
+    var minified = gulp.src('<%= paths.resources %>/**/*.html')
         .pipe(sourcemaps.init())
         .pipe(ngHtml2js({moduleName: 'cat', stripPrefix: 'resources/'}))
         .pipe(_minify(config.pkg.name + '.tpl'));
