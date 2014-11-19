@@ -9,8 +9,11 @@
     "description": "Common Catalysts angular js code",
     "main": [
         "cat-angular.css",
+        "cat-angular.css.map",
         "cat-angular.min.js",
-        "cat-angular.tpl.min.js"
+        "cat-angular.min.js.map",
+        "cat-angular.tpl.min.js",
+        "cat-angular.tpl.min.js.map"
     ],
     "keywords": [
         "angular",

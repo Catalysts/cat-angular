@@ -2,6 +2,8 @@
 
 var gulp = require('gulp'),
     ngHtml2js = require('gulp-ng-html2js'),
+    ngAnnotate = require('gulp-ng-annotate'),
+    sourcemaps = require('gulp-sourcemaps'),
     jshint = require('gulp-jshint'),
     less = require('gulp-less'),
     uglify = require('gulp-uglify'),
@@ -15,8 +17,9 @@ var gulp = require('gulp'),
 var karma_server = require('karma').server;
 var lodash = require('lodash');
 var lazypipe = require('lazypipe');
+var merge = require('merge-stream');
 
-var license = '/*\n ' +
+var license = '/*!\n ' +
     '* Copyright 2014 the original author or authors.\n ' +
     '*\n ' +
     '* Licensed under the Apache License, Version 2.0 (the "License");\n ' +
@@ -99,8 +102,10 @@ var test = function (watch) {
 var less2css = function () {
     var dest = template('<%= paths.dist %>');
     return gulp.src(['<%= paths.resources %>/styles/*.less'])
+        .pipe(sourcemaps.init())
         .pipe(less())
         .pipe(header(license))
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(dest));
 };
 
@@ -108,30 +113,58 @@ var banner = lazypipe()
     .pipe(header, '(function(window, document, undefined) {\n\'use strict\';\n')
     .pipe(footer, '\n})(window, document);\n');
 
-var dist = function (name) {
+var _concatenate = function (name) {
     return lazypipe()
-        .pipe(banner)
+        .pipe(ngAnnotate)
         .pipe(concat, name + '.js')
+        .pipe(banner)
         .pipe(header, license)
-        .pipe(gulp.dest, config.paths.dist)
-        .pipe(uglify)
         .pipe(header, license)
+        .pipe(sourcemaps.write, '.')
+        .pipe(gulp.dest, config.paths.dist)();
+};
+
+var _minify = function (name) {
+    return lazypipe()
+        .pipe(ngAnnotate)
+        .pipe(concat, name + '.js')
+        .pipe(banner)
+        .pipe(header, license)
+        .pipe(uglify, {preserveComments: 'some', mangle: false})
         .pipe(rename, name + '.min.js')
+        .pipe(sourcemaps.write, '.')
         .pipe(gulp.dest, config.paths.dist)();
 };
 
 var angularJs = function () {
-    return gulp.src('<%= paths.src %>/**/*.js')
+    var concatenated = gulp.src('<%= paths.src %>/**/*.js')
         .pipe(jshint(config.jshint.jshintrc))
         .pipe(jshint.reporter(config.jshint.reporters.dev))
         .pipe(replace('\'use strict\';', ''))
-        .pipe(dist(config.pkg.name));
+        .pipe(sourcemaps.init())
+        .pipe(_concatenate(config.pkg.name));
+
+    var minified = gulp.src('<%= paths.src %>/**/*.js')
+        .pipe(jshint(config.jshint.jshintrc))
+        .pipe(jshint.reporter(config.jshint.reporters.dev))
+        .pipe(replace('\'use strict\';', ''))
+        .pipe(sourcemaps.init())
+        .pipe(_minify(config.pkg.name));
+
+
+    return merge(concatenated, minified);
 };
 
 var angularTemplates = function () {
-    return gulp.src('<%= paths.resources %>/**/*.tpl.html')
+    var concatenated = gulp.src('<%= paths.resources %>/**/*.tpl.html')
+        .pipe(sourcemaps.init())
         .pipe(ngHtml2js({moduleName: 'cat', stripPrefix: 'resources/'}))
-        .pipe(dist(config.pkg.name + '.tpl'));
+        .pipe(_concatenate(config.pkg.name + '.tpl'));
+    var minified = gulp.src('<%= paths.resources %>/**/*.tpl.html')
+        .pipe(sourcemaps.init())
+        .pipe(ngHtml2js({moduleName: 'cat', stripPrefix: 'resources/'}))
+        .pipe(_minify(config.pkg.name + '.tpl'));
+    return merge(concatenated, minified);
 };
 
 var bowerJson = function () {
