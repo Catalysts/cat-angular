@@ -16,10 +16,18 @@ function CatBaseTabsController($scope, $controller, $routeParams, $location, con
     };
 
     $scope.selectTab = function (tabName) {
+        if (_.isUndefined($location.search().tab) && tabName === $scope.tabNames[0]) {
+            // don't add 'default' tab to url
+            return;
+        }
         $location.search('tab', tabName);
     };
 
     var isTabActive = function (tab) {
+        if (tab.name === $scope.tabNames[0] && _.isUndefined($routeParams.tab)) {
+            // first tab is active if no parameter is given
+            return true;
+        }
         return $routeParams.tab === tab.name;
     };
 
@@ -28,6 +36,9 @@ function CatBaseTabsController($scope, $controller, $routeParams, $location, con
     }, function (newValue) {
         if (_.isString(newValue.tab)) {
             $scope.activateTab(newValue.tab);
+        } else if (_.isUndefined(newValue.tab)) {
+            // activate first tab if undefined
+            $scope.activateTab($scope.tabNames[0]);
         }
     });
 
