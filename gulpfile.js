@@ -86,8 +86,8 @@ var watch = function () {
     console.log(template('Watching <%= paths.src %>/**/*'));
     gulp.watch(template('<%= paths.src %>/**/*'), ['angular-js']).on('change', watchLog);
 
-    console.log(template('Watching <%= paths.resources %>/**/*.tpl.js'));
-    gulp.watch(template('<%= paths.resources %>/**/*.tpl.js'), ['angular-templates']).on('change', watchLog);
+    console.log(template('Watching <%= paths.resources %>/**/*.html'));
+    gulp.watch(template('<%= paths.resources %>/**/*.html'), ['angular-templates']).on('change', watchLog);
 
     console.log(template('Watching <%= paths.resources %>/**/*.less'));
     gulp.watch(template('<%= paths.resources %>/**/*.less'), ['less2css']).on('change', watchLog);
