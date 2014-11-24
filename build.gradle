@@ -1,1 +1,38 @@
+description = 'cat-angular AngularJS library'
 
+version = '0.0.13'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'be.filipblondeel.gradle:gradle-gulp-plugin:0.1'
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.2'
+}
+
+apply plugin: 'gulp'
+
+print "${project.buildDir}"
+
+node {
+    version = '0.10.33'
+    download = true
+    workDir = file("${project.buildDir}/nodejs")
+}
+
+gulp_build.dependsOn << 'npmInstall'
+gulp_test.dependsOn << 'npmInstall'
+
+tasks.create('build', {}).dependsOn << 'gulp_build'
+tasks.create('test', {}).dependsOn << 'gulp_test'
+tasks.create('clean', {
+    delete 'build'
+    delete 'dist'
+    delete 'node_modules'
+    delete 'bower_components'
+})
