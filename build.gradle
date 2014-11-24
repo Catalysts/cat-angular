@@ -26,9 +26,10 @@ node {
 }
 
 gulp_build.dependsOn << 'npmInstall'
+tasks.getByName('gulp_build-production').dependsOn << 'npmInstall'
 gulp_test.dependsOn << 'npmInstall'
 
-tasks.create('build', {}).dependsOn << 'gulp_build'
+tasks.create('build', {}).dependsOn << (System.getProperty('prod') == null ? 'gulp_build' : 'gulp_build-production')
 tasks.create('test', {}).dependsOn << 'gulp_test'
 tasks.create('clean', {
     delete 'build'

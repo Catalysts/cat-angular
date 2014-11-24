@@ -94,9 +94,19 @@ var watch = function () {
     gulp.watch(template('<%= paths.resources %>/**/*.less'), ['less2css']).on('change', watchLog);
 };
 
-var test = function (watch) {
+var test = function (watch, production) {
     return function (cb) {
-        karma_server.start(lodash.assign({}, config.karma, {singleRun: !watch, autoWatch: watch}), cb);
+        var options = {};
+        if (production === true) {
+            var plugins = config.karma.plugins;
+            plugins.push('karma-teamcity-reporter');
+            options.plugins = plugins;
+
+            var reporters = config.karma.reporters;
+            reporters.push('teamcity');
+            options.reporters = reporters;
+        }
+        karma_server.start(lodash.assign(options, config.karma, {singleRun: !watch, autoWatch: watch}), cb);
     };
 };
 
@@ -188,7 +198,9 @@ gulp.task('less2css', less2css);
 gulp.task('default', ['build']);
 gulp.task('bower-json', bowerJson);
 gulp.task('build', ['test', 'less2css', 'bower-json']);
+gulp.task('build-production', ['test-production', 'less2css', 'bower-json']);
 gulp.task('test', ['angular', 'bower-install'], test(false));
+gulp.task('test-production', ['angular', 'bower-install'], test(false, true));
 gulp.task('test-watch', ['angular', 'bower-install'], test(true));
 gulp.task('angular', ['angular-js', 'angular-templates']);
 gulp.task('angular-js', angularJs);
