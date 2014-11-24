@@ -9,7 +9,6 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     header = require('gulp-header'),
     footer = require('gulp-footer'),
-    clean = require('gulp-clean'),
     rename = require('gulp-rename'),
     replace = require('gulp-replace'),
     concat = require('gulp-concat'),
@@ -19,6 +18,7 @@ var karma_server = require('karma').server;
 var lodash = require('lodash');
 var lazypipe = require('lazypipe');
 var merge = require('merge-stream');
+var rimraf = require('rimraf');
 
 var license = '/*!\n ' +
     '* Copyright 2014 the original author or authors.\n ' +
@@ -174,9 +174,8 @@ var bowerJson = function () {
         .pipe(gulp.dest(config.paths.dist));
 };
 
-var cleanTask = function () {
-    return gulp.src(['<%= paths.dist %>'], {read: false})
-        .pipe(clean());
+var cleanTask = function (cb) {
+    rimraf(config.paths.dist, cb);
 };
 
 var bowerInstall = function() {
