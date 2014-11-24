@@ -12,7 +12,8 @@ var gulp = require('gulp'),
     clean = require('gulp-clean'),
     rename = require('gulp-rename'),
     replace = require('gulp-replace'),
-    concat = require('gulp-concat');
+    concat = require('gulp-concat'),
+    bower = require('gulp-bower');
 
 var karma_server = require('karma').server;
 var lodash = require('lodash');
@@ -178,13 +179,18 @@ var cleanTask = function () {
         .pipe(clean());
 };
 
+var bowerInstall = function() {
+    return bower();
+};
+
+gulp.task('bower-install', bowerInstall);
 gulp.task('watch', ['angular'], watch);
 gulp.task('less2css', less2css);
 gulp.task('default', ['build']);
 gulp.task('bower-json', bowerJson);
 gulp.task('build', ['test', 'less2css', 'bower-json']);
-gulp.task('test', ['angular'], test(false));
-gulp.task('test-watch', ['angular'], test(true));
+gulp.task('test', ['angular', 'bower-install'], test(false));
+gulp.task('test-watch', ['angular', 'bower-install'], test(true));
 gulp.task('angular', ['angular-js', 'angular-templates']);
 gulp.task('angular-js', angularJs);
 gulp.task('angular-templates', angularTemplates);
