@@ -13,14 +13,13 @@ module.exports = {
         // cat-angular
         'src/main/javascript/module.js',
         'src/main/javascript/**/*.js',
-        'src/main/resources/**/*.tpl.html',
+        'dist/cat-angular.tpl.js',
         'src/test/javascript/**/*.spec.js'
     ],
     plugins: [
         'karma-jasmine',
         'karma-coverage',
-        'karma-phantomjs-launcher',
-        'karma-ng-html2js-preprocessor'
+        'karma-phantomjs-launcher'
     ],
     reporters: ['progress', 'coverage'],
     browsers: ['PhantomJS'],
@@ -33,9 +32,5 @@ module.exports = {
             {type: 'lcov', dir: 'build/coverage/'},
             {type: 'text-summary', dir: 'build/coverage/'}
         ]
-    },
-    ngHtml2JsPreprocessor: {
-        stripPrefix: 'src/main/resources',
-        moduleName: 'cat.template'
     }
 };
