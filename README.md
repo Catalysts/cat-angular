@@ -23,5 +23,6 @@ cat-angular is published via bower, just call 'bower install cat-angular' to ins
 add the --save option to automatically add it to your bower.json file as dependency
 
 ##getting local changes into other projects##
+- execute 'gulpw' once to ensure that a bower.json file is present within the 'dist' folder
 - execute 'bower link' within the 'dist' folder of cat-angular
 - execute 'bower link cat-angular' in the directory containing your bower.json file of your project - **NOTE** _admin privileges required_
