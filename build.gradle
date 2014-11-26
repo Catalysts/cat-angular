@@ -33,7 +33,6 @@ tasks.create('build', {}).dependsOn << (System.getProperty('prod') == null ? 'gu
 tasks.create('test', {}).dependsOn << 'gulp_test'
 tasks.create('clean', {
     delete 'build'
-    delete 'dist'
     delete 'node_modules'
     delete 'bower_components'
 })
