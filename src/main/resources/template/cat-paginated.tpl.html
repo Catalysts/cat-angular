@@ -24,7 +24,7 @@
             <span cat-i18n="cc.catalysts.cat-paginated.noItemsFound">Keine Einträge gefunden</span>
         </div>
     </div>
-    <div ng-transclude ng-show="listData.count !== 0"></div>
+    <div ng-transclude></div>
     <div class="text-center" ng-if="!listData.isSinglePageList && listData.count !== 0">
         <pagination total-items="listData.count" items-per-page="listData.pagination.size"
                     ng-model="listData.pagination.page" max-size="10"
