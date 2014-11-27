@@ -116,7 +116,7 @@ var less2css = function () {
         .pipe(sourcemaps.init())
         .pipe(less())
         .pipe(header(license))
-        .pipe(sourcemaps.write('.'))
+        .pipe(sourcemaps.write('.', {sourceRoot: 'src'}))
         .pipe(gulp.dest(dest));
 };
 
@@ -131,7 +131,7 @@ var _concatenate = function (name) {
         //.pipe(banner)
         //.pipe(header, license)
         //.pipe(header, license)
-        .pipe(sourcemaps.write, '.')
+        .pipe(sourcemaps.write, '.', {sourceRoot: 'src'})
         .pipe(gulp.dest, config.paths.dist)();
 };
 
