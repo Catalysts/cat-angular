@@ -1,6 +1,6 @@
 <ul class="nav navbar-nav">
-    <li class="dropdown" ng-repeat="menu in menus">
-        <a href="" class="dropdown-toggle" ng-if="isVisible(menu)">
+    <li class="dropdown" ng-repeat="menu in menus" dropdown="">
+        <a href="" class="dropdown-toggle" ng-if="isVisible(menu)" dropdown-toggle="">
             <span cat-i18n="cc.catalysts.cat-menu.menu.{{menu.completeId}}">{{menu.getOptions().name}}</span> <b
                 class="caret"></b>
         </a>
