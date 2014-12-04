@@ -1,3 +1,7 @@
+git submodule update --remote
+cd dist
+git co master
+cd ..
 call gulpw
 cd dist
 git commit -a -m %*
