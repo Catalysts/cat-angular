@@ -1,5 +1,5 @@
 'use strict';
-angular.module('cat')
+angular.module('cat.directives.facets')
     .directive('catFacets', function CatFacetsDirective() {
         function _initDefaults(scope) {
             if (_.isUndefined(scope.listData)) {

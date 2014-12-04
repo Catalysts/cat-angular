@@ -1,5 +1,5 @@
 'use strict';
-angular.module('cat')
+angular.module('cat.directives.loadMore')
     .directive('catLoadMore', function CatLoadMoreDirective() {
         return {
             replace: true,

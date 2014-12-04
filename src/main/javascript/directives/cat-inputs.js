@@ -3,7 +3,7 @@
  */
 'use strict';
 
-angular.module('cat')
+angular.module('cat.directives.inputs')
     .directive('input', function CatInputDirective() {
         return {
             require: 'ngModel',

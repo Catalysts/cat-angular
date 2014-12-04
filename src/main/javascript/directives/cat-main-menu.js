@@ -1,5 +1,5 @@
 'use strict';
-angular.module('cat')
+angular.module('cat.directives.menu')
     .directive('catMainMenu', ['$mainMenu', '$rootScope', function CatMainMenuDirective($mainMenu, $rootScope) {
         return {
             restrict: 'E',

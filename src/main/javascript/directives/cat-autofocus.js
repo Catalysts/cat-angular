@@ -1,5 +1,5 @@
 'use strict';
-angular.module('cat')
+angular.module('cat.directives.autofocus')
     .directive('catAutofocus', function CatAutofocusDirective($timeout) {
         return {
             restrict: 'A',

@@ -1,5 +1,5 @@
 'use strict';
-angular.module('cat')
+angular.module('cat.directives.form')
     .directive('form', ['$timeout', function CatFormDirective($timeout) {
         return {
             restrict: 'E',

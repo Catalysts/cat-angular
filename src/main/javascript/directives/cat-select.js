@@ -141,5 +141,5 @@ function CatSelectDirective() {
     };
 }
 
-angular.module('cat.directives')
+angular.module('cat.directives.select')
     .directive('catSelect', CatSelectDirective);

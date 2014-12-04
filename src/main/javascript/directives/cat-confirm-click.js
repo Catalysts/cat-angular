@@ -1,5 +1,5 @@
 'use strict';
-angular.module('cat')
+angular.module('cat.directives.confirmClick')
     .directive('catConfirmClick', function CatConfirmClickDirective() {
         return {
             restrict: 'A',

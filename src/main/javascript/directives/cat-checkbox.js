@@ -1,5 +1,5 @@
 'use strict';
-angular.module('cat')
+angular.module('cat.directives.checkbox')
     .directive('catCheckbox', function CatCheckboxDirective() {
         return {
             replace: true,

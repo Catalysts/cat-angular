@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('cat')
+angular.module('cat.directives.numbersOnly')
     .directive('numbersOnly', function CatNumbersOnlyDirective() {
         return {
             require: 'ngModel',

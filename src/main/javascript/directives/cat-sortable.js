@@ -1,5 +1,5 @@
 'use strict';
-angular.module('cat')
+angular.module('cat.directives.sortable')
     .directive('catSortable', function CatSortableDirective($compile) {
         return {
             restrict: 'AC',

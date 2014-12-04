@@ -1,5 +1,5 @@
 'use strict';
-angular.module('cat')
+angular.module('cat.directives.paginated')
     .directive('catPaginated', function CatPaginatedDirective($log, catI18nService) {
         var SEARCH_PROP_KEY = 'cc.catalysts.cat-paginated.search.prop';
 

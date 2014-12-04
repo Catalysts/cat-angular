@@ -3,7 +3,7 @@
  */
 'use strict';
 
-angular.module('cat')
+angular.module('cat.directives.fieldErrors')
     .directive('catFieldErrors', function CatFieldErrorsDirective() {
         return {
             replace: 'true',
