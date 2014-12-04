@@ -37,11 +37,11 @@ angular.module('cat.directives.fieldErrors', []);
 angular.module('cat.directives.inputs', []);
 angular.module('cat.directives.loadMore', []);
 angular.module('cat.directives.menu', ['cat.service.menu']);
-angular.module('cat.directives.select', ['cat.service.api', 'cat.service.selectConfig']);
+angular.module('cat.directives.select', ['ui.select2', 'cat.service.api', 'cat.service.selectConfig']);
 
 angular.module('cat.directives.i18n', ['cat.service.i18n']);
 
-angular.module('cat.directives.paginated', []);
+angular.module('cat.directives.paginated', ['ui.bootstrap.pagination']);
 angular.module('cat.directives.facets', ['cat.directives.paginated']);
 angular.module('cat.directives.sortable', ['cat.directives.paginated']);
 
@@ -68,9 +68,7 @@ angular.module('cat.directives', [
     'cat.directives.facets',
     'cat.directives.sortable',
     'cat.directives.form',
-    'cat.directives.numbersOnly',
-    'ui.select2',
-    'ui.bootstrap.pagination'
+    'cat.directives.numbersOnly'
 ]);
 
 angular.module('cat', [
