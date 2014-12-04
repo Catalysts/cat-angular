@@ -1,7 +1,3 @@
-cd dist
-git fetch
-git reset --hard origin/master
-cd ..
 call gulpw
 cd dist
 git commit -a -m %*
