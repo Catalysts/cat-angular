@@ -1,5 +1,8 @@
 window.cat = {};
 
+angular.module('cat.filters.replaceText', []);
+angular.module('cat.filters', ['cat.filters.replaceText']);
+
 angular.module('cat.template', ['ui.bootstrap.tpls']);
 
 angular.module('cat.service.api', []);
@@ -74,5 +77,6 @@ angular.module('cat', [
     'cat.service',
     'cat.template',
     'cat.directives',
+    'cat.filters',
     'cat.controller'
 ]);
