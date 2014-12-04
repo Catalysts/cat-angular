@@ -3,7 +3,7 @@
  */
 'use strict';
 
-angular.module('cat.service')
+angular.module('cat.service.loading')
     .factory('loadingService', function CatLoadingService($rootScope, usSpinnerService, $timeout) {
         var timeout = 50;
         var animationDuration = 200;

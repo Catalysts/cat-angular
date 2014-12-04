@@ -56,4 +56,4 @@ function CatRouteServiceProvider($routeProvider) {
 }
 
 
-angular.module('cat.service').provider('catRouteService', CatRouteServiceProvider);
+angular.module('cat.service.route').provider('catRouteService', CatRouteServiceProvider);

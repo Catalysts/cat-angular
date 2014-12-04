@@ -185,4 +185,4 @@ function MainMenuProvider() {
     };
 }
 
-angular.module('cat.service').provider('$mainMenu', MainMenuProvider);
+angular.module('cat.service.menu').provider('$mainMenu', MainMenuProvider);

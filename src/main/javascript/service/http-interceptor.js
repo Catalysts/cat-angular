@@ -3,7 +3,7 @@
  */
 'use strict';
 
-angular.module('cat.service')
+angular.module('cat.service.httpIntercept')
     .factory('errorHttpInterceptor', function CatErrorHttpInterceptor($q, $globalMessages, loadingService) {
         return {
             'request': function (config) {

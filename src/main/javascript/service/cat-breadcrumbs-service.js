@@ -108,7 +108,7 @@ function CatBreadcrumbsService() {
     };
 }
 
-angular.module('cat.service').service('catBreadcrumbsService', CatBreadcrumbsService);
+angular.module('cat.service.breadcrumbs').service('catBreadcrumbsService', CatBreadcrumbsService);
 
 // TODO remove in future release
-angular.module('cat.service').service('$breadcrumbs', CatBreadcrumbsService);
+angular.module('cat.service.breadcrumbs').service('$breadcrumbs', CatBreadcrumbsService);

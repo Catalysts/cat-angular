@@ -45,4 +45,4 @@ function CatSelectConfigServiceProvider() {
 }
 
 
-angular.module('cat.service').provider('catSelectConfigService', CatSelectConfigServiceProvider);
+angular.module('cat.service.selectConfig').provider('catSelectConfigService', CatSelectConfigServiceProvider);

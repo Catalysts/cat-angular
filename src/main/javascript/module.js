@@ -1,15 +1,31 @@
 window.cat = {};
 
-angular.module('cat.controller.base.list', []);
-angular.module('cat.controller.base.tabs', []);
-angular.module('cat.controller.base.detail', ['cat.controller.base.tabs']);
-angular.module('cat.controller', ['cat.controller.base.detail', 'cat.controller.base.list']);
-
 angular.module('cat.template', ['ui.bootstrap.tpls']);
 
 angular.module('cat.service.api', []);
+angular.module('cat.service.breadcrumbs', []);
 angular.module('cat.service.i18n', []);
-angular.module('cat.service', ['angularSpinner', 'ngRoute', 'cat.service.api', 'cat.service.i18n']);
+angular.module('cat.service.listDataLoading', ['cat.service.api']);
+angular.module('cat.service.route', ['ngRoute']);
+angular.module('cat.service.selectConfig', []);
+angular.module('cat.service.view', ['cat.service.api', 'cat.service.route']);
+angular.module('cat.service.loading', ['angularSpinner']);
+angular.module('cat.service.message', []);
+angular.module('cat.service.httpIntercept', ['cat.service.loading', 'cat.service.message']);
+angular.module('cat.service.menu', []);
+angular.module('cat.service', [
+    'cat.service.api',
+    'cat.service.breadcrumbs',
+    'cat.service.i18n',
+    'cat.service.listDataLoading',
+    'cat.service.route',
+    'cat.service.selectConfig',
+    'cat.service.view',
+    'cat.service.loading',
+    'cat.service.httpIntercept',
+    'cat.service.menu',
+    'cat.service.message'
+]);
 
 angular.module('cat.directives.autofocus', []);
 angular.module('cat.directives.checkbox', []);
@@ -17,8 +33,8 @@ angular.module('cat.directives.confirmClick', []);
 angular.module('cat.directives.fieldErrors', []);
 angular.module('cat.directives.inputs', []);
 angular.module('cat.directives.loadMore', []);
-angular.module('cat.directives.menu', []);
-angular.module('cat.directives.select', []);
+angular.module('cat.directives.menu', ['cat.service.menu']);
+angular.module('cat.directives.select', ['cat.service.api', 'cat.service.selectConfig']);
 
 angular.module('cat.directives.i18n', ['cat.service.i18n']);
 
@@ -29,6 +45,10 @@ angular.module('cat.directives.sortable', ['cat.directives.paginated']);
 angular.module('cat.directives.form', []);
 angular.module('cat.directives.numbersOnly', []);
 
+angular.module('cat.controller.base.list', ['cat.service.breadcrumbs']);
+angular.module('cat.controller.base.tabs', []);
+angular.module('cat.controller.base.detail', ['cat.service.breadcrumbs', 'cat.controller.base.tabs']);
+angular.module('cat.controller', ['cat.controller.base.detail', 'cat.controller.base.list']);
 
 angular.module('cat.directives', [
     'cat.template',
