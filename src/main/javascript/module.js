@@ -41,7 +41,11 @@ angular.module('cat.directives.select', ['ui.select2', 'cat.service.api', 'cat.s
 
 angular.module('cat.directives.i18n', ['cat.service.i18n']);
 
-angular.module('cat.directives.paginated', ['ui.bootstrap.pagination']);
+angular.module('cat.directives.paginated', [
+    'ui.bootstrap.pagination',
+    'cat.service.listDataLoading',
+    'cat.service.i18n'
+]);
 angular.module('cat.directives.facets', ['cat.directives.paginated']);
 angular.module('cat.directives.sortable', ['cat.directives.paginated']);
 

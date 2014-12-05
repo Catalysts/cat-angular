@@ -113,6 +113,7 @@ angular.module('cat.directives.paginated')
                 }
 
                 $scope.$watch('listData.pagination', function () {
+                    searchRequest.pagination($scope.listData.pagination);
                     updateLocation();
                     reload();
                 }, true);
