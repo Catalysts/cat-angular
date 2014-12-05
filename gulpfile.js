@@ -14,6 +14,7 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     bower = require('gulp-bower');
 
+var path = require('path');
 var karma_server = require('karma').server;
 var lodash = require('lodash');
 var lazypipe = require('lazypipe');
@@ -52,7 +53,9 @@ var config = {
             dev: 'jshint-stylish'
         }
     },
-    karma: require('./karma.conf.js')
+    karma: {
+        configFile: path.resolve('./karma.conf.js')
+    }
 };
 
 function template(templateString, data) {
@@ -98,13 +101,18 @@ var test = function (watch, production) {
     return function (cb) {
         var options = {};
         if (production === true) {
-            var plugins = config.karma.plugins;
-            plugins.push('karma-teamcity-reporter');
-            options.plugins = plugins;
+            options.plugins = [
+                'karma-teamcity-reporter',
+                'karma-jasmine',
+                'karma-coverage',
+                'karma-phantomjs-launcher'
+            ];
 
-            var reporters = config.karma.reporters;
-            reporters.push('teamcity');
-            options.reporters = reporters;
+            options.reporters = [
+                'progress',
+                'coverage',
+                'teamcity'
+            ];
         }
         karma_server.start(lodash.assign(options, config.karma, {singleRun: !watch, autoWatch: watch}), cb);
     };

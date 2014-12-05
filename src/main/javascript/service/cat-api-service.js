@@ -6,14 +6,15 @@
  * @param {string} url the base url which is added before the configured urls
  * @param {object} endpointConfig the configuration of this endpoint - holds properties like name, url, the model and children
  * @param {object} $http the angular $http service which handles the actual xhr requests
+ * @param {object} catConversionService the catConversionService used to convert from and to server side data
  * @constructor
  */
-function CatApiEndpoint(url, endpointConfig, $http) {
+function CatApiEndpoint(url, endpointConfig, $http, catConversionService) {
     var that = this;
 
     var _endpointName = endpointConfig.name;
-    var _endpointUrl = url + (endpointConfig.config.url || endpointConfig.name);
-    var ModelClass = endpointConfig.config.model;
+    var config = endpointConfig.config;
+    var _endpointUrl = url + (config.url || endpointConfig.name);
     var _childEndpointSettings = endpointConfig.children;
 
     /**
@@ -36,6 +37,10 @@ function CatApiEndpoint(url, endpointConfig, $http) {
         return ret;
     });
 
+    var _addChildEndpoints = function (data) {
+        _.merge(data, _res(data.id));
+    };
+
     /**
      * This helper method initializes a new instance of the configured model with the given data and adds all child
      * endpoints to it.
@@ -45,8 +50,21 @@ function CatApiEndpoint(url, endpointConfig, $http) {
      * @private
      */
     var _mapResponse = function (data) {
-        var object = new ModelClass(data);
-        return _.merge(object, _res(object.id));
+        var object = catConversionService.toClient(data, config);
+
+        if (!_.isUndefined(object.id)) {
+            _.forEach(object, _addChildEndpoints);
+        }
+
+        if (_.isArray(object)) {
+            _.forEach(object, _addChildEndpoints);
+        }
+
+        if (_.isArray(object.elements)) {
+            _.forEach(object.elements, _addChildEndpoints);
+        }
+
+        return object;
     };
 
     /**
@@ -112,33 +130,7 @@ function CatApiEndpoint(url, endpointConfig, $http) {
      */
     this.list = function (searchRequest) {
         return $http.get(_endpointUrl + _getSearchQuery(searchRequest)).then(function (response) {
-            if (!!response.data.totalCount || response.data.totalCount === 0) {
-                var facets = [];
-
-                if (!!response.data.facets) {
-                    facets = _.map(response.data.facets, function (facet) {
-                        return new window.cat.Facet(facet);
-                    });
-                }
-
-                var result = {
-                    totalCount: response.data.totalCount,
-                    facets: facets,
-                    elements: _.map(response.data.elements, function (elem) {
-                        return _mapResponse(elem);
-                    })
-                };
-
-                delete response.data.totalCount;
-                delete response.data.elements;
-                delete response.data.facets;
-
-                return _.assign(result, response.data);
-            } else {
-                return _.map(response.data, function (elem) {
-                    return _mapResponse(elem);
-                });
-            }
+            return _mapResponse(response.data);
         });
     };
 
@@ -327,15 +319,15 @@ function CatApiServiceProvider() {
     };
 
 
-    this.$get = ['$http',
+    this.$get = ['$http', 'catConversionService',
         /**
          * @return {object} returns a map from names to CatApiEndpoints
          */
-            function $getCatApiService($http) {
+            function $getCatApiService($http, catConversionService) {
             var catApiService = {};
 
             _.forEach(_.keys(_endpoints), function (path) {
-                catApiService[path] = new CatApiEndpoint(_urlPrefix, _endpoints[path], $http);
+                catApiService[path] = new CatApiEndpoint(_urlPrefix, _endpoints[path], $http, catConversionService);
             });
 
             return catApiService;

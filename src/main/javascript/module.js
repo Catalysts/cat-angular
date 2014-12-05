@@ -5,7 +5,8 @@ angular.module('cat.filters', ['cat.filters.replaceText']);
 
 angular.module('cat.template', ['ui.bootstrap.tpls']);
 
-angular.module('cat.service.api', []);
+angular.module('cat.service.conversion', []);
+angular.module('cat.service.api', ['cat.service.conversion']);
 angular.module('cat.service.breadcrumbs', []);
 angular.module('cat.service.i18n', []);
 angular.module('cat.service.listDataLoading', ['cat.service.api']);
@@ -17,6 +18,7 @@ angular.module('cat.service.message', []);
 angular.module('cat.service.httpIntercept', ['cat.service.loading', 'cat.service.message']);
 angular.module('cat.service.menu', []);
 angular.module('cat.service', [
+    'cat.service.conversion',
     'cat.service.api',
     'cat.service.breadcrumbs',
     'cat.service.i18n',

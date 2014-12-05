@@ -1,16 +1,6 @@
 'use strict';
 
-// test model class
 
-function Test(data) {
-    this.isTestObject = true;
-    this.id = data.id;
-    this.name = data.name;
-}
-
-Test.prototype.equals = function (data) {
-    return data.id === this.id && data.name === this.name;
-};
 
 // actual spec
 describe('Api Service', function () {
@@ -28,14 +18,14 @@ describe('Api Service', function () {
         angular.module('cat.service.api.test', []).config(function (catApiServiceProvider) {
             catApiServiceProvider.endpoint('test', {
                 url: 'test',
-                model: Test
+                model: cat.util.test.Model
             });
         });
 
         module('cat.service.api');
         module('cat.service.api.test');
 
-        inject(function (_$httpBackend_, _catApiService_) {
+        inject(function (_$httpBackend_, _catConversionService_, _catApiService_) {
             $httpBackend = _$httpBackend_;
             catApiService = _catApiService_;
         });
@@ -47,14 +37,13 @@ describe('Api Service', function () {
     });
 
     it('should return a paginated result if a PagedResultDTO is returned by the server', function () {
-        $httpBackend.expectGET('/api/test?page=0&size=100').respond({totalCount: 2, elements: testData});
+        var serverData = {totalCount: 2, elements: testData};
+        $httpBackend.expectGET('/api/test?page=0&size=100').respond(serverData);
         catApiService.test.list(new window.cat.SearchRequest()).then(function (result) {
+            expect(result).toBeDefined();
             expect(result.totalCount).toBe(2);
             expect(result.elements.length).toBe(2);
-            expect(result.elements[0].isTestObject).toBe(true);
-            expect(result.elements[0].id).toBe(1);
-            expect(result.elements[1].isTestObject).toBe(true);
-            expect(result.elements[1].id).toBe(2);
+            cat.util.test.expectToEqualConverted(result.elements, testData);
         });
         $httpBackend.flush();
     });
@@ -62,31 +51,28 @@ describe('Api Service', function () {
     it('should return a list of objects if the server response is not paginated', function () {
         $httpBackend.expectGET('/api/test').respond(testData);
         catApiService.test.list().then(function (result) {
+            expect(result).toBeDefined();
             expect(result.length).toBe(2);
-            expect(result[0].isTestObject).toBe(true);
-            expect(result[0].id).toBe(1);
-            expect(result[1].isTestObject).toBe(true);
-            expect(result[1].id).toBe(2);
+            cat.util.test.expectToEqualConverted(result, testData);
         });
         $httpBackend.flush();
     });
 
     it('should post an object without id', function () {
-        $httpBackend.expectPOST('/api/test', {name: 'NewTestObject'}).respond({id: 100, name: 'NewTestObject'});
-        catApiService.test.save({name: 'NewTestObject'}).then(function (result) {
-            expect(result.isTestObject).toBe(true);
-            expect(result.id).toBe(100);
-            expect(result.name).toBe('NewTestObject');
+        var clientData = {name: 'NewTestObject'};
+        var serverData = {id: 100, name: 'NewTestObject'};
+        $httpBackend.expectPOST('/api/test', clientData).respond(serverData);
+        catApiService.test.save(clientData).then(function (result) {
+            cat.util.test.expectToEqualConverted(result, new cat.util.test.Model(serverData));
         });
         $httpBackend.flush();
     });
 
     it('should update an object with id', function () {
-        $httpBackend.expectPUT('/api/test/100', {id: 100, name: 'NewTestObject'}).respond({id: 100, name: 'NewTestObject'});
-        catApiService.test.save({id: 100, name: 'NewTestObject'}).then(function (result) {
-            expect(result.isTestObject).toBe(true);
-            expect(result.id).toBe(100);
-            expect(result.name).toBe('NewTestObject');
+        var data = {id: 100, name: 'NewTestObject'};
+        $httpBackend.expectPUT('/api/test/100', data).respond(data);
+        catApiService.test.save(data).then(function (result) {
+            cat.util.test.expectToEqualConverted(result, data);
         });
         $httpBackend.flush();
     });

@@ -23,6 +23,7 @@
     "eqnull": false,
     "expr": true,
     "globals": {
+        "cat": false,
         "after": false,
         "afterEach": false,
         "angular": false,
