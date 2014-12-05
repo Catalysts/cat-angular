@@ -1,18 +1,18 @@
 'use strict';
 
-var gulp = require('gulp'),
-    ngHtml2js = require('gulp-ng-html2js'),
-    ngAnnotate = require('gulp-ng-annotate'),
-    sourcemaps = require('gulp-sourcemaps'),
-    jshint = require('gulp-jshint'),
-    less = require('gulp-less'),
-    uglify = require('gulp-uglify'),
-    header = require('gulp-header'),
-    footer = require('gulp-footer'),
-    rename = require('gulp-rename'),
-    replace = require('gulp-replace'),
-    concat = require('gulp-concat'),
-    bower = require('gulp-bower');
+var gulp = require('gulp');
+gulp.ngHtml2js = require('gulp-ng-html2js');
+gulp.ngAnnotate = require('gulp-ng-annotate');
+gulp.sourcemaps = require('gulp-sourcemaps');
+gulp.jshint = require('gulp-jshint');
+gulp.less = require('gulp-less');
+gulp.uglify = require('gulp-uglify');
+gulp.header = require('gulp-header');
+gulp.footer = require('gulp-footer');
+gulp.rename = require('gulp-rename');
+gulp.replace = require('gulp-replace');
+gulp.concat = require('gulp-concat');
+gulp.bower = require('gulp-bower');
 
 var path = require('path');
 var karma_server = require('karma').server;
@@ -121,53 +121,53 @@ var test = function (watch, production) {
 var less2css = function () {
     var dest = template('<%= paths.dist %>');
     return gulp.src(['<%= paths.resources %>/styles/*.less'])
-        .pipe(sourcemaps.init())
-        .pipe(less())
-        .pipe(header(license))
-        .pipe(sourcemaps.write('.', {sourceRoot: 'src'}))
+        .pipe(gulp.sourcemaps.init())
+        .pipe(gulp.less())
+        .pipe(gulp.header(license))
+        .pipe(gulp.sourcemaps.write('.', {sourceRoot: 'src'}))
         .pipe(gulp.dest(dest));
 };
 
 var banner = lazypipe()
-    .pipe(header, '(function(window, document, undefined) {\n\'use strict\';\n')
-    .pipe(footer, '\n})(window, document);\n');
+    .pipe(gulp.header, '(function(window, document, undefined) {\n\'use strict\';\n')
+    .pipe(gulp.footer, '\n})(window, document);\n');
 
 var _concatenate = function (name) {
     return lazypipe()
-        .pipe(ngAnnotate)
-        .pipe(concat, name + '.js')
+        .pipe(gulp.ngAnnotate)
+        .pipe(gulp.concat, name + '.js')
         //.pipe(banner)
         //.pipe(header, license)
         //.pipe(header, license)
-        .pipe(sourcemaps.write, '.', {sourceRoot: 'src'})
+        .pipe(gulp.sourcemaps.write, '.', {sourceRoot: 'src'})
         .pipe(gulp.dest, config.paths.dist)();
 };
 
 var _minify = function (name) {
     return lazypipe()
-        .pipe(ngAnnotate)
-        .pipe(concat, name + '.js')
+        .pipe(gulp.ngAnnotate)
+        .pipe(gulp.concat, name + '.js')
         //.pipe(banner)
         //.pipe(header, license)
-        .pipe(uglify, {preserveComments: 'some', mangle: false})
-        .pipe(rename, name + '.min.js')
-        .pipe(sourcemaps.write, '.')
+        .pipe(gulp.uglify, {preserveComments: 'some', mangle: false})
+        .pipe(gulp.rename, name + '.min.js')
+        .pipe(gulp.sourcemaps.write, '.')
         .pipe(gulp.dest, config.paths.dist)();
 };
 
 var angularJs = function () {
     var concatenated = gulp.src('<%= paths.src %>/**/*.js')
-        .pipe(jshint(config.jshint.jshintrc))
-        .pipe(jshint.reporter(config.jshint.reporters.dev))
-        .pipe(replace('\'use strict\';', ''))
-        .pipe(sourcemaps.init())
+        .pipe(gulp.jshint(config.jshint.jshintrc))
+        .pipe(gulp.jshint.reporter(config.jshint.reporters.dev))
+        .pipe(gulp.replace('\'use strict\';', ''))
+        .pipe(gulp.sourcemaps.init())
         .pipe(_concatenate(config.pkg.name));
 
     var minified = gulp.src('<%= paths.src %>/**/*.js')
-        .pipe(jshint(config.jshint.jshintrc))
-        .pipe(jshint.reporter(config.jshint.reporters.dev))
-        .pipe(replace('\'use strict\';', ''))
-        .pipe(sourcemaps.init())
+        .pipe(gulp.jshint(config.jshint.jshintrc))
+        .pipe(gulp.jshint.reporter(config.jshint.reporters.dev))
+        .pipe(gulp.replace('\'use strict\';', ''))
+        .pipe(gulp.sourcemaps.init())
         .pipe(_minify(config.pkg.name));
 
 
@@ -176,19 +176,19 @@ var angularJs = function () {
 
 var angularTemplates = function () {
     var concatenated = gulp.src('<%= paths.resources %>/**/*.html')
-        .pipe(sourcemaps.init())
-        .pipe(ngHtml2js({moduleName: 'cat.template', stripPrefix: 'resources/'}))
+        .pipe(gulp.sourcemaps.init())
+        .pipe(gulp.ngHtml2js({moduleName: 'cat.template', stripPrefix: 'resources/'}))
         .pipe(_concatenate(config.pkg.name + '.tpl'));
     var minified = gulp.src('<%= paths.resources %>/**/*.html')
-        .pipe(sourcemaps.init())
-        .pipe(ngHtml2js({moduleName: 'cat.template', stripPrefix: 'resources/'}))
+        .pipe(gulp.sourcemaps.init())
+        .pipe(gulp.ngHtml2js({moduleName: 'cat.template', stripPrefix: 'resources/'}))
         .pipe(_minify(config.pkg.name + '.tpl'));
     return merge(concatenated, minified);
 };
 
 var bowerJson = function () {
     return gulp.src(['bower.dist.json'])
-        .pipe(rename('bower.json'))
+        .pipe(gulp.rename('bower.json'))
         .pipe(gulp.dest(config.paths.dist));
 };
 
@@ -197,7 +197,7 @@ var cleanTask = function (cb) {
 };
 
 var bowerInstall = function() {
-    return bower();
+    return gulp.bower();
 };
 
 gulp.task('bower-install', bowerInstall);
