@@ -9,6 +9,7 @@ gulp.less = require('gulp-less');
 gulp.uglify = require('gulp-uglify');
 gulp.header = require('gulp-header');
 gulp.footer = require('gulp-footer');
+gulp.filter = require('gulp-filter');
 gulp.rename = require('gulp-rename');
 gulp.replace = require('gulp-replace');
 gulp.concat = require('gulp-concat');
@@ -132,7 +133,7 @@ var banner = lazypipe()
     .pipe(gulp.header, '(function(window, document, undefined) {\n\'use strict\';\n')
     .pipe(gulp.footer, '\n})(window, document);\n');
 
-var _concatenate = function (name) {
+var _concatenateAndUglify = function (name) {
     return lazypipe()
         .pipe(gulp.ngAnnotate)
         .pipe(gulp.concat, name + '.js')
@@ -140,50 +141,29 @@ var _concatenate = function (name) {
         //.pipe(header, license)
         //.pipe(header, license)
         .pipe(gulp.sourcemaps.write, '.', {sourceRoot: 'src'})
-        .pipe(gulp.dest, config.paths.dist)();
-};
-
-var _minify = function (name) {
-    return lazypipe()
-        .pipe(gulp.ngAnnotate)
-        .pipe(gulp.concat, name + '.js')
-        //.pipe(banner)
-        //.pipe(header, license)
+        .pipe(gulp.dest, config.paths.dist)
+        .pipe(gulp.filter, ['**/*.js'])
         .pipe(gulp.uglify, {preserveComments: 'some', mangle: false})
         .pipe(gulp.rename, name + '.min.js')
-        .pipe(gulp.sourcemaps.write, '.')
-        .pipe(gulp.dest, config.paths.dist)();
+        .pipe(gulp.sourcemaps.write, '.', {sourceRoot: 'src/../'})
+        .pipe(gulp.dest, config.paths.dist)
+    ();
 };
 
 var angularJs = function () {
-    var concatenated = gulp.src('<%= paths.src %>/**/*.js')
+    return gulp.src('<%= paths.src %>/**/*.js')
         .pipe(gulp.jshint(config.jshint.jshintrc))
         .pipe(gulp.jshint.reporter(config.jshint.reporters.dev))
         .pipe(gulp.replace('\'use strict\';', ''))
         .pipe(gulp.sourcemaps.init())
-        .pipe(_concatenate(config.pkg.name));
-
-    var minified = gulp.src('<%= paths.src %>/**/*.js')
-        .pipe(gulp.jshint(config.jshint.jshintrc))
-        .pipe(gulp.jshint.reporter(config.jshint.reporters.dev))
-        .pipe(gulp.replace('\'use strict\';', ''))
-        .pipe(gulp.sourcemaps.init())
-        .pipe(_minify(config.pkg.name));
-
-
-    return merge(concatenated, minified);
+        .pipe(_concatenateAndUglify(config.pkg.name));
 };
 
 var angularTemplates = function () {
-    var concatenated = gulp.src('<%= paths.resources %>/**/*.html')
+    return gulp.src('<%= paths.resources %>/**/*.html')
         .pipe(gulp.sourcemaps.init())
         .pipe(gulp.ngHtml2js({moduleName: 'cat.template', stripPrefix: 'resources/'}))
-        .pipe(_concatenate(config.pkg.name + '.tpl'));
-    var minified = gulp.src('<%= paths.resources %>/**/*.html')
-        .pipe(gulp.sourcemaps.init())
-        .pipe(gulp.ngHtml2js({moduleName: 'cat.template', stripPrefix: 'resources/'}))
-        .pipe(_minify(config.pkg.name + '.tpl'));
-    return merge(concatenated, minified);
+        .pipe(_concatenateAndUglify(config.pkg.name + '.tpl'));
 };
 
 var bowerJson = function () {
