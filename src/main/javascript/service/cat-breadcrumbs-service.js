@@ -13,40 +13,42 @@
  *
  * @constructor
  */
-function CatBreadcrumbsService() {
-    var _bc = [];
+function CatBreadcrumbsService(catBreadcrumbs) {
     var that = this;
 
     this.clear = function () {
-        _bc = [];
+        catBreadcrumbs.length = 0;
     };
 
-    this.set = function (bc) {
-        _bc = bc;
+    this.set = function (bcs) {
+        that.clear();
+        _.forEach(bcs, function (bc) {
+            catBreadcrumbs.push(bc);
+        });
     };
 
     this.get = function () {
-        return _bc;
+        return catBreadcrumbs;
     };
 
     this.addFirst = function (entry) {
-        _bc.unshift(entry);
+        catBreadcrumbs.unshift(entry);
     };
 
     this.removeFirst = function () {
-        return _bc.shift();
+        return catBreadcrumbs.shift();
     };
 
     this.push = function (entry) {
-        _bc.push(entry);
+        catBreadcrumbs.push(entry);
     };
 
     this.pop = function () {
-        return _bc.pop();
+        return catBreadcrumbs.pop();
     };
 
     this.length = function () {
-        return _bc.length;
+        return catBreadcrumbs.length;
     };
 
     function capitalize(string) {
@@ -54,7 +56,7 @@ function CatBreadcrumbsService() {
     }
 
     this.replaceLast = function (newVal) {
-        _bc[_bc.length - 1] = newVal;
+        catBreadcrumbs[catBreadcrumbs.length - 1] = newVal;
     };
 
     function splitShiftAndJoin(path, amount) {
@@ -108,7 +110,6 @@ function CatBreadcrumbsService() {
     };
 }
 
-angular.module('cat.service.breadcrumbs').service('catBreadcrumbsService', CatBreadcrumbsService);
-
-// TODO remove in future release
-angular.module('cat.service.breadcrumbs').service('$breadcrumbs', CatBreadcrumbsService);
+angular.module('cat.service.breadcrumbs')
+    .value('catBreadcrumbs', [])
+    .service('catBreadcrumbsService', CatBreadcrumbsService);
