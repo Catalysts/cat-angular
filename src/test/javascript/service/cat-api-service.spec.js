@@ -1,7 +1,6 @@
 'use strict';
 
 
-
 // actual spec
 describe('Api Service', function () {
 
@@ -34,6 +33,15 @@ describe('Api Service', function () {
     afterEach(function () {
         $httpBackend.verifyNoOutstandingExpectation();
         $httpBackend.verifyNoOutstandingRequest();
+    });
+
+    it('should return a converted object', function () {
+        $httpBackend.expectGET('/api/test/' + testData[0].id).respond(testData[0]);
+        catApiService.test.get(testData[0].id).then(function (result) {
+            expect(result).toBeDefined();
+            cat.util.test.expectToEqualConverted(result, testData[0]);
+        });
+        $httpBackend.flush();
     });
 
     it('should return a paginated result if a PagedResultDTO is returned by the server', function () {

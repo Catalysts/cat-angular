@@ -53,7 +53,7 @@ function CatApiEndpoint(url, endpointConfig, $http, catConversionService) {
         var object = catConversionService.toClient(data, config);
 
         if (!_.isUndefined(object.id)) {
-            _.forEach(object, _addChildEndpoints);
+            _addChildEndpoints(object);
         }
 
         if (_.isArray(object)) {
