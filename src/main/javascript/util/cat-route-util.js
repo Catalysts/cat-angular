@@ -26,26 +26,22 @@ var toLowerCaseName = function (name) {
 
 /**
  * Helper function to extract the base url from the current route and the parent endpoints
- * @param $route The angular $route service
+ * @param $location The $location service holding the current path + params
+ * @param $stateParams The $stateParams service holding all params of the requested state
  * @param {string} [baseUrl]
- * @param {array} [parentEndpointNames]
  * @return {string} the extracted baseUrl which is either the provided one, or one, generated from the parentEndpointNames
  */
-var getBaseUrl = function ($route, baseUrl, parentEndpointNames) {
-    if (_.isUndefined(baseUrl)) {
-        baseUrl = $route.current.originalPath;
-        if (_.keys($route.current.pathParams).length !== 0) {
-            baseUrl = baseUrl.substring(0, baseUrl.lastIndexOf('/'));
-        }
-        if (_.isArray(parentEndpointNames)) {
-            _.forEach(parentEndpointNames, function (parentEndpointName) {
-                var idName = parentEndpointName + 'Id';
-                baseUrl = baseUrl.replace(':' + idName, $route.current.params[idName]);
-            });
-        }
+var getBaseUrl = function ($location, $stateParams, baseUrl) {
+    if (!_.isUndefined(baseUrl)) {
+        return baseUrl;
     }
 
-    return baseUrl;
+    var path = $location.path();
+    if (_.isUndefined($stateParams.id)) {
+        return path;
+    }
+
+    return path.substring(0, path.lastIndexOf('/'));
 };
 
 /**
@@ -66,11 +62,11 @@ var listRoute = function (config) {
         return catListDataLoadingService.resolve(config.endpoint || name, config.defaultSort);
     }
 
-    function getResolvedConfig($q, $route, catListDataLoadingService) {
+    function getResolvedConfig($q, $stateParams, $location, catListDataLoadingService) {
         var deferredConfig = $q.defer();
         var resolvedConfig = {
             controller: config.controller || config.name + 'Controller',
-            baseUrl: getBaseUrl($route, config.baseUrl),
+            baseUrl: getBaseUrl($location, $stateParams, config.baseUrl),
             title: window.cat.util.pluralize(config.name),
             searchProps: config.searchProps || window.cat.util.defaultListSearchProps,
             listTemplateUrl: config.listTemplateUrl || (name + '/' + name + '-list.tpl.html')
@@ -87,6 +83,7 @@ var listRoute = function (config) {
     }
 
     return {
+        url: config.url || '',
         reloadOnSearch: false,
         controller: 'CatBaseListController',
         controllerAs: 'catBaseListController',
@@ -154,7 +151,7 @@ var detailRoute = function (config) {
         tabs = config.additionalViewTemplateTabs;
     }
 
-    function getEndpoint($route, catApiService) {
+    function getEndpoint($stateParams, catApiService) {
         var endpoint = catApiService[endpointName];
 
         if (_.isArray(parentEndpointNames)) {
@@ -167,7 +164,7 @@ var detailRoute = function (config) {
                     // child api endpoint
                     currentEndpoint = endpoint[parentEndpointName];
                 }
-                endpoint = currentEndpoint.res($route.current.params[parentEndpointName + 'Id']);
+                endpoint = currentEndpoint.res($stateParams[parentEndpointName + 'Id']);
             });
 
             endpoint = endpoint[endpointName];
@@ -176,9 +173,9 @@ var detailRoute = function (config) {
         return endpoint;
     }
 
-    function getDetailData($route, $q, endpoint) {
+    function getDetailData($stateParams, $q, endpoint) {
         var detailPromise;
-        var detailId = $route.current.params.id;
+        var detailId = $stateParams.id;
         if (detailId === 'new') {
             detailPromise = $q.when(new Model());
         } else {
@@ -187,11 +184,11 @@ var detailRoute = function (config) {
         return detailPromise;
     }
 
-    function getConfig($route, $q, catApiService) {
+    function getConfig($location, $stateParams, $q, catApiService) {
         var deferred = $q.defer();
-        var endpoint = getEndpoint($route, catApiService);
+        var endpoint = getEndpoint($stateParams, catApiService);
 
-        var baseUrl = getBaseUrl($route, config.baseUrl, parentEndpointNames);
+        var baseUrl = getBaseUrl($location, $stateParams, config.baseUrl);
 
         var resolvedConfig = {
             controller: config.controller || config.name + 'DetailsController',
@@ -203,7 +200,7 @@ var detailRoute = function (config) {
         };
 
 
-        var detailPromise = getDetailData($route, $q, endpoint);
+        var detailPromise = getDetailData($stateParams, $q, endpoint);
         detailPromise.then(function (data) {
             resolvedConfig.detail = data;
         });
@@ -252,13 +249,12 @@ var detailRoute = function (config) {
     }
 
     return {
+        url: config.url || '/:id',
         templateUrl: config.templateUrl || 'template/cat-base-detail.tpl.html',
         controller: 'CatBaseDetailController',
         reloadOnSearch: config.reloadOnSearch,
         resolve: {
-            config: function ($route, $q, catApiService) {
-                return getConfig($route, $q, catApiService);
-            }
+            config: getConfig
         }
     };
 };

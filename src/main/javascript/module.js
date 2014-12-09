@@ -10,7 +10,7 @@ angular.module('cat.service.api', ['cat.service.conversion']);
 angular.module('cat.service.breadcrumbs', []);
 angular.module('cat.service.i18n', []);
 angular.module('cat.service.listDataLoading', ['cat.service.api']);
-angular.module('cat.service.route', ['ngRoute']);
+angular.module('cat.service.route', ['ui.router']);
 angular.module('cat.service.selectConfig', []);
 angular.module('cat.service.view', ['cat.service.api', 'cat.service.route']);
 angular.module('cat.service.loading', ['angularSpinner']);

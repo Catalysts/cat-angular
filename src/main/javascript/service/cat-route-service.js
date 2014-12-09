@@ -7,47 +7,117 @@
 /**
  * @ngdoc service
  * @description
- * This service provider delegates to the $routeProvider and actually creates 2 separate routes after applying various
+ * This service provider delegates to the $stateProvider and actually creates 2 separate routes after applying various
  * conventions / defaults
  *
- * @param $routeProvider
+ * @param $stateProvider
  * @constructor
  */
-function CatRouteServiceProvider($routeProvider) {
+function CatRouteServiceProvider($stateProvider) {
     var viewNames = [];
+
+    function _getListUrl(baseUrl, name, config) {
+        var listUrl = baseUrl + '/' + window.cat.util.pluralize(name.toLowerCase());
+
+        if (!!config && config.url) {
+            listUrl = baseUrl + '/' + config.url;
+        }
+
+        return listUrl;
+    }
+
+    function _registerAbstractState(url, name) {
+        $stateProvider
+            .state(name, {
+                abstract: true,
+                template: '<ui-view></ui-view>',
+                url: url
+            });
+    }
+
+    function _getStateName(name, config) {
+        if (!!config && !!config.parent) {
+            return config.parent + '.' + name;
+        }
+
+        return name;
+    }
+
+    function _registerDetailState(config, name) {
+        var stateName = _getStateName(name, config);
+        var detailConfig = _getDetailConfig(config, name);
+
+        $stateProvider
+            .state(stateName + '.detail', detailConfig);
+
+        if (!!config && config.additionalViewTemplate === 'tabs') {
+            $stateProvider
+                .state(stateName + '.tab', {
+                    abstract: true,
+                    template: '<ui-view></ui-view>',
+                    url: '/:' + name.toLowerCase() + 'Id'
+                });
+        }
+    }
+
+    function _registerListState(config, name) {
+        var stateName = _getStateName(name, config);
+        var listConfig = _getListConfig(config, name);
+        $stateProvider
+            .state(stateName + '.list', listConfig);
+    }
+
+    function _getDetailConfig(config, name) {
+        return window.cat.util.route.detail(_.assign({name: name}, config));
+    }
+
+    function _getListConfig(config, name) {
+        return window.cat.util.route.list(_.assign({name: name}, config));
+    }
+
+    /**
+     * This function creates route url via convention from the given parameters and passes them (together with the
+     * configuration) to the $stateProvider. The actual route configuration is received by passing the given one
+     * to #window.cat.util.route.detail
+     * @param {string} baseUrl the base url which will be prepended to all routes
+     * @param {string} name the name for which the routes will be created
+     * @param {Object} [config] the config object which wraps the configurations for the list and detail route
+     */
+    this.detailRoute = function (baseUrl, name, config) {
+        var stateName = _getStateName(name, config);
+        viewNames.push(stateName);
+
+        var listUrl = _getListUrl(baseUrl, name, config);
+
+        _registerAbstractState(listUrl, stateName);
+        _registerDetailState(config, name);
+    };
 
     /**
      * This function creates route urls via convention from the given parameters and passes them (together with the
-     * configuration) to the $routeProvider. The actual route configuration is received by passing the given one
+     * configuration) to the $stateProvider. The actual route configuration is received by passing the given one
      * to #window.cat.util.route.list and #window.cat.util.route.detail
      * @param {string} baseUrl the base url which will be prepended to all routes
      * @param {string} name the name for which the routes will be created
      * @param {Object} [config] the config object which wraps the configurations for the list and detail route
      */
     this.listAndDetailRoute = function (baseUrl, name, config) {
-        viewNames.push(name);
-
-
-        var listUrl = baseUrl + '/' + window.cat.util.pluralize(name.toLowerCase());
-
-        if (!!config && config.url) {
-            listUrl = baseUrl + '/' + config.url || listUrl;
+        var stateName = _getStateName(name, config);
+        viewNames.push(stateName);
+        if (_.isUndefined(config)) {
+            config = {};
         }
 
-        var listConfig = !!config ? config.list : {};
-        var detailsConfig = !!config ? config.details : {};
-        var nameConf = {
-            name: name
-        };
+        var listUrl = _getListUrl(baseUrl, name, config);
 
-        $routeProvider
-            .when(listUrl, window.cat.util.route.list(_.assign({}, nameConf, listConfig)))
-            .when(listUrl + '/:id', window.cat.util.route.detail(_.assign({}, nameConf, detailsConfig)));
+        _registerAbstractState(listUrl, stateName);
+        _registerDetailState(config.details, name);
+        _registerListState(config.list, name);
     };
 
     /**
      * This service simply exposes the created view and endpoint names, as the provider basically only delegates
-     * to the $routeProvider
+     * to the $stateProvider
      * @return {Array} the registered view names
      */
     this.$get = function () {

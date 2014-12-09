@@ -1,6 +1,6 @@
 'use strict';
 
-function CatBaseTabsController($scope, $controller, $routeParams, $location, config) {
+function CatBaseTabsController($scope, $controller, $stateParams, $location, config) {
     var endpoint = config.endpoint;
 
     $scope.tabs = config.tabs;
@@ -24,11 +24,11 @@ function CatBaseTabsController($scope, $controller, $routeParams, $location, con
     };
 
     var isTabActive = function (tab) {
-        if (tab.name === $scope.tabNames[0] && _.isUndefined($routeParams.tab)) {
+        if (tab.name === $scope.tabNames[0] && _.isUndefined($stateParams.tab)) {
             // first tab is active if no parameter is given
             return true;
         }
-        return $routeParams.tab === tab.name;
+        return $stateParams.tab === tab.name;
     };
 
     $scope.$watchCollection(function () {

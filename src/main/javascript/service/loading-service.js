@@ -42,14 +42,14 @@ angular.module('cat.service.loading')
             }
         };
 
-        $rootScope.$on('$routeChangeStart', function (event) {
+        $rootScope.$on('$stateChangeStart', function (event) {
             start();
 
         });
-        $rootScope.$on('$routeChangeSuccess', function (event) {
+        $rootScope.$on('$stateChangeSuccess', function (event) {
             stop();
         });
-        $rootScope.$on('$routeChangeError', function (event) {
+        $rootScope.$on('$stateChangeError', function (event) {
             stop();
         });
 

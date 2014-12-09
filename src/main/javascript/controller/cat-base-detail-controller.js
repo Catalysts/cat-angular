@@ -27,7 +27,7 @@
  * * title - a function to resolve a 'title' of the current object
  *
  * @param $scope
- * @param $routeParams
+ * @param $stateParams
  * @param $location
  * @param $window
  * @param $globalMessages
@@ -37,7 +37,7 @@
  * @param {Object} config holds data like the current api endpoint, template urls, base url, the model constructor, etc.
  * @constructor
  */
-function CatBaseDetailController($scope, $routeParams, $location, $window, $globalMessages, $controller, $log, catBreadcrumbsService, config) {
+function CatBaseDetailController($scope, $stateParams, $location, $window, $globalMessages, $controller, $log, catBreadcrumbsService, config) {
     $scope.detail = config.detail;
     $scope.editDetail = undefined;
     $scope.$fieldErrors = {};
@@ -49,7 +49,7 @@ function CatBaseDetailController($scope, $routeParams, $location, $window, $glob
 
     $scope.uiStack = catBreadcrumbsService.generateFromConfig(config);
 
-    if ($routeParams.id === 'new') {
+    if ($stateParams.id === 'new') {
         catBreadcrumbsService.push({
             title: 'New',
             key: 'cc.catalysts.general.new'
@@ -90,7 +90,7 @@ function CatBaseDetailController($scope, $routeParams, $location, $window, $glob
      * reloads the current object from the server
      */
     var reload = function () {
-        endpoint.get($routeParams.id).then(function (data) {
+        endpoint.get($stateParams.id).then(function (data) {
             $scope.detail = data;
             update();
         });
@@ -98,7 +98,7 @@ function CatBaseDetailController($scope, $routeParams, $location, $window, $glob
 
     $scope.reloadDetails = reload;
 
-    $scope.exists = !!$routeParams.id && $routeParams.id !== 'new';
+    $scope.exists = !!$stateParams.id && $stateParams.id !== 'new';
 
     /**
      * Creates a new copy of the given model and sets its parent if applicable.

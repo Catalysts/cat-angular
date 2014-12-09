@@ -66,7 +66,7 @@ angular.module('cat.service.message').service('$globalMessages', function CatGlo
         }
     };
 
-    $rootScope.$on('$routeChangeSuccess', function () {
+    $rootScope.$on('$stateChangeSuccess', function () {
         self.clearMessages();
     });
 });
