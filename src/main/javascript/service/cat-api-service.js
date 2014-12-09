@@ -27,7 +27,7 @@ function CatApiEndpoint(url, endpointConfig, $http, catConversionService) {
         var url = _endpointUrl + '/' + id + '/';
         var ret = {};
         _.forEach(_.keys(_childEndpointSettings), function (path) {
-            ret[path] = new CatApiEndpoint(url, _childEndpointSettings[path], $http);
+            ret[path] = new CatApiEndpoint(url, _childEndpointSettings[path], $http, catConversionService);
             ret[path].parentEndpoint = that;
             ret[path].parentId = id;
             ret[path].parentInfo = function () {
