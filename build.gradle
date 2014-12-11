@@ -1,6 +1,6 @@
 description = 'cat-angular AngularJS library'
 
-version = '0.0.20'
+version = '0.0.21'
 
 buildscript {
     repositories {
