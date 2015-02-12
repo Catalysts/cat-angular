@@ -27,6 +27,7 @@
  * * title - a function to resolve a 'title' of the current object
  *
  * @param $scope
+ * @param $state
  * @param $stateParams
  * @param $location
  * @param $window
@@ -37,7 +38,7 @@
  * @param {Object} config holds data like the current api endpoint, template urls, base url, the model constructor, etc.
  * @constructor
  */
-function CatBaseDetailController($scope, $stateParams, $location, $window, $globalMessages, $controller, $log, catBreadcrumbsService, config) {
+function CatBaseDetailController($scope, $state, $stateParams, $location, $window, $globalMessages, $controller, $log, catBreadcrumbsService, config) {
     $scope.detail = config.detail;
     $scope.editDetail = undefined;
     $scope.$fieldErrors = {};
@@ -141,6 +142,7 @@ function CatBaseDetailController($scope, $stateParams, $location, $window, $glob
     $scope.remove = function () {
         endpoint.remove($scope.detail.id).then(function () {
             if (_.isEmpty($scope.uiStack)) {
+                $state.go(config.name + '.list');
                 $location.path(baseUrl);
             } else {
                 var parentUrl = $scope.uiStack[$scope.uiStack.length - 1].url;
@@ -162,7 +164,7 @@ function CatBaseDetailController($scope, $stateParams, $location, $window, $glob
             $scope.$fieldErrors = undefined;
             if (!$scope.exists) {
                 $scope.$broadcast('formReset');
-                $location.path(baseUrl + '/' + data.id);
+                $state.go(config.name + '.detail', {id: data.id});
             } else {
                 $scope.editDetail = undefined;
                 $scope.detail = data;
