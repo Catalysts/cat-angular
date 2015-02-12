@@ -126,4 +126,12 @@ function CatRouteServiceProvider($stateProvider) {
 }
 
 
-angular.module('cat.service.route').provider('catRouteService', CatRouteServiceProvider);
+angular.module('cat.service.route')
+    .provider('catRouteService', CatRouteServiceProvider)
+    .run(function($rootScope, $log, $globalMessages) {
+        $rootScope.$on('$stateChangeError', function() {
+            var exception = arguments[arguments.length - 1];
+            $globalMessages.addMessage('warning', exception);
+            $log.warn(exception);
+        });
+    });
