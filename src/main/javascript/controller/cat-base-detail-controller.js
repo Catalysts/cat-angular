@@ -42,6 +42,7 @@ function CatBaseDetailController($scope, $stateParams, $location, $window, $glob
     $scope.editDetail = undefined;
     $scope.$fieldErrors = {};
 
+    $scope.config = config;
     var endpoint = config.endpoint;
     var baseUrl = config.baseUrl;
     var templateUrls = config.templateUrls;

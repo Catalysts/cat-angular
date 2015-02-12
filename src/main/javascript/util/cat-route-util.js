@@ -65,6 +65,7 @@ var listRoute = function (config) {
     function getResolvedConfig($q, $stateParams, $location, catListDataLoadingService) {
         var deferredConfig = $q.defer();
         var resolvedConfig = {
+            name: config.name,
             controller: config.controller || config.name + 'Controller',
             baseUrl: getBaseUrl($location, $stateParams, config.baseUrl),
             title: window.cat.util.pluralize(config.name),
@@ -191,6 +192,7 @@ var detailRoute = function (config) {
         var baseUrl = getBaseUrl($location, $stateParams, config.baseUrl);
 
         var resolvedConfig = {
+            name: config.name,
             controller: config.controller || config.name + 'DetailsController',
             endpoint: endpoint,
             Model: Model,

@@ -1,6 +1,6 @@
 <h2>
     <span cat-i18n="{{catBaseListController.titleKey}}">{{catBaseListController.title}}</span>
-    <a ng-href="{{catBaseListController.getUrlForNewPage()}}" class="btn btn-primary pull-right">
+    <a class="btn btn-primary pull-right" ui-sref="{{catBaseListController.config.name}}.detail({id: 'new'})">
         <span class="glyphicon glyphicon-plus"></span> <span cat-i18n="cc.catalysts.general.new">New</span>
     </a>
 </h2>
