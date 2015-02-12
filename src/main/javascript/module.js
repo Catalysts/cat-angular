@@ -82,5 +82,6 @@ angular.module('cat', [
     'cat.template',
     'cat.directives',
     'cat.filters',
-    'cat.controller'
+    'cat.controller',
+    'ui.bootstrap'
 ]);
