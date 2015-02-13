@@ -1,5 +1,12 @@
 'use strict';
 
+angular.module('cat.service.route', [
+    'ui.router',
+    'cat.service.message',
+    'cat.service.breadcrumbs',
+    'cat.service.validation'
+])
+
 /**
  * @ngdoc service
  * @name cat.service.route:catRouteServiceProvider
@@ -7,6 +14,21 @@
  * This service provider delegates to the $stateProvider and actually creates 2 separate routes after applying various
  * conventions / defaults
  */
+    .provider('catRouteService', CatRouteServiceProvider)
+
+    .run(['$rootScope', '$log', '$globalMessages', 'catBreadcrumbsService', 'catValidationService',
+        function ($rootScope, $log, $globalMessages, catBreadcrumbsService, catValidationService) {
+            $rootScope.$on('$stateChangeError', function () {
+                var exception = arguments[arguments.length - 1];
+                $globalMessages.addMessage('warning', exception);
+                $log.warn(exception);
+            });
+            $rootScope.$on('$stateChangeSuccess', function () {
+                catBreadcrumbsService.clear();
+                catValidationService.clearValidationErrors();
+            });
+        }]);
+
 function CatRouteServiceProvider($stateProvider) {
     var viewNames = [];
 
@@ -54,6 +76,20 @@ function CatRouteServiceProvider($stateProvider) {
         }
     }
 
+    function _registerCreateState(config, name) {
+        var stateName = _getStateName(name, config);
+        var createConfig = _getCreateConfig(config, name);
+        $stateProvider
+            .state(stateName + '.create', createConfig);
+    }
+
+    function _registerEditState(config, name) {
+        var stateName = _getStateName(name, config);
+        var editConfig = _getEditConfig(config, name);
+        $stateProvider
+            .state(stateName + '.edit', editConfig);
+    }
+
     function _registerListState(config, name) {
         var stateName = _getStateName(name, config);
         var listConfig = _getListConfig(config, name);
@@ -77,6 +113,46 @@ function CatRouteServiceProvider($stateProvider) {
             url: _config.url || '/:id',
             templateUrl: _config.templateUrl || 'template/cat-base-detail.tpl.html',
             controller: 'CatBaseDetailController',
+            reloadOnSearch: _config.reloadOnSearch,
+            resolve: {
+                config: function ($stateParams, catViewConfigService) {
+                    // TODO $stateParams needs to be passed from here because otherwise it's empty...
+                    return catViewConfigService.getDetailConfig(_config, $stateParams);
+                }
+            }
+        };
+    }
+
+    /**
+     * A helper function which basically just overrides the controller, url and template of the detail config.
+     * @param config
+     * @param name
+     * @returns {{templateUrl: (string), controller: string, reloadOnSearch: (boolean), resolve: {config: (object)}}}
+     * @private
+     */
+    function _getCreateConfig(config, name) {
+        var _config = _.assign({name: name}, config);
+        var detailConfig = _getEditConfig(config, name);
+
+        detailConfig.url = _config.url || '/new';
+
+        return detailConfig;
+    }
+
+    /**
+     * A helper function which basically just overrides the controller, url and template of the detail config.
+     * @param config
+     * @param name
+     * @returns {{templateUrl: (string), controller: string, reloadOnSearch: (boolean), resolve: {config: (object)}}}
+     * @private
+     */
+    function _getEditConfig(config, name) {
+        var _config = _.assign({name: name}, config);
+
+        return {
+            url: _config.url || '/:id/edit',
+            templateUrl: _config.templateUrl || 'template/cat-base-edit.tpl.html',
+            controller: 'CatBaseEditController',
             reloadOnSearch: _config.reloadOnSearch,
             resolve: {
                 config: function ($stateParams, catViewConfigService) {
@@ -167,7 +243,9 @@ function CatRouteServiceProvider($stateProvider) {
         var listUrl = _getListUrl(baseUrl, name, config);
 
         _registerAbstractState(listUrl, stateName);
+        _registerCreateState(_.assign({}, config.create, viewData), name);
         _registerDetailState(_.assign({}, config.details, viewData), name);
+        _registerEditState(_.assign({}, config.list, viewData), name);
         _registerListState(_.assign({}, config.list, viewData), name);
     };
 
@@ -184,24 +262,3 @@ function CatRouteServiceProvider($stateProvider) {
         return viewNames;
     };
 }
-
-angular
-    .module('cat.service.route', [
-        'ui.router',
-        'cat.service.message',
-        'cat.service.breadcrumbs',
-        'cat.service.validation'
-    ])
-    .provider('catRouteService', CatRouteServiceProvider)
-    .run(['$rootScope', '$log', '$globalMessages', 'catBreadcrumbsService', 'catValidationService',
-        function ($rootScope, $log, $globalMessages, catBreadcrumbsService, catValidationService) {
-            $rootScope.$on('$stateChangeError', function () {
-                var exception = arguments[arguments.length - 1];
-                $globalMessages.addMessage('warning', exception);
-                $log.warn(exception);
-            });
-            $rootScope.$on('$stateChangeSuccess', function () {
-                catBreadcrumbsService.clear();
-                catValidationService.clearValidationErrors();
-            });
-        }]);

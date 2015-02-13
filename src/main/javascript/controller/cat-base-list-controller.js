@@ -1,6 +1,5 @@
 'use strict';
 
-
 /**
  * @ngdoc controller
  * @name cat.controller.base.list:CatBaseListController
@@ -25,8 +24,9 @@
  * @param {object} catBreadcrumbsService catBreadcrumbsService
  * @param {object} catListDataLoadingService catListDataLoadingService
  * @param {object} config holds data like the listData object, the template url, base url, the model constructor, etc.
+ * @param {object} $globalMessages $globalMessages
  */
-function CatBaseListController($scope, $state, $controller, $log, catBreadcrumbsService, catListDataLoadingService, config) {
+function CatBaseListController($scope, $state, $controller, $log, catBreadcrumbsService, catListDataLoadingService, $globalMessages, config) {
     if (!_.isUndefined(config.listData)) {
         this.titleKey = 'cc.catalysts.cat-breadcrumbs.entry.' + config.listData.endpoint.getEndpointName();
 
@@ -58,6 +58,7 @@ function CatBaseListController($scope, $state, $controller, $log, catBreadcrumbs
     this.remove = function (id) {
         config.listData.endpoint.remove(id)
             .then(function () {
+                $globalMessages.addMessage('success', 'Successfully deleted entry.', true);
                 catListDataLoadingService.load(config.listData.endpoint, config.listData.searchRequest).then(
                     function (data) {
                         _.assign($scope.listData, data);
@@ -77,4 +78,4 @@ function CatBaseListController($scope, $state, $controller, $log, catBreadcrumbs
 
 angular.module('cat.controller.base.list', ['cat.service.breadcrumbs'])
     .controller('CatBaseListController',
-        ['$scope', '$state', '$controller', '$log', 'catBreadcrumbsService', 'catListDataLoadingService', 'config', CatBaseListController]);
+        ['$scope', '$state', '$controller', '$log', 'catBreadcrumbsService', 'catListDataLoadingService', '$globalMessages', 'config', CatBaseListController]);
