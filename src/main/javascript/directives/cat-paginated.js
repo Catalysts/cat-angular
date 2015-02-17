@@ -101,10 +101,6 @@ angular.module('cat.directives.paginated')
                     }
                 }, true);
 
-                $scope.$on('SearchChanged', function (event, value, delay) {
-                    searchChanged(value, delay);
-                });
-
                 function updateLocation() {
                     if ($scope.syncLocation !== false) {
                         searchRequest.setSearch($location);
@@ -128,7 +124,7 @@ angular.module('cat.directives.paginated')
                 var updateSearch = function (value) {
                     var search = searchRequest.search();
                     _.assign(search, value);
-                    $rootScope.$broadcast('SearchChanged', search, DELAY_ON_SEARCH);
+                    searchChanged(value, DELAY_ON_SEARCH);
                 };
 
                 $scope.$watch('listData.search', updateSearch, true);
