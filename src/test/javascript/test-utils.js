@@ -2,10 +2,8 @@
  * Created by tscheinecker on 05.12.2014.
  */
 
-'use strict';
-
-
 (function () {
+    'use strict';
 
     // test model class
 

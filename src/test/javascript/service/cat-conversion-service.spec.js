@@ -2,10 +2,9 @@
  * Created by tscheinecker on 05.12.2014.
  */
 
-'use strict';
-
 // actual spec
 describe('CatConversionService', function () {
+    'use strict';
 
     var testData = [
         {id: 1, name: 'TestData1'},

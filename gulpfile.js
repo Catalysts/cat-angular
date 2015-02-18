@@ -151,9 +151,6 @@ var _concatenateAndUglify = function (name) {
 
 var angularJs = function () {
     return gulp.src('<%= paths.src %>/**/*.js')
-        .pipe(gulp.jshint())
-        .pipe(gulp.jshint.reporter(config.jshint.reporters.dev))
-        .pipe(gulp.replace('\'use strict\';', ''))
         .pipe(gulp.sourcemaps.init())
         .pipe(_concatenateAndUglify(config.pkg.name));
 };
@@ -179,6 +176,17 @@ var bowerInstall = function() {
     return gulp.bower();
 };
 
+function jshint(src) {
+    return function() {
+        return gulp.src(src)
+            .pipe(gulp.jshint())
+            .pipe(gulp.jshint.reporter(config.jshint.reporters.dev));
+    };
+}
+
+gulp.task('jshint-main', jshint('<%= paths.src %>/**/*.js'));
+gulp.task('jshint-test', jshint('<%= paths.test %>/**/*.js'));
+gulp.task('jshint', ['jshint-main', 'jshint-test']);
 gulp.task('bower-install', bowerInstall);
 gulp.task('watch', ['angular'], watch);
 gulp.task('less2css', less2css);
@@ -190,6 +198,6 @@ gulp.task('test', ['angular', 'bower-install'], test(false));
 gulp.task('test-production', ['angular', 'bower-install'], test(false, true));
 gulp.task('test-watch', ['angular', 'bower-install'], test(true));
 gulp.task('angular', ['angular-js', 'angular-templates']);
-gulp.task('angular-js', angularJs);
+gulp.task('angular-js', ['jshint'], angularJs);
 gulp.task('angular-templates', angularTemplates);
 gulp.task('clean', cleanTask);

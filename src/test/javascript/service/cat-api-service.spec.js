@@ -1,8 +1,6 @@
-'use strict';
-
-
 // actual spec
 describe('Api Service', function () {
+    'use strict';
 
     var testData = [
         {id: 1, name: 'TestData1'},

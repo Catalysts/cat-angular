@@ -2,10 +2,9 @@
  * Created by tscheinecker on 05.12.2014.
  */
 
-'use strict';
-
 // actual spec
 describe('CatBreadcrumbsService', function () {
+    'use strict';
 
     var catBreadcrumbsService;
     var catBreadcrumbs;

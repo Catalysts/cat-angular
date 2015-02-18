@@ -1,11 +1,10 @@
-'use strict';
-
 /**
  * Created by tscheinecker on 31.03.2014.
  */
 
 // actual spec
 describe('Main Menu Service', function () {
+    'use strict';
 
     var $mainMenuProvider;
     var testMenus = [
