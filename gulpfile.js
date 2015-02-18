@@ -49,7 +49,6 @@ var config = {
         dist: 'dist'
     },
     jshint: {
-        jshintrc: '.jshintrc',
         reporters: {
             dev: 'jshint-stylish'
         }
@@ -152,7 +151,7 @@ var _concatenateAndUglify = function (name) {
 
 var angularJs = function () {
     return gulp.src('<%= paths.src %>/**/*.js')
-        .pipe(gulp.jshint(config.jshint.jshintrc))
+        .pipe(gulp.jshint())
         .pipe(gulp.jshint.reporter(config.jshint.reporters.dev))
         .pipe(gulp.replace('\'use strict\';', ''))
         .pipe(gulp.sourcemaps.init())
