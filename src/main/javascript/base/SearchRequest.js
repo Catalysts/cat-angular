@@ -55,7 +55,7 @@ window.cat.SearchRequest = function (searchUrlParams) {
 
     var _encodeSearch = function () {
         if (!!_search && !_.isEmpty(_search)) {
-            return $.param(_search);
+            return $.param(_search, true);
         }
 
         return '';
