@@ -21,10 +21,11 @@
  * @param $controller
  * @param $log
  * @param catBreadcrumbsService
+ * @param catListDataLoadingService
  * @param {Object} config holds data like the listData object, the template url, base url, the model constructor, etc.
  * @constructor
  */
-function CatBaseListController($scope, $controller, $log, catBreadcrumbsService, config) {
+function CatBaseListController($scope, $controller, $log, catBreadcrumbsService, catListDataLoadingService, config) {
     if (!_.isUndefined(config.listData)) {
         this.titleKey = 'cc.catalysts.cat-breadcrumbs.entry.' + config.listData.endpoint.getEndpointName();
 
@@ -52,6 +53,16 @@ function CatBaseListController($scope, $controller, $log, catBreadcrumbsService,
         return this.getUrlForId('new');
     };
 
+    this.remove = function(id) {
+        config.listData.endpoint.remove(id)
+            .then(function() {
+                catListDataLoadingService.load(config.listData.endpoint, config.listData.searchRequest).then(
+                    function (data) {
+                        _.assign($scope.listData, data);
+                    }
+                );
+            });
+    };
 
     try {
         // extend with custom controller
@@ -63,4 +74,4 @@ function CatBaseListController($scope, $controller, $log, catBreadcrumbsService,
 
 angular.module('cat.controller.base.list')
     .controller('CatBaseListController',
-    ['$scope', '$controller', '$log', 'catBreadcrumbsService', 'config', CatBaseListController]);
+    ['$scope', '$controller', '$log', 'catBreadcrumbsService', 'catListDataLoadingService', 'config', CatBaseListController]);
