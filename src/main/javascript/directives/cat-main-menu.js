@@ -1,10 +1,14 @@
 'use strict';
+
+/**
+ * @ngdoc directive
+ * @name cat.directives.menu:catLoadMore
+ */
 angular.module('cat.directives.menu')
     .directive('catMainMenu', ['$mainMenu', '$rootScope', function CatMainMenuDirective($mainMenu, $rootScope) {
         return {
             restrict: 'E',
-            scope: {
-            },
+            scope: {},
             link: function CatMainMenuLink(scope) {
                 scope.menus = $mainMenu.getMenus();
                 scope.isVisible = function (entry) {

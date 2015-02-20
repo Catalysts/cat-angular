@@ -7,7 +7,6 @@ function CatI18nService($q, $log, catI18nMessageSourceService, catI18nMessagePar
     var that = this;
 
     /**
-     * @ngdoc method
      * @name catI18nService#translate
      * @function
      *
@@ -59,7 +58,6 @@ function CatI18nService($q, $log, catI18nMessageSourceService, catI18nMessagePar
     };
 
     /**
-     * @ngdoc method
      * @name catI18nService#canTranslate
      * @function
      *
@@ -91,8 +89,8 @@ function CatI18nService($q, $log, catI18nMessageSourceService, catI18nMessagePar
 
 angular.module('cat.service.i18n')
 /**
- * @ngdoc value
- * @name catI18nMessageParameterResolver
+ * @ngdoc service
+ * @name cat.service.i18n:catI18nMessageParameterResolver
  * @value
  *
  * @description
@@ -105,16 +103,15 @@ angular.module('cat.service.i18n')
 
 /**
  * @ngdoc service
- * @name catI18nService
+ * @name cat.service.i18n:catI18nService
  * @service
  *
  * @description
- * A service to translate message keys to messages of specivic locales
+ * A service to translate message keys to messages of specific locales
  *
- *
- * @param $q
- * @param catI18nMessageSourceService
- * @param catI18nMessageParameterResolver
+ * @param {object} $q DOCTODO
+ * @param {object} catI18nMessageSourceService DOCTODO
+ * @param {object} catI18nMessageParameterResolver DOCTODO
  * @constructor
  */
     .service('catI18nService', ['$q', '$log', 'catI18nMessageSourceService', 'catI18nMessageParameterResolver', CatI18nService]);

@@ -1,4 +1,9 @@
 'use strict';
+
+/**
+ * @ngdoc directive
+ * @name cat.directives.sortable:catSortable
+ */
 angular.module('cat.directives.sortable')
     .directive('catSortable', function CatSortableDirective($compile) {
         return {

@@ -1,9 +1,12 @@
-/**
- * Created by tscheinecker on 05.05.2014.
- */
 'use strict';
 
 angular.module('cat.service.httpIntercept')
+
+/**
+ * @ngdoc service
+ * @name cat.service.httpIntercept:errorHttpInterceptor
+ */
+
     .factory('errorHttpInterceptor', function CatErrorHttpInterceptor($q, $globalMessages, loadingService) {
         return {
             'request': function (config) {

@@ -1,7 +1,8 @@
 'use strict';
 
 /**
- * @ngdoc function
+ * @ngdoc controller
+ * @name cat.controller.base.detail:CatBaseDetailController
  *
  * @description
  * The CatBaseDetailController takes care of providing several common properties and functions to the scope
@@ -26,17 +27,16 @@
  * * remove - a function to delete the current object
  * * title - a function to resolve a 'title' of the current object
  *
- * @param $scope
- * @param $state
- * @param $stateParams
- * @param $location
- * @param $window
- * @param $globalMessages
- * @param $controller
- * @param $log
- * @param catBreadcrumbsService
+ * @param {object} $scope DOCTODO
+ * @param {object} $state DOCTODO
+ * @param {object} $stateParams DOCTODO
+ * @param {object} $location DOCTODO
+ * @param {object} $window DOCTODO
+ * @param {object} $globalMessages DOCTODO
+ * @param {object} $controller DOCTODO
+ * @param {object} $log DOCTODO
+ * @param {object} catBreadcrumbsService DOCTODO
  * @param {Object} config holds data like the current api endpoint, template urls, base url, the model constructor, etc.
- * @constructor
  */
 function CatBaseDetailController($scope, $state, $stateParams, $location, $window, $globalMessages, $controller, $log, catBreadcrumbsService, config) {
     $scope.detail = config.detail;

@@ -14,6 +14,7 @@ gulp.rename = require('gulp-rename');
 gulp.replace = require('gulp-replace');
 gulp.concat = require('gulp-concat');
 gulp.bower = require('gulp-bower');
+gulp.ngdocs = require('gulp-ngdocs');
 
 var path = require('path');
 var karma_server = require('karma').server;
@@ -201,3 +202,43 @@ gulp.task('angular', ['angular-js', 'angular-templates']);
 gulp.task('angular-js', ['jshint'], angularJs);
 gulp.task('angular-templates', angularTemplates);
 gulp.task('clean', cleanTask);
+
+
+// npm install -g http-server
+// gulp docs && http-server docs/ -c -1 -p 8091
+
+// ERROR:
+// [TypeError: Cannot read property 'replace' of undefined]
+// Solution:
+// @name is missing in documentation?
+
+gulp.task('docs', [], function () {
+    var options = {
+        html5Mode: true,
+        startPage: '/api',
+        title: config.pkg.name,
+        titleLink: "/api"
+    };
+    return gulp.ngdocs
+        .sections({
+            api: {
+                glob: [
+                    'src/main/javascript/**/*.js'
+                ],
+                api: true,
+                title: 'API Documentation'
+            }
+        })
+        .pipe(gulp.ngdocs.process(options))
+        .pipe(gulp.dest('./docs'));
+});
+
+gulp.task('watchDocs', ['docs'], function() {
+    console.log(template('Watching <%= paths.src %>/**/*'));
+    gulp
+        .watch(template([
+            '<%= paths.src %>/**/*',
+            'gulpfile.js'
+        ]), ['docs'])
+        .on('change', watchLog);
+});

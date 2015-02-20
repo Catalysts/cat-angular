@@ -3,10 +3,8 @@
 /**
  * @ngdoc service
  * @name catConversionService
- * @service
  *
  * @description
- *
  * This service handles the transformation between server and client side data.
  *
  * @constructor

@@ -132,6 +132,11 @@ function MenuBar(menuBarId, options) {
     };
 }
 
+/**
+ * @ngdoc service
+ * @name cat.service.menu:$mainMenu
+ * @constructor
+ */
 function MainMenuProvider() {
     var _mainMenu = new MenuBar('main.menu', {});
 

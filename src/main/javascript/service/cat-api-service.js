@@ -1,6 +1,9 @@
 'use strict';
 
 /**
+ * @name CatApiEndpoint
+ *
+ * @description
  * A CatApiEndpoint wraps several helper functions to easily execute backend calls for the base CRUD operations.
  * It also adds support for 'children' which can only be used by resolving them for a parent id.
  * @param {string} url the base url which is added before the configured urls
@@ -245,6 +248,9 @@ function CatApiEndpoint(url, endpointConfig, $http, catConversionService) {
 }
 
 /**
+ * @ngdoc service
+ * @name EndpointConfig
+ *
  * @description
  * An 'EndpointConfig' basically is a wrapper around the configuration for an api endpoint during the configuration
  * phase which is later used to instantiate the actual CatApiEndpoints. It exposes its name, the configuration itself,
@@ -293,15 +299,6 @@ function EndpointConfig(name, config) {
 // CatApiServiceProvider in a future release
 var _endpoints = {};
 
-/**
- * @ngdoc service
- * @description
- *
- * The CatApiServiceProvider exposes a single configuration method 'endpoint' which can be used to create or retrieve
- * named endpoint configurations.
- *
- * @constructor
- */
 function CatApiServiceProvider() {
     var _urlPrefix = '/api/';
 
@@ -333,6 +330,30 @@ function CatApiServiceProvider() {
             return catApiService;
         }];
 }
+
+/**
+ * @ngdoc service
+ * @name cat.service.api:$api
+ *
+ * @description
+ * The CatApiServiceProvider exposes a single configuration method 'endpoint' which can be used to create or retrieve
+ * named endpoint configurations.
+ *
+ * @constructor
+ */
 angular.module('cat.service.api').provider('catApiService', CatApiServiceProvider);
+
+/**
+ * @ngdoc service
+ * @name cat.service.api:$api
+ * @deprectaed use '$api'
+ *
+ * @description
+ * deprectaed use '$api'
+ * The CatApiServiceProvider exposes a single configuration method 'endpoint' which can be used to create or retrieve
+ * named endpoint configurations.
+ *
+ * @constructor
+ */
 // $api is deprecated, will be removed in a future release
 angular.module('cat.service.api').provider('$api', CatApiServiceProvider);

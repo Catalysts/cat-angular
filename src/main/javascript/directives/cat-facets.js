@@ -1,4 +1,9 @@
 'use strict';
+
+/**
+ * @ngdoc directive
+ * @name cat.directives.facets:catFacets
+ */
 angular.module('cat.directives.facets')
     .directive('catFacets', function CatFacetsDirective() {
         function _initDefaults(scope) {

@@ -1,8 +1,9 @@
-/**
- * Created by tscheinecker on 01.06.2014.
- */
 'use strict';
 
+/**
+ * @ngdoc service
+ * @name cat.service.loading:loadingService
+ */
 angular.module('cat.service.loading')
     .factory('loadingService', function CatLoadingService($rootScope, usSpinnerService, $timeout) {
         var timeout = 50;

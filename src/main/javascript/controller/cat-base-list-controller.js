@@ -1,9 +1,10 @@
 'use strict';
 
+angular.module('cat.controller.base.list')
+
 /**
- * @ngdoc function
- * @name CatBaseListController
- * @controller
+ * @ngdoc controller
+ * @name cat.controller.base.list:CatBaseListController
  *
  * @description
  * The CatBaseListController takes care of providing several common properties to the scope
@@ -17,14 +18,16 @@
  * * searchProps - the list of search properties passed on to the cat-paginated directive
  * * config - the config object used to instantiate this view
  *
- * @param $scope
- * @param $controller
- * @param $log
- * @param catBreadcrumbsService
- * @param catListDataLoadingService
- * @param {Object} config holds data like the listData object, the template url, base url, the model constructor, etc.
- * @constructor
+ * @param {object} $scope scope
+ * @param {object} $controller controller
+ * @param {object} $log log
+ * @param {object} catBreadcrumbsService catBreadcrumbsService
+ * @param {object} catListDataLoadingService catListDataLoadingService
+ * @param {object} config holds data like the listData object, the template url, base url, the model constructor, etc.
  */
+    .controller('CatBaseListController',
+    ['$scope', '$controller', '$log', 'catBreadcrumbsService', 'catListDataLoadingService', 'config', CatBaseListController]);
+
 function CatBaseListController($scope, $controller, $log, catBreadcrumbsService, catListDataLoadingService, config) {
     if (!_.isUndefined(config.listData)) {
         this.titleKey = 'cc.catalysts.cat-breadcrumbs.entry.' + config.listData.endpoint.getEndpointName();
@@ -71,7 +74,3 @@ function CatBaseListController($scope, $controller, $log, catBreadcrumbsService,
         $log.info('Couldn\'t instantiate controller with name ' + config.controller);
     }
 }
-
-angular.module('cat.controller.base.list')
-    .controller('CatBaseListController',
-    ['$scope', '$controller', '$log', 'catBreadcrumbsService', 'catListDataLoadingService', 'config', CatBaseListController]);

@@ -91,10 +91,11 @@ function CatSelectController($scope, $log, catApiService, catSelectConfigService
 
 /**
  * @ngdoc directive
+ * @name cat.directives.select:catSelect
  * @scope
  * @restrict EA
- * @description
  *
+ * @description
  * The 'cat-select' directive is a wrapper around the 'ui-select2' directive which adds support for using an api
  * endpoint provided by catApiService. There exist 2 supported ways of configuration:
  * - The 'config' attribute: This represents a named configuration which will be retrieved from the catSelectConfigService
@@ -109,19 +110,19 @@ function CatSelectController($scope, $log, catApiService, catSelectConfigService
  * - sort: An object which defines the 'sort' property and direction used when retrieving the list from an endpoint
  * - ui-select2: An config object which supports all options provided by the 'ui-select2' directive
  *
- *
- * @returns {{
- *      restrict: string,
- *      replace: boolean,
- *      priority: number,
+ * TODO fix returns doc (not the correct format)
+ * returns {{
+ *      restrict: {string},
+ *      replace: {boolean},
+ *      priority: {number},
  *      scope: {
- *          options: string,
- *          id: string,
- *          config: string
+ *          options: {string},
+ *          id: {string},
+ *          config: {string}
  *      },
- *      link: CatSelectLink,
- *      controller: CatSelectController,
- *      template: string
+ *      link: {CatSelectLink},
+ *      controller: {CatSelectController},
+ *      template: {string}
  * }}
  * @constructor
  */

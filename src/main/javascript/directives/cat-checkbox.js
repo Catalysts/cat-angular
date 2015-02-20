@@ -1,4 +1,9 @@
 'use strict';
+
+/**
+ * @ngdoc directive
+ * @name cat.directives.checkbox:catCheckbox
+ */
 angular.module('cat.directives.checkbox')
     .directive('catCheckbox', function CatCheckboxDirective() {
         return {

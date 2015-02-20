@@ -1,4 +1,9 @@
 'use strict';
+
+/**
+ * @ngdoc directive
+ * @name cat.directives.form:form
+ */
 angular.module('cat.directives.form')
     .directive('form', ['$timeout', function CatFormDirective($timeout) {
         return {

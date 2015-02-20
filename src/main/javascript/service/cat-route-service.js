@@ -1,18 +1,27 @@
-/**
- * Created by tscheinecker on 05.08.2014.
- */
-
 'use strict';
+
+angular.module('cat.service.route')
 
 /**
  * @ngdoc service
+ * @name cat.service.route:catRouteService
  * @description
  * This service provider delegates to the $stateProvider and actually creates 2 separate routes after applying various
  * conventions / defaults
- *
- * @param $stateProvider
- * @constructor
  */
+    .provider('catRouteService', CatRouteServiceProvider)
+    
+    .run(function($rootScope, $log, $globalMessages, catBreadcrumbsService) {
+        $rootScope.$on('$stateChangeError', function() {
+            var exception = arguments[arguments.length - 1];
+            $globalMessages.addMessage('warning', exception);
+            $log.warn(exception);
+        });
+        $rootScope.$on('$stateChangeSuccess', function() {
+            catBreadcrumbsService.clear();
+        });
+    });
+
 function CatRouteServiceProvider($stateProvider) {
     var viewNames = [];
 
@@ -124,14 +133,3 @@ function CatRouteServiceProvider($stateProvider) {
         return viewNames;
     };
 }
-
-
-angular.module('cat.service.route')
-    .provider('catRouteService', CatRouteServiceProvider)
-    .run(function($rootScope, $log, $globalMessages) {
-        $rootScope.$on('$stateChangeError', function() {
-            var exception = arguments[arguments.length - 1];
-            $globalMessages.addMessage('warning', exception);
-            $log.warn(exception);
-        });
-    });

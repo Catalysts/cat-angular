@@ -1,9 +1,11 @@
-/**
- * Created by tscheinecker on 05.05.2014.
- */
 'use strict';
 
 angular.module('cat.directives.inputs')
+
+/**
+ * @ngdoc directive
+ * @name cat.directives.inputs:input
+ */
     .directive('input', function CatInputDirective() {
         return {
             require: 'ngModel',
@@ -19,6 +21,11 @@ angular.module('cat.directives.inputs')
             }
         };
     })
+
+/**
+ * @ngdoc directive
+ * @name cat.directives.inputs:catInputGroup
+ */
     .directive('catInputGroup', function CatInputGroupDirective() {
         return {
             restrict: 'A',

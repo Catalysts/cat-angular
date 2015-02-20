@@ -1,7 +1,22 @@
-/**
- * Created by tscheinecker on 23.10.2014.
- */
 'use strict';
+
+angular.module('cat.service.i18n')
+
+/**
+ * @ngdoc service
+ * @name cat.service.i18n:catI18nMessageSourceService
+ * @service
+ *
+ * @description
+ * A service to retrieve message templates for a given key and locale
+ *
+ *
+ * @param {object} $q DOCTODO
+ * @param {object} $$locale DOCTODO
+ * @param {string} $CAT_I18N_DEFAULT_LOCALE DOCTODO
+ * @constructor
+ */
+    .service('catI18nMessageSourceService', ['$q', 'catI18nLocaleService', 'CAT_I18N_DEFAULT_LOCALE', CatI18nMessageSourceService]);
 
 function CatI18nMessageSourceService($q, catI18nLocaleService, CAT_I18N_DEFAULT_LOCALE) {
     function _getLocale(locale) {
@@ -23,7 +38,6 @@ function CatI18nMessageSourceService($q, catI18nLocaleService, CAT_I18N_DEFAULT_
     }
 
     /**
-     * @ngdoc method
      * @name catI18nMessageSourceService#getMessages
      * @function
      *
@@ -38,7 +52,6 @@ function CatI18nMessageSourceService($q, catI18nLocaleService, CAT_I18N_DEFAULT_
     };
 
     /**
-     * @ngdoc method
      * @name catI18nMessageSourceService#getMessage
      * @function
      *
@@ -59,7 +72,6 @@ function CatI18nMessageSourceService($q, catI18nLocaleService, CAT_I18N_DEFAULT_
 
 
     /**
-     * @ngdoc method
      * @name catI18nMessageSourceService#hasMessage
      * @function
      *
@@ -75,20 +87,3 @@ function CatI18nMessageSourceService($q, catI18nLocaleService, CAT_I18N_DEFAULT_
         return $q.when(!_.isUndefined(bundle) && !_.isUndefined(bundle[key]));
     };
 }
-
-angular.module('cat.service.i18n')
-/**
- * @ngdoc service
- * @name catI18nMessageSourceService
- * @service
- *
- * @description
- * A service to retrieve message templates for a given key and locale
- *
- *
- * @param $q
- * @param $locale
- * @param CAT_I18N_DEFAULT_LOCALE
- * @constructor
- */
-    .service('catI18nMessageSourceService', ['$q', 'catI18nLocaleService', 'CAT_I18N_DEFAULT_LOCALE', CatI18nMessageSourceService]);

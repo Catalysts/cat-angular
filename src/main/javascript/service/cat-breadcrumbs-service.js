@@ -1,18 +1,27 @@
 'use strict';
 
+angular.module('cat.service.breadcrumbs')
+
+/**
+ * @ngdoc overview
+ * @name cat.service.breadcrumbs:catBreadcrumbs
+ */
+    .value('catBreadcrumbs', [])
+
 /**
  * @ngdoc service
- * @name catBreadcrumbService
+ * @name cat.service.breadcrumbs:catBreadcrumbService
  * @service
  *
  * @description
- *
  * This service is a simple wrapper around a list of Objects.
  * It provides some convenience methods for manipulating the list.
  * It's main purpose is to make breadcrumb handling less cumbersome.
  *
  * @constructor
  */
+    .service('catBreadcrumbsService', CatBreadcrumbsService);
+
 function CatBreadcrumbsService(catBreadcrumbs) {
     var that = this;
 
@@ -109,7 +118,3 @@ function CatBreadcrumbsService(catBreadcrumbs) {
         return uiStack;
     };
 }
-
-angular.module('cat.service.breadcrumbs')
-    .value('catBreadcrumbs', [])
-    .service('catBreadcrumbsService', CatBreadcrumbsService);

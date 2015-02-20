@@ -1,8 +1,9 @@
-/**
- * Created by tscheinecker on 05.05.2014.
- */
 'use strict';
 
+/**
+ * @ngdoc service
+ * @name cat.service.message:$globalMessages
+ */
 angular.module('cat.service.message').service('$globalMessages', function CatGlobalMessages($rootScope) {
     var messages = {};
 

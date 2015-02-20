@@ -1,4 +1,9 @@
 'use strict';
+
+/**
+ * @ngdoc directive
+ * @name cat.directives.confirmClick:catConfirmClick
+ */
 angular.module('cat.directives.confirmClick')
     .directive('catConfirmClick', function CatConfirmClickDirective() {
         return {

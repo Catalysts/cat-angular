@@ -3,6 +3,10 @@
 window.cat = window.cat || {};
 
 /**
+ * @ngdoc overview
+ * @name FacetTerm
+ *
+ * @description
  * A 'FacetTerm' model used in conjunction with the cat-paginated directive where it represents a value of a group or
  * property which can be used to filter the shown list.
  * It consist of an id, a name and a count
@@ -20,6 +24,10 @@ window.cat.FacetTerm = function (data) {
 };
 
 /**
+ * @ngdoc overview
+ * @name Facet
+ *
+ * @description
  * A 'Facet' model which is used in conjunction with the cat-paginated directive where it represents a group or
  * which property which can be used to filter the shown list.
  * It has a name and an array of FacetTerms

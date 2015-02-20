@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * @ngdoc service
+ * @name cat.service.listDataLoading:catListDataLoadingService
+ */
 angular.module('cat.service.listDataLoading')
     .factory('catListDataLoadingService', ['catApiService', '$state', '$location', '$q', function CatListDataLoadingService(catApiService, $state, $location, $q) {
         var load = function (endpoint, searchRequest) {

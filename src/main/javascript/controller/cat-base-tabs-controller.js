@@ -1,5 +1,12 @@
 'use strict';
 
+angular.module('cat.controller.base.tabs').controller('CatBaseTabsController', CatBaseTabsController);
+
+/**
+ * @ngdoc controller
+ * @name cat.controller.base.tabs:CatBaseTabsController
+ *
+ */
 function CatBaseTabsController($scope, $controller, $stateParams, $location, config) {
     var endpoint = config.endpoint;
 
@@ -119,5 +126,3 @@ function CatBaseTabsController($scope, $controller, $stateParams, $location, con
         }
     }];
 }
-
-angular.module('cat.controller.base.tabs').controller('CatBaseTabsController', CatBaseTabsController);

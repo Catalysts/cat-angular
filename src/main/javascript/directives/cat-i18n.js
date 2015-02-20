@@ -1,7 +1,9 @@
-/**
- * Created by tscheinecker on 21.10.2014.
- */
 'use strict';
+
+/**
+ * @ngdoc directive
+ * @name cat.directives.i18n:catI18n
+ */
 angular.module('cat.directives.i18n')
     .directive('catI18n', ['$log', '$rootScope', 'catI18nService', function CatI18nDirective($log, $rootScope, catI18nService) {
         function _translate(scope, element) {
