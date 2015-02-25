@@ -1,0 +1,44 @@
+<h1><code ng:non-bindable="">catSelect</code>
+<div><span class="hint">directive in module <code ng:non-bindable="">cat.directives</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="cat-directives-select-page cat-directives-select-catselect-page"><p>The &#39;cat-select&#39; directive is a wrapper around the &#39;ui-select2&#39; directive which adds support for using an api
+endpoint provided by catApiService. There exist 2 supported ways of configuration:
+- The &#39;config&#39; attribute: This represents a named configuration which will be retrieved from the catSelectConfigService
+- The &#39;options&#39; attribute: Here the options object can directly be passed in</p>
+<p>The 2 different approaches exist to easily reuse certain options, as the named config is seen as &#39;default&#39; and all
+values which are provided via the options object will be overridden.</p>
+<p>An config / options object has the following properties:
+- endpoint: This can either be an array, in which case it will directly be treated as the source, an endpoint name
+or an endpoint object to call the given endpoint, or a function which is used as the &#39;transport&#39; function
+- sort: An object which defines the &#39;sort&#39; property and direction used when retrieving the list from an endpoint
+- ui-select2: An config object which supports all options provided by the &#39;ui-select2&#39; directive</p>
+<p>TODO fix returns doc (not the correct format)
+returns {{
+     restrict: {string},
+     replace: {boolean},
+     priority: {number},
+     scope: {
+         options: {string},
+         id: {string},
+         config: {string}
+     },
+     link: {CatSelectLink},
+     controller: {CatSelectController},
+     template: {string}
+}}</p>
+</div></div>
+<h2 id="usage">Usage</h2>
+<div class="usage">as element:<pre class="prettyprint linenums">&lt;cat-select&gt;
+&lt;/cat-select&gt;</pre>
+as attribute<pre class="prettyprint linenums">&lt;ANY cat-select&gt;
+   ...
+&lt;/ANY&gt;</pre>
+<h3 id="usage_directive-info">Directive info</h3>
+<div class="directive-info"><ul><li>This directive creates new scope.</li>
+</ul>
+</div>
+</div>
+</div>

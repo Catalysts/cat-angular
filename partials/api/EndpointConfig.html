@@ -1,0 +1,17 @@
+<h1><code ng:non-bindable="">EndpointConfig</code>
+<div><span class="hint"></span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="endpointconfig-page"><p>An &#39;EndpointConfig&#39; basically is a wrapper around the configuration for an api endpoint during the configuration
+phase which is later used to instantiate the actual CatApiEndpoints. It exposes its name, the configuration itself,
+as well as a map of all its children and helper function to create or receive child endpoint configurations.</p>
+</div></div>
+<h2 id="usage">Usage</h2>
+<div class="usage"><pre class="prettyprint linenums">EndpointConfig(name, config);</pre>
+<h4 id="usage_parameters">Parameters</h4><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>name</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="endpointconfig-page"><p>the name of the endpoint</p>
+</div></td></tr><tr><td>config</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="endpointconfig-page"><p>the api endpoint configuration which basically wraps an &#39;url&#39; and a &#39;model&#39; attribute.
+If a &#39;children&#39; attribute is present as well it will be used to create the appropriate child endpoints automatically,
+without the need to call the #child method manually - this works to arbitrary deps.</p>
+</div></td></tr></tbody></table></div>
+</div>
