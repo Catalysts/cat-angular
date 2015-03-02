@@ -157,18 +157,28 @@ function CatBaseDetailController($scope, $state, $stateParams, $location, $windo
      * Upon success the view mode of the details of the currently created / updated object will be shown.
      * Upon an error the reported errors (global & field errors) will be shown to the user and the edit mode
      * will remain active.
+     *
+     * * @param {object} stayInEdit If true the view stays in detail edit state after save instead of switching to
+     *                              detail view state.
      */
-    $scope.save = function () {
-        endpoint.save($scope.editDetail).then(function (data) {
+    $scope.save = function (stayInEdit) {
+        // When passing data to an asynchronous method, it makes sense to clone it.
+        endpoint.save(angular.copy($scope.editDetail)).then(function (data) {
             $globalMessages.clearMessages();
             $scope.$fieldErrors = undefined;
-            if (!$scope.exists) {
-                $scope.$broadcast('formReset');
-                $state.go(config.name + '.detail', {id: data.id});
+            if (stayInEdit){
+                $scope.editDetail = data;
+                // Refresh-Breadcrumb:
+                $scope.reloadDetails();
             } else {
-                $scope.editDetail = undefined;
-                $scope.detail = data;
-                update();
+                if (!$scope.exists) {
+                    $scope.$broadcast('formReset');
+                    $state.go(config.name + '.detail', {id: data.id});
+                } else {
+                    $scope.editDetail = undefined;
+                    $scope.detail = data;
+                    update();
+                }
             }
         }, function (response) {
             if (!response.data.fieldErrors) {
