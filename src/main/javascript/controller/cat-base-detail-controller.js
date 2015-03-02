@@ -170,8 +170,7 @@ function CatBaseDetailController($scope, $state, $stateParams, $location, $windo
                 $scope.editDetail = data;
                 // Refresh-Breadcrumb:
                 $scope.reloadDetails();
-            }
-            else {
+            } else {
                 if (!$scope.exists) {
                     $scope.$broadcast('formReset');
                     $location.path(baseUrl + '/' + data.id);
