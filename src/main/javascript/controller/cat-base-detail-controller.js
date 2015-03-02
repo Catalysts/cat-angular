@@ -173,7 +173,7 @@ function CatBaseDetailController($scope, $state, $stateParams, $location, $windo
             } else {
                 if (!$scope.exists) {
                     $scope.$broadcast('formReset');
-                    $location.path(baseUrl + '/' + data.id);
+                    $state.go(config.name + '.detail', {id: data.id});
                 } else {
                     $scope.editDetail = undefined;
                     $scope.detail = data;
