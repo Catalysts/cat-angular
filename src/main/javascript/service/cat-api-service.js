@@ -323,6 +323,29 @@ function CatApiServiceProvider() {
             function $getCatApiService($http, catConversionService) {
             var catApiService = {};
 
+            var dynamicEndpoints = {};
+
+            /**
+             * This method allows to define (dynamic) endpoints after the configuration phase.
+             * @param {string} name (optional the name of the api endpoint to create or retrieve the configuration for
+             * @param {object} [settings] if given a new {EndpointConfig} will be created with the given settings
+             * @returns {CatApiEndpoint}
+             */
+            catApiService.dynamicEndpoint = function (name, settings) {
+                if (typeof name === 'object' && _.isUndefined(settings)) {
+                    settings = name;
+                    name = settings.url;
+                }
+                if (_.isUndefined(dynamicEndpoints[name])) {
+                    if(_.isUndefined(settings)){
+                        throw new Error('Undefined dynamic endpoint settings');
+                    }
+                    dynamicEndpoints[name] = new CatApiEndpoint(_urlPrefix,
+                        new EndpointConfig(name, settings), $http, catConversionService);
+                }
+                return dynamicEndpoints[name];
+            };
+
             _.forEach(_.keys(_endpoints), function (path) {
                 catApiService[path] = new CatApiEndpoint(_urlPrefix, _endpoints[path], $http, catConversionService);
             });
