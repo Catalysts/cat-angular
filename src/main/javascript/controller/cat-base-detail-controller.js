@@ -142,8 +142,7 @@ function CatBaseDetailController($scope, $state, $stateParams, $location, $windo
     $scope.remove = function () {
         endpoint.remove($scope.detail.id).then(function () {
             if (_.isEmpty($scope.uiStack)) {
-                $state.go(config.name + '.list');
-                $location.path(baseUrl);
+                $state.go('^.list');
             } else {
                 var parentUrl = $scope.uiStack[$scope.uiStack.length - 1].url;
                 $location.path(parentUrl.substring(1, parentUrl.indexOf('?')));
@@ -173,7 +172,7 @@ function CatBaseDetailController($scope, $state, $stateParams, $location, $windo
             } else {
                 if (!$scope.exists) {
                     $scope.$broadcast('formReset');
-                    $state.go(config.name + '.detail', {id: data.id});
+                    $state.go('.', {id: data.id});
                 } else {
                     $scope.editDetail = undefined;
                     $scope.detail = data;
