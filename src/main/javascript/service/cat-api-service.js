@@ -12,7 +12,7 @@
  * @param {object} catConversionService the catConversionService used to convert from and to server side data
  * @constructor
  */
-function CatApiEndpoint(url, endpointConfig, $http, catConversionService) {
+function CatApiEndpoint(url, endpointConfig, $http, catConversionService, catSearchService) {
     var that = this;
 
     var _endpointName = endpointConfig.name;
@@ -91,7 +91,11 @@ function CatApiEndpoint(url, endpointConfig, $http, catConversionService) {
      * @private
      */
     var _getSearchQuery = function (searchRequest) {
-        return !!searchRequest && searchRequest instanceof window.cat.SearchRequest ? '?' + searchRequest.urlEncoded() : '';
+        if (!!searchRequest && searchRequest instanceof window.cat.SearchRequest) {
+            return '?' + catSearchService.encodeAsUrl(searchRequest);
+        }
+
+        return '';
     };
 
     /**
@@ -316,11 +320,11 @@ function CatApiServiceProvider() {
     };
 
 
-    this.$get = ['$http', 'catConversionService',
+    this.$get = ['$http', 'catConversionService', 'catSearchService',
         /**
          * @return {object} returns a map from names to CatApiEndpoints
          */
-            function $getCatApiService($http, catConversionService) {
+            function $getCatApiService($http, catConversionService, catSearchService) {
             var catApiService = {};
 
             var dynamicEndpoints = {};
@@ -337,7 +341,7 @@ function CatApiServiceProvider() {
                     name = settings.url;
                 }
                 if (_.isUndefined(dynamicEndpoints[name])) {
-                    if(_.isUndefined(settings)){
+                    if (_.isUndefined(settings)) {
                         throw new Error('Undefined dynamic endpoint settings');
                     }
                     dynamicEndpoints[name] = new CatApiEndpoint(_urlPrefix,
@@ -347,7 +351,7 @@ function CatApiServiceProvider() {
             };
 
             _.forEach(_.keys(_endpoints), function (path) {
-                catApiService[path] = new CatApiEndpoint(_urlPrefix, _endpoints[path], $http, catConversionService);
+                catApiService[path] = new CatApiEndpoint(_urlPrefix, _endpoints[path], $http, catConversionService, catSearchService);
             });
 
             return catApiService;

@@ -22,6 +22,7 @@
     "boss": false,
     "eqnull": false,
     "expr": true,
+    "lastsemic": true,
     "globals": {
         "cat": false,
         "angular": false,

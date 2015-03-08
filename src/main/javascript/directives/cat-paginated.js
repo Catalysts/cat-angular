@@ -35,7 +35,7 @@ angular.module('cat.directives.paginated')
                 }
             },
             controllerAs: 'catPaginatedController',
-            controller: function CatPaginatedController($scope, $location, $timeout, $rootScope, catListDataLoadingService, catI18nService) {
+            controller: function CatPaginatedController($scope, $location, $timeout, $rootScope, catListDataLoadingService, catI18nService, catSearchService) {
                 var that = this;
                 var searchTimeout = null, DELAY_ON_SEARCH = 500;
                 var PAGINATION_PREVIOUS_KEY = 'cc.catalysts.cat-paginated.pagination.previous';
@@ -92,6 +92,7 @@ angular.module('cat.directives.paginated')
                         if (searchRequest.isDirty()) {
                             catListDataLoadingService.load($scope.listData.endpoint, searchRequest).then(
                                 function (data) {
+                                    searchRequest.setPristine();
                                     _.assign($scope.listData, data);
                                 }
                             );
@@ -108,7 +109,7 @@ angular.module('cat.directives.paginated')
 
                 function updateLocation() {
                     if ($scope.syncLocation !== false) {
-                        searchRequest.setSearch($location);
+                        catSearchService.updateLocation(searchRequest);
                         $location.replace();
                     }
                 }

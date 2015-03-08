@@ -5,7 +5,7 @@
  * @name cat.service.listDataLoading:catListDataLoadingService
  */
 angular.module('cat.service.listDataLoading')
-    .factory('catListDataLoadingService', ['catApiService', '$state', '$location', '$q', function CatListDataLoadingService(catApiService, $state, $location, $q) {
+    .factory('catListDataLoadingService', ['$state', '$location', '$q', 'catApiService', 'catSearchService', function CatListDataLoadingService($state, $location, $q, catApiService, catSearchService) {
         var load = function (endpoint, searchRequest) {
             var deferred = $q.defer();
             endpoint.list(searchRequest).then(
@@ -41,7 +41,7 @@ angular.module('cat.service.listDataLoading')
          * @param {Object} [defaultSort={property:'name',isDesc:false}]
          */
         var resolve = function (endpointName, defaultSort) {
-            var searchRequest = new window.cat.SearchRequest($location.search());
+            var searchRequest = catSearchService.fromLocation();
             if (!defaultSort) {
                 defaultSort = {property: 'name', isDesc: false};
             }

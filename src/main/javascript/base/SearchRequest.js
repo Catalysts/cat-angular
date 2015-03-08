@@ -23,6 +23,7 @@ window.cat.SearchRequest = function (searchUrlParams) {
     };
     var _sort = {};
     var _search = {};
+    var _dirty = false;
 
     var lastEncoded;
 
@@ -78,6 +79,7 @@ window.cat.SearchRequest = function (searchUrlParams) {
             return _pagination;
         } else {
             _pagination = pagination;
+            _dirty = true;
             return _pagination;
         }
     };
@@ -92,6 +94,7 @@ window.cat.SearchRequest = function (searchUrlParams) {
             return _sort;
         } else {
             _sort = sort;
+            _dirty = true;
             return _sort;
         }
     };
@@ -105,11 +108,14 @@ window.cat.SearchRequest = function (searchUrlParams) {
             return _search;
         } else {
             _search = search;
+            _dirty = true;
             return _search;
         }
     };
 
     /**
+     * @deprecated use catSearchService#encodeAsUrl instead
+     *
      * @returns {String} a string representation of the current SearchRequest which can be used as part of the request
      * url
      */
@@ -118,14 +124,20 @@ window.cat.SearchRequest = function (searchUrlParams) {
         return lastEncoded;
     };
 
+    this.setPristine = function () {
+        _dirty = false;
+    };
+
     /**
      * @returns {boolean} <code>true</code> if something changed since the last time {@link this#urlEncoded} was called
      */
     this.isDirty = function () {
-        return lastEncoded !== urlEndoded();
+        return _dirty;
     };
 
     /**
+     * @deprecated use catSearchService#updateLocation instead
+     *
      * A small helper function to update the current url to correctly reflect all properties set within this
      * SearchRequest
      * @param $location the angular $location service

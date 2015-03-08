@@ -5,8 +5,9 @@ angular.module('cat.filters', ['cat.filters.replaceText']);
 
 angular.module('cat.template', ['ui.bootstrap.tpls']);
 
+angular.module('cat.service.search', []);
 angular.module('cat.service.conversion', []);
-angular.module('cat.service.api', ['cat.service.conversion']);
+angular.module('cat.service.api', ['cat.service.conversion', 'cat.service.search']);
 angular.module('cat.service.breadcrumbs', []);
 angular.module('cat.service.i18n', []);
 angular.module('cat.service.listDataLoading', ['cat.service.api']);
@@ -29,7 +30,8 @@ angular.module('cat.service', [
     'cat.service.loading',
     'cat.service.httpIntercept',
     'cat.service.menu',
-    'cat.service.message'
+    'cat.service.message',
+    'cat.service.search'
 ]);
 
 angular.module('cat.directives.autofocus', []);
@@ -46,7 +48,8 @@ angular.module('cat.directives.i18n', ['cat.service.i18n']);
 angular.module('cat.directives.paginated', [
     'ui.bootstrap.pagination',
     'cat.service.listDataLoading',
-    'cat.service.i18n'
+    'cat.service.i18n',
+    'cat.service.search'
 ]);
 angular.module('cat.directives.facets', ['cat.directives.paginated']);
 angular.module('cat.directives.sortable', ['cat.directives.paginated']);
