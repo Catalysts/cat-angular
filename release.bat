@@ -1,6 +1,6 @@
-git submodule update --remote
+git submodule update
 cd dist
-git co master
+git checkout master
 cd ..
 call gulpw
 cd dist
