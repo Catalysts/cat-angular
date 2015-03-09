@@ -1,3 +1,5 @@
+echo "Start with release?"
+pause
 git submodule update
 cd dist
 git checkout master
@@ -10,6 +12,8 @@ cd ..
 git commit -a -m %*
 git tag %*
 cd dist
+echo "Push release to github?"
+pause
 git push origin HEAD:master
 git push origin tags/%*
 cd ..
