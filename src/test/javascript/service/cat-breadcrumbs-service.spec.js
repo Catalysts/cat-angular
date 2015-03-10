@@ -12,6 +12,7 @@ describe('CatBreadcrumbsService', function () {
     beforeEach(function () {
         angular.module('cat.service.breadcrumbs.test', []);
 
+        module('ui.router');
         module('cat.service.breadcrumbs');
         module('cat.service.breadcrumbs.test');
 
