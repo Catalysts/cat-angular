@@ -45,7 +45,6 @@ function CatBaseDetailController($scope, $state, $stateParams, $location, $windo
 
     $scope.config = config;
     var endpoint = config.endpoint;
-    var baseUrl = config.baseUrl;
     var templateUrls = config.templateUrls;
     var Model = config.Model;
 
@@ -68,8 +67,6 @@ function CatBaseDetailController($scope, $state, $stateParams, $location, $windo
     } else {
         $scope.mainViewTemplate = templateUrls.view;
     }
-
-    $scope.baseUrl = baseUrl;
 
     /**
      * @returns {String|Number} A title of the current object or the 'id' as fallback
@@ -137,15 +134,15 @@ function CatBaseDetailController($scope, $state, $stateParams, $location, $windo
     };
 
     /**
-     * Calls the remove function of the current endpoint and redirects to the given baseUrl upon success
+     * Calls the remove function of the current endpoint and redirects to the ^.list upon success
      */
     $scope.remove = function () {
         endpoint.remove($scope.detail.id).then(function () {
             if (_.isEmpty($scope.uiStack)) {
                 $state.go('^.list');
             } else {
-                var parentUrl = $scope.uiStack[$scope.uiStack.length - 1].url;
-                $location.path(parentUrl.substring(1, parentUrl.indexOf('?')));
+                var url = $state.href('^.^');
+                $location.url(url.substring(1, url.length));
                 $location.search('tab', endpoint.getEndpointName());
             }
         });

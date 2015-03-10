@@ -19,13 +19,14 @@
  * * config - the config object used to instantiate this view
  *
  * @param {object} $scope scope
+ * @param {object} $state state service
  * @param {object} $controller controller
  * @param {object} $log log
  * @param {object} catBreadcrumbsService catBreadcrumbsService
  * @param {object} catListDataLoadingService catListDataLoadingService
  * @param {object} config holds data like the listData object, the template url, base url, the model constructor, etc.
  */
-function CatBaseListController($scope, $controller, $log, catBreadcrumbsService, catListDataLoadingService, config) {
+function CatBaseListController($scope, $state, $controller, $log, catBreadcrumbsService, catListDataLoadingService, config) {
     if (!_.isUndefined(config.listData)) {
         this.titleKey = 'cc.catalysts.cat-breadcrumbs.entry.' + config.listData.endpoint.getEndpointName();
 
@@ -46,7 +47,8 @@ function CatBaseListController($scope, $controller, $log, catBreadcrumbsService,
     this.config = config;
 
     this.getUrlForId = function (id) {
-        return '#' + config.baseUrl + '/' + id;
+        $log.warn('use ui-sref directly - this method will be removed in the near future');
+        return $state.href('^.detail', {id: id});
     };
 
     this.getUrlForNewPage = function () {
