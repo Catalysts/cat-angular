@@ -31,7 +31,6 @@ angular.module('cat.directives.inputs')
             restrict: 'A',
             transclude: true,
             scope: {
-                errors: '=',
                 label: '@',
                 name: '@'
             },

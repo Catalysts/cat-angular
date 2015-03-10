@@ -11,7 +11,8 @@
 angular.module('cat.service.search')
 /**
  * @ngdoc service
- * @name catUrlEncodingService
+ * @name cat.service.search:catUrlEncodingService
+ * @module cat.service.search
  *
  * @descripton
  * A small helper service which encapsulates the url encoding of an object.
@@ -28,7 +29,8 @@ angular.module('cat.service.search')
     })
 /**
  * @ngdoc service
- * @name catSearchService
+ * @name cat.service.search:catSearchService
+ * @module cat.service.search
  *
  * @descripton
  * A helper service which encapsulates several operations which can be performed on a cat.SearchRequest
@@ -69,8 +71,9 @@ angular.module('cat.service.search')
         /**
          * @ngdoc function
          * @name encodeAsUrl
+         * @methodOf cat.service.search:catSearchService
          *
-         * @param searchRequest
+         * @param {Object} searchRequest DOCTODO
          *
          * @description
          * This methods returns an url encoded version of the given search request
@@ -86,8 +89,9 @@ angular.module('cat.service.search')
         /**
          * @ngdoc function
          * @name updateLocation
+         * @methodOf cat.service.search:catSearchService
          *
-         * @param searchRequest
+         * @param {Object} searchRequest DOCTODO
          *
          * @description
          * This methods updates the browsers address bar via the $location service to reflect the given SearchRequest
@@ -116,6 +120,7 @@ angular.module('cat.service.search')
         /**
          * @ngdoc function
          * @name fromLocation
+         * @methodOf cat.service.search:catSearchService
          *
          * @description
          * This methods returns a new instance of cat.SearchRequest with all parameters set according to the current url search parameters

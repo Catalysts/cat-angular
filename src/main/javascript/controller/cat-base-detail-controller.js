@@ -17,7 +17,6 @@
  * * editTemplate - the url of the edit template
  * * mainViewTemplate - the url of the main view template
  * * additionalViewTemplate - the url of the additional view template if it exists
- * * $fieldErrors - a map of validation errors returned by the server
  *
  * Common functions include:
  * * save - the save function to update / create an object
@@ -35,13 +34,13 @@
  * @param {object} $globalMessages DOCTODO
  * @param {object} $controller DOCTODO
  * @param {object} $log DOCTODO
+ * @param {object} catValidationService DOCTODO
  * @param {object} catBreadcrumbsService DOCTODO
  * @param {Object} config holds data like the current api endpoint, template urls, base url, the model constructor, etc.
  */
-function CatBaseDetailController($scope, $state, $stateParams, $location, $window, $globalMessages, $controller, $log, catBreadcrumbsService, config) {
+function CatBaseDetailController($scope, $state, $stateParams, $location, $window, $globalMessages, $controller, $log, catValidationService, catBreadcrumbsService, config) {
     $scope.detail = config.detail;
     $scope.editDetail = undefined;
-    $scope.$fieldErrors = {};
 
     $scope.config = config;
     var endpoint = config.endpoint;
@@ -130,7 +129,6 @@ function CatBaseDetailController($scope, $state, $stateParams, $location, $windo
         if ($scope.exists) {
             $scope.editDetail = undefined;
             $globalMessages.clearMessages();
-            $scope.$fieldErrors = undefined;
         } else {
             $window.history.back();
         }
@@ -164,7 +162,6 @@ function CatBaseDetailController($scope, $state, $stateParams, $location, $windo
         // When passing data to an asynchronous method, it makes sense to clone it.
         endpoint.save(angular.copy($scope.editDetail)).then(function (data) {
             $globalMessages.clearMessages();
-            $scope.$fieldErrors = undefined;
             if (stayInEdit){
                 $scope.editDetail = data;
                 // Refresh-Breadcrumb:
@@ -179,20 +176,6 @@ function CatBaseDetailController($scope, $state, $stateParams, $location, $windo
                     update();
                 }
             }
-        }, function (response) {
-            if (!response.data.fieldErrors) {
-                $scope.$fieldErrors = undefined;
-                return;
-            }
-            // group by field
-            var fieldErrors = {};
-            _.forEach(response.data.fieldErrors, function (fieldError) {
-                fieldErrors[fieldError.field] = fieldErrors[fieldError.field] || [];
-                fieldErrors[fieldError.field].push(fieldError.message);
-            });
-
-            $scope.$fieldErrors = fieldErrors;
-            $scope.$broadcast('fieldErrors', fieldErrors);
         });
     };
 

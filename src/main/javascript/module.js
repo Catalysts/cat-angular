@@ -16,7 +16,8 @@ angular.module('cat.service.selectConfig', []);
 angular.module('cat.service.view', ['cat.service.api', 'cat.service.route']);
 angular.module('cat.service.loading', ['angularSpinner']);
 angular.module('cat.service.message', []);
-angular.module('cat.service.httpIntercept', ['cat.service.loading', 'cat.service.message']);
+angular.module('cat.service.validation', ['cat.service.message']);
+angular.module('cat.service.httpIntercept', ['cat.service.loading', 'cat.service.message', 'cat.service.validation']);
 angular.module('cat.service.menu', []);
 angular.module('cat.service', [
     'cat.service.conversion',
@@ -37,7 +38,7 @@ angular.module('cat.service', [
 angular.module('cat.directives.autofocus', []);
 angular.module('cat.directives.checkbox', []);
 angular.module('cat.directives.confirmClick', []);
-angular.module('cat.directives.fieldErrors', []);
+angular.module('cat.directives.fieldErrors', ['cat.service.validation']);
 angular.module('cat.directives.inputs', []);
 angular.module('cat.directives.loadMore', []);
 angular.module('cat.directives.menu', ['cat.service.menu']);

@@ -7,7 +7,7 @@ angular.module('cat.service.httpIntercept')
  * @name cat.service.httpIntercept:errorHttpInterceptor
  */
 
-    .factory('errorHttpInterceptor', function CatErrorHttpInterceptor($q, $globalMessages, loadingService) {
+    .factory('errorHttpInterceptor', function CatErrorHttpInterceptor($q, $globalMessages, loadingService, catValidationService) {
         return {
             'request': function (config) {
                 loadingService.start();
@@ -32,9 +32,8 @@ angular.module('cat.service.httpIntercept')
                     }
                     $globalMessages.addMessage('error', error);
                 }
-                if (!!rejection.data.globalErrors) {
-                    $globalMessages.addMessages('error', rejection.data.globalErrors);
-                }
+
+                catValidationService.updateFromRejection(rejection);
 
                 return $q.reject(rejection);
             }
