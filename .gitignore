@@ -6,5 +6,6 @@ build/
 classes/
 coverage/
 .gradle/
+docs/
 
 *.iml
