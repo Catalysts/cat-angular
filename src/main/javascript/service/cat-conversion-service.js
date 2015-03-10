@@ -2,7 +2,8 @@
 
 /**
  * @ngdoc service
- * @name catConversionService
+ * @name cat.service.conversion:catConversionService
+ * @module cat.service.conversion
  *
  * @description
  * This service handles the transformation between server and client side data.
@@ -72,6 +73,16 @@ function _convertToClientData(serverData, context) {
 
 
 angular.module('cat.service.conversion')
+/**
+ * @ngdoc object
+ * @name cat.service.conversion:catConversionFunctions
+ * @module cat.service.conversion
+ *
+ * @description
+ * Value holding functions used by {@link cat.service.conversion:catConversionService catConversionService}
+ *
+ * @constructor
+ */
     .value('catConversionFunctions', {
         toClient: _convertToClientData,
         toServer: function (clientData, context) {

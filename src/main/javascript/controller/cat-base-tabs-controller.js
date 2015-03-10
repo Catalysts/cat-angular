@@ -1,11 +1,19 @@
 'use strict';
 
-angular.module('cat.controller.base.tabs').controller('CatBaseTabsController', CatBaseTabsController);
-
 /**
  * @ngdoc controller
  * @name cat.controller.base.tabs:CatBaseTabsController
+ * @module cat.controller.base.tabs
  *
+ * @description
+ * The base code for handling sub entites (as tabs).
+ * Includes the instantiation of one controller per tab/list and lazy loading of the approrpiate data
+ *
+ * @param {Object} $scope The angular scope
+ * @param {Object} $controller The angular $controller service
+ * @param {Object} $stateParams The ui-router $stateParams service
+ * @param {Object} $location The angular $location service
+ * @param {Object} config The config as handled by state resolve
  */
 function CatBaseTabsController($scope, $controller, $stateParams, $location, config) {
     var endpoint = config.endpoint;
@@ -126,3 +134,5 @@ function CatBaseTabsController($scope, $controller, $stateParams, $location, con
         }
     }];
 }
+
+angular.module('cat.controller.base.tabs').controller('CatBaseTabsController', CatBaseTabsController);

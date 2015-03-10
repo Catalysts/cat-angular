@@ -3,6 +3,7 @@
 /**
  * @ngdoc controller
  * @name cat.controller.base.detail:CatBaseDetailController
+ * @module cat.controller.base.detail
  *
  * @description
  * The CatBaseDetailController takes care of providing several common properties and functions to the scope

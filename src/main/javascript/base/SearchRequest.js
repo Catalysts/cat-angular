@@ -3,8 +3,9 @@
 window.cat = window.cat || {};
 
 /**
- * @ngdoc overview
- * @name SearchRequest
+ * @ngdoc function
+ * @name cat.SearchRequest
+ * @module cat
  *
  * @description
  * A 'SearchRequest' model used by the catApiService to provide the backend with certain filter, order, page and size

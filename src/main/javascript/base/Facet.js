@@ -3,8 +3,10 @@
 window.cat = window.cat || {};
 
 /**
- * @ngdoc overview
- * @name FacetTerm
+ /**
+ * @ngdoc function
+ * @name cat.FacetTerm
+ * @module cat
  *
  * @description
  * A 'FacetTerm' model used in conjunction with the cat-paginated directive where it represents a value of a group or

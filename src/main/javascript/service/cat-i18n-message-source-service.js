@@ -1,23 +1,19 @@
 'use strict';
 
-angular.module('cat.service.i18n')
-
 /**
  * @ngdoc service
  * @name cat.service.i18n:catI18nMessageSourceService
+ * @module cat.service.i18n
  * @service
  *
  * @description
  * A service to retrieve message templates for a given key and locale
  *
- *
  * @param {object} $q DOCTODO
- * @param {object} $$locale DOCTODO
- * @param {string} $CAT_I18N_DEFAULT_LOCALE DOCTODO
+ * @param {object} catI18nLocaleService DOCTODO
+ * @param {string} CAT_I18N_DEFAULT_LOCALE DOCTODO
  * @constructor
  */
-    .service('catI18nMessageSourceService', ['$q', 'catI18nLocaleService', 'CAT_I18N_DEFAULT_LOCALE', CatI18nMessageSourceService]);
-
 function CatI18nMessageSourceService($q, catI18nLocaleService, CAT_I18N_DEFAULT_LOCALE) {
     function _getLocale(locale) {
         return locale || catI18nLocaleService.getDefaultLocale();
@@ -38,7 +34,9 @@ function CatI18nMessageSourceService($q, catI18nLocaleService, CAT_I18N_DEFAULT_
     }
 
     /**
-     * @name catI18nMessageSourceService#getMessages
+     * @ngdoc function
+     * @name getMessages
+     * @methodOf cat.service.i18n:catI18nMessageSourceService
      * @function
      *
      * @description
@@ -52,7 +50,9 @@ function CatI18nMessageSourceService($q, catI18nLocaleService, CAT_I18N_DEFAULT_
     };
 
     /**
-     * @name catI18nMessageSourceService#getMessage
+     * @ngdoc function
+     * @name getMessage
+     * @methodOf cat.service.i18n:catI18nMessageSourceService
      * @function
      *
      * @description
@@ -72,7 +72,9 @@ function CatI18nMessageSourceService($q, catI18nLocaleService, CAT_I18N_DEFAULT_
 
 
     /**
-     * @name catI18nMessageSourceService#hasMessage
+     * @ngdoc function
+     * @name hasMessage
+     * @methodOf cat.service.i18n:catI18nMessageSourceService
      * @function
      *
      * @description
@@ -87,3 +89,6 @@ function CatI18nMessageSourceService($q, catI18nLocaleService, CAT_I18N_DEFAULT_
         return $q.when(!_.isUndefined(bundle) && !_.isUndefined(bundle[key]));
     };
 }
+
+angular.module('cat.service.i18n')
+    .service('catI18nMessageSourceService', ['$q', 'catI18nLocaleService', 'CAT_I18N_DEFAULT_LOCALE', CatI18nMessageSourceService]);

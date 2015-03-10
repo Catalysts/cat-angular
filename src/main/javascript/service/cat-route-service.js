@@ -1,27 +1,12 @@
 'use strict';
 
-angular.module('cat.service.route')
-
 /**
  * @ngdoc service
- * @name cat.service.route:catRouteService
+ * @name cat.service.route:catRouteServiceProvider
  * @description
  * This service provider delegates to the $stateProvider and actually creates 2 separate routes after applying various
  * conventions / defaults
  */
-    .provider('catRouteService', CatRouteServiceProvider)
-    
-    .run(function($rootScope, $log, $globalMessages, catBreadcrumbsService) {
-        $rootScope.$on('$stateChangeError', function() {
-            var exception = arguments[arguments.length - 1];
-            $globalMessages.addMessage('warning', exception);
-            $log.warn(exception);
-        });
-        $rootScope.$on('$stateChangeSuccess', function() {
-            catBreadcrumbsService.clear();
-        });
-    });
-
 function CatRouteServiceProvider($stateProvider) {
     var viewNames = [];
 
@@ -85,9 +70,15 @@ function CatRouteServiceProvider($stateProvider) {
     }
 
     /**
+     * @ngdoc function
+     * @name detailRoute
+     * @methodOf cat.service.route:catRouteServiceProvider
+     *
+     * @description
      * This function creates route url via convention from the given parameters and passes them (together with the
      * configuration) to the $stateProvider. The actual route configuration is received by passing the given one
      * to #window.cat.util.route.detail
+     *
      * @param {string} baseUrl the base url which will be prepended to all routes
      * @param {string} name the name for which the routes will be created
      * @param {Object} [config] the config object which wraps the configurations for the list and detail route
@@ -103,9 +94,15 @@ function CatRouteServiceProvider($stateProvider) {
     };
 
     /**
+     * @ngdoc function
+     * @name detailRoute
+     * @methodOf cat.service.route:catRouteServiceProvider
+     *
+     * @description
      * This function creates route urls via convention from the given parameters and passes them (together with the
      * configuration) to the $stateProvider. The actual route configuration is received by passing the given one
      * to #window.cat.util.route.list and #window.cat.util.route.detail
+     *
      * @param {string} baseUrl the base url which will be prepended to all routes
      * @param {string} name the name for which the routes will be created
      * @param {Object} [config] the config object which wraps the configurations for the list and detail route
@@ -125,11 +122,28 @@ function CatRouteServiceProvider($stateProvider) {
     };
 
     /**
+     * @ngdoc service
+     * @name cat.service.route:catRouteService
+     * @module cat.service.route
+     *
+     * @description
      * This service simply exposes the created view and endpoint names, as the provider basically only delegates
      * to the $stateProvider
-     * @return {Array} the registered view names
      */
     this.$get = function () {
         return viewNames;
     };
 }
+
+angular.module('cat.service.route')
+    .provider('catRouteService', CatRouteServiceProvider)
+    .run(function($rootScope, $log, $globalMessages, catBreadcrumbsService) {
+        $rootScope.$on('$stateChangeError', function() {
+            var exception = arguments[arguments.length - 1];
+            $globalMessages.addMessage('warning', exception);
+            $log.warn(exception);
+        });
+        $rootScope.$on('$stateChangeSuccess', function() {
+            catBreadcrumbsService.clear();
+        });
+    });

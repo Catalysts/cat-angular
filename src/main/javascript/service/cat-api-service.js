@@ -10,6 +10,7 @@
  * @param {object} endpointConfig the configuration of this endpoint - holds properties like name, url, the model and children
  * @param {object} $http the angular $http service which handles the actual xhr requests
  * @param {object} catConversionService the catConversionService used to convert from and to server side data
+ * @param {object} catSearchService the catSearchService for handling all operations concerning cat.uitl.SearchRequest objects
  * @constructor
  */
 function CatApiEndpoint(url, endpointConfig, $http, catConversionService, catSearchService) {
@@ -373,10 +374,10 @@ angular.module('cat.service.api').provider('catApiService', CatApiServiceProvide
 /**
  * @ngdoc service
  * @name cat.service.api:$api
- * @deprectaed use '$api'
+ * @deprecated use 'catApiService'
  *
  * @description
- * deprectaed use '$api'
+ * deprecated use 'catApiService'
  * The CatApiServiceProvider exposes a single configuration method 'endpoint' which can be used to create or retrieve
  * named endpoint configurations.
  *

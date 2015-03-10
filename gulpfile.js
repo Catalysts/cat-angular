@@ -214,10 +214,10 @@ gulp.task('clean', cleanTask);
 
 gulp.task('docs', [], function () {
     var options = {
-        html5Mode: true,
+        html5Mode: false,
         startPage: '/api',
         title: config.pkg.name,
-        titleLink: "/api"
+        titleLink: '/api'
     };
     return gulp.ngdocs
         .sections({

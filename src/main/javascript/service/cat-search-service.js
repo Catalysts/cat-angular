@@ -14,7 +14,7 @@ angular.module('cat.service.search')
  * @name cat.service.search:catUrlEncodingService
  * @module cat.service.search
  *
- * @descripton
+ * @description
  * A small helper service which encapsulates the url encoding of an object.
  * In it's default version it just delegates to jQuery.param
  */
@@ -30,6 +30,7 @@ angular.module('cat.service.search')
 /**
  * @ngdoc service
  * @name cat.service.search:catSearchService
+ * @requires cat.service.search:catUrlEncodingService
  * @module cat.service.search
  *
  * @descripton
@@ -73,7 +74,7 @@ angular.module('cat.service.search')
          * @name encodeAsUrl
          * @methodOf cat.service.search:catSearchService
          *
-         * @param {Object} searchRequest DOCTODO
+         * @param {cat.SearchRequest} searchRequest the search request to encode as url
          *
          * @description
          * This methods returns an url encoded version of the given search request
@@ -91,7 +92,7 @@ angular.module('cat.service.search')
          * @name updateLocation
          * @methodOf cat.service.search:catSearchService
          *
-         * @param {Object} searchRequest DOCTODO
+         * @param {cat.SearchRequest} searchRequest the search request from which to update the $location service
          *
          * @description
          * This methods updates the browsers address bar via the $location service to reflect the given SearchRequest
@@ -123,7 +124,7 @@ angular.module('cat.service.search')
          * @methodOf cat.service.search:catSearchService
          *
          * @description
-         * This methods returns a new instance of cat.SearchRequest with all parameters set according to the current url search parameters
+         * This methods returns a new instance of {@link cat.SearchRequest} with all parameters set according to the current url search parameters
          */
         this.fromLocation = function () {
             return new cat.SearchRequest($location.search());

@@ -1,10 +1,10 @@
 'use strict';
 
-angular.module('cat.service.view').provider('catViewService', CatViewServiceProvider);
-
 /**
  * @ngdoc service
  * @name cat.service.view:catViewService
+ * @module cat.service.view
+ *
  * @description
  * This service provider can be used to initialize an api endpoint and the according detail and list routes by simply
  * providing a name and a config object.
@@ -62,3 +62,5 @@ function CatViewServiceProvider(catRouteServiceProvider, catApiServiceProvider) 
         };
     };
 }
+
+angular.module('cat.service.view').provider('catViewService', CatViewServiceProvider);
