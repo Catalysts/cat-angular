@@ -8,4 +8,5 @@ coverage/
 .gradle/
 docs/
 
+test-results.xml
 *.iml
