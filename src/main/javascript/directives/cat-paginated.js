@@ -81,15 +81,14 @@ angular.module('cat.directives.paginated')
                     _loadPaginationTranslations();
                 });
 
-
                 $scope.listData.search = $scope.listData.search || $scope.listData.searchRequest.search() || {};
 
                 var searchRequest = $scope.listData.searchRequest;
 
-                var reload = function (delay) {
+                var reload = function (delay, force) {
                     $timeout.cancel(searchTimeout);
                     searchTimeout = $timeout(function () {
-                        if (searchRequest.isDirty()) {
+                        if (searchRequest.isDirty() || !!force) {
                             catListDataLoadingService.load($scope.listData.endpoint, searchRequest).then(
                                 function (data) {
                                     searchRequest.setPristine();
@@ -99,6 +98,10 @@ angular.module('cat.directives.paginated')
                         }
                     }, delay || 0);
                 };
+
+                $rootScope.$on('cat-paginated-refresh', function () {
+                    reload(0, true);
+                });
 
                 $scope.$watch('listData.sort', function (newVal) {
                     if (!!newVal) {
