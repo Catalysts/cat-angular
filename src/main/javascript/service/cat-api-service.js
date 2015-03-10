@@ -31,7 +31,7 @@ function CatApiEndpoint(url, endpointConfig, $http, catConversionService, catSea
         var url = _endpointUrl + '/' + id + '/';
         var ret = {};
         _.forEach(_.keys(_childEndpointSettings), function (path) {
-            ret[path] = new CatApiEndpoint(url, _childEndpointSettings[path], $http, catConversionService);
+            ret[path] = new CatApiEndpoint(url, _childEndpointSettings[path], $http, catConversionService, catSearchService);
             ret[path].parentEndpoint = that;
             ret[path].parentId = id;
             ret[path].parentInfo = function () {
@@ -346,7 +346,7 @@ function CatApiServiceProvider() {
                         throw new Error('Undefined dynamic endpoint settings');
                     }
                     dynamicEndpoints[name] = new CatApiEndpoint(_urlPrefix,
-                        new EndpointConfig(name, settings), $http, catConversionService);
+                        new EndpointConfig(name, settings), $http, catConversionService, catSearchService);
                 }
                 return dynamicEndpoints[name];
             };
