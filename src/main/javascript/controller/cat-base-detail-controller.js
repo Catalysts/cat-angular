@@ -125,6 +125,7 @@ function CatBaseDetailController($scope, $state, $stateParams, $location, $windo
      * is active
      */
     $scope.cancelEdit = function () {
+        catValidationService.clearValidationErrors();
         $scope.$broadcast('formReset');
         if ($scope.exists) {
             $scope.editDetail = undefined;
@@ -162,6 +163,7 @@ function CatBaseDetailController($scope, $state, $stateParams, $location, $windo
         // When passing data to an asynchronous method, it makes sense to clone it.
         endpoint.save(angular.copy($scope.editDetail)).then(function (data) {
             $globalMessages.clearMessages();
+            catValidationService.clearValidationErrors();
             if (stayInEdit){
                 $scope.editDetail = data;
                 // Refresh-Breadcrumb:

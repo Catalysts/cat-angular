@@ -46,6 +46,11 @@ angular.module('cat.service.validation')
 
         };
 
+        this.clearValidationErrors = function() {
+            delete catValidations.global;
+            catValidations.fieldErrors = {};
+        };
+
         this.hasGlobalErrors = function() {
             return !!catValidations.global;
         };
