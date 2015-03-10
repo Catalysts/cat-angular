@@ -31,7 +31,7 @@ angular.module('cat.service.search')
  * @name catSearchService
  *
  * @descripton
- * A helper service which encapsulates several operations which can be performed on a cat.util.SearchRequest
+ * A helper service which encapsulates several operations which can be performed on a cat.SearchRequest
  */
     .service('catSearchService', function ($location, catUrlEncodingService) {
 
@@ -118,9 +118,9 @@ angular.module('cat.service.search')
          * @name fromLocation
          *
          * @description
-         * This methods returns a new instance of cat.util.SearchRequest with all parameters set according to the current url search parameters
+         * This methods returns a new instance of cat.SearchRequest with all parameters set according to the current url search parameters
          */
         this.fromLocation = function () {
-            return new cat.util.SearchRequest($location.search());
+            return new cat.SearchRequest($location.search());
         };
     });
