@@ -103,7 +103,7 @@ var test = function (watch, production) {
         var options = {};
         if (production === true) {
             options.plugins = [
-                'karma-teamcity-reporter',
+                'karma-junit-reporter',
                 'karma-jasmine',
                 'karma-coverage',
                 'karma-phantomjs-launcher'
@@ -112,8 +112,13 @@ var test = function (watch, production) {
             options.reporters = [
                 'progress',
                 'coverage',
-                'teamcity'
+                'junit'
             ];
+
+            options.junitReporter = {
+                outputFile: 'test-results.xml',
+                suite: ''
+            };
         }
         karma_server.start(lodash.assign(options, config.karma, {singleRun: !watch, autoWatch: watch}), cb);
     };
@@ -135,7 +140,7 @@ var banner = lazypipe()
 
 var _concatenateAndUglify = function (name) {
     return lazypipe()
-        .pipe(gulp.ngAnnotate)
+        .pipe(gulp.ngAnnotate, {gulpWarnings: false})
         .pipe(gulp.concat, name + '.js')
         //.pipe(banner)
         //.pipe(header, license)
