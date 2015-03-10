@@ -61,12 +61,58 @@ function CatRouteServiceProvider($stateProvider) {
             .state(stateName + '.list', listConfig);
     }
 
+    /**
+     * A helper function for detail routes which applies a few optimizations and some auto configuration.
+     * The actual instantiated controller will be 'CatBaseDetailController' with a default templateUrl
+     * 'template/cat-base-detail.tpl.html'. As the CatBaseDetailController expects a config object with several properties
+     * (templateUrls, parents, detail, endpoint, etc.) this function also takes care of providing the correct 'resolve'
+     * object which pre-loads all the necessary data.
+     * @param {Object} config the route config object which will be used to generate the actual route configuration
+     * @returns {{templateUrl: (string), controller: string, reloadOnSearch: (boolean), resolve: {config: (object)}}}
+     */
     function _getDetailConfig(config, name) {
-        return window.cat.util.route.detail(_.assign({name: name}, config));
+        var _config = _.assign({name: name}, config);
+
+        return {
+            url: _config.url || '/:id',
+            templateUrl: _config.templateUrl || 'template/cat-base-detail.tpl.html',
+            controller: 'CatBaseDetailController',
+            reloadOnSearch: _config.reloadOnSearch,
+            resolve: {
+                config: function($stateParams, catViewConfigService) {
+                    // TODO $stateParams needs to be passed from here because otherwise it's empty...
+                    return catViewConfigService.getDetailConfig(_config, $stateParams);
+                }
+            }
+        };
     }
 
+    /**
+     * A helper function for list routes which applies a few optimizations and some auto configuration.
+     * In the current state it handles 4 settings:
+     * * templateUrl - Auto-generation of the correct templateUrl based on conventions and the config.name property
+     * * controller - Auto-generation of the correct controller based on conventions and the config.name property
+     * * reloadOnSearch - this property is set to false
+     * * resolve - a object with a 'listData' property is returned which is resolved via the correct endpoint
+     *
+     * @param {Object} config the route config object which will be used to generate the actual route configuration
+     * @return {{reloadOnSearch: boolean, controller: string, templateUrl: (string), resolve: {config: Object}}}
+     */
     function _getListConfig(config, name) {
-        return window.cat.util.route.list(_.assign({name: name}, config));
+        var _config = _.assign({name: name}, config);
+
+        return {
+            url: _config.url || '',
+            reloadOnSearch: false,
+            controller: 'CatBaseListController',
+            controllerAs: 'catBaseListController',
+            templateUrl: _config.templateUrl || 'template/cat-base-list.tpl.html',
+            resolve: {
+                config: function(catViewConfigService) {
+                    return catViewConfigService.getListConfig(_config);
+                }
+            }
+        };
     }
 
     /**
