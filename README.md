@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Catalysts/cat-angular.svg)](https://travis-ci.org/Catalysts/cat-angular)
+
 #CAT-ANGULAR#
 
 In this repository we will share our common angular js code
