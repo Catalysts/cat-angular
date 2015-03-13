@@ -68,40 +68,44 @@ function CatBreadcrumbsService(catBreadcrumbs, $state) {
         that.clear();
         var uiStack = [];
 
-        if (!_.isUndefined(config.endpoint.parentEndpoint)) {
-            var currentEndpoint = config.endpoint;
-            var parentEndpoint = currentEndpoint.parentEndpoint;
-            var count = 0;
-            var parentState = '^.^';
+        var currentState = $state.$current.parent;
+        var currentEndpoint = config.endpoint;
+        var count = 0;
+        var parents = '^';
 
-            while (!_.isUndefined(parentEndpoint)) {
-                var parent = config.parents[count++];
+        while (!!currentState && !!currentState.parent) {
+            var stateName = currentState.name;
 
-                var detailBreadcrumb = {
-                    url: $state.href(parentState) + '?tab=' + currentEndpoint.getEndpointName(),
-                    title: parent.name
-                };
-                uiStack.unshift(detailBreadcrumb);
-                that.addFirst(detailBreadcrumb);
+            if (!/\.tab$/g.test(stateName)) {
+                var href = $state.href(parents);
 
-                var breadcrumb = {
-                    title: capitalize(window.cat.util.pluralize(parentEndpoint.getEndpointName())),
-                    key: 'cc.catalysts.cat-breadcrumbs.entry.' + parentEndpoint.getEndpointName(),
-                    url: $state.href(parentState+'.^.list')
-                };
+                var breadcrumb = {};
+
+                if (config.parents.length > count) {
+                    var parent = config.parents[count++];
+                    var regex = new RegExp('/' + window.cat.util.pluralize(currentEndpoint.getEndpointName()) + '$');
+                    href = href.replace(regex, '?tab=' + currentEndpoint.getEndpointName());
+
+                    breadcrumb = {
+                        url: href,
+                        title: parent.name
+                    };
+
+                    uiStack.unshift(breadcrumb);
+                } else {
+                    breadcrumb = {
+                        title: capitalize(window.cat.util.pluralize(currentEndpoint.getEndpointName())),
+                        key: 'cc.catalysts.cat-breadcrumbs.entry.' + currentEndpoint.getEndpointName(),
+                        url: href
+                    };
+                }
+
                 that.addFirst(breadcrumb);
-
-                currentEndpoint = parentEndpoint;
-                parentEndpoint = currentEndpoint.parentEndpoint;
-
-                parentState += '.^.^';
+                currentEndpoint = currentEndpoint.parentEndpoint;
             }
-        } else {
-            that.push({
-                title: capitalize(window.cat.util.pluralize(config.endpoint.getEndpointName())),
-                key: 'cc.catalysts.cat-breadcrumbs.entry.' + config.endpoint.getEndpointName(),
-                url: $state.href('^.list')
-            });
+
+            currentState = currentState.parent;
+            parents += '.^';
         }
         return uiStack;
     };
