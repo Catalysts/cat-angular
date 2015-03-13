@@ -53,7 +53,7 @@ function CatViewConfigService($q, catApiService, catListDataLoadingService) {
             endpoint.parentInfo().then(
                 function (parent) {
                     parents.push(parent);
-                    getParentInfo($q, endpoint.parentEndpoint).then(
+                    getParentInfo(endpoint.parentEndpoint).then(
                         function (response) {
                             parents.push(response);
                             parents = _.flatten(parents);
