@@ -309,19 +309,31 @@ gulp.task('release-commit-dist', function () {
 });
 
 gulp.task('release-commit', ['release-commit-dist'], function () {
-    return gulp.src('./*.json')
+    return gulp.src(['./*.json', 'dist'])
         .pipe(gulp.git.commit(getVersionTag()));
 });
 
 gulp.task('release-push-dist', function () {
     return wrapInPromise(function (cb) {
-        gulp.git.push('origin', 'master', {cwd: config.paths.dist}, cb);
+        gulp.git.push('origin', 'master', {cwd: config.paths.dist}, function (err) {
+            if (!!err) {
+                cb(err);
+            } else {
+                gulp.git.push('origin', getVersionTag(), {cwd: config.paths.dist}, cb);
+            }
+        });
     });
 });
 
 gulp.task('release-push', ['release-push-dist'], function () {
     return wrapInPromise(function (cb) {
-        gulp.git.push('origin', 'master', cb);
+        gulp.git.push('origin', 'master', function (err) {
+            if (!!err) {
+                cb(err);
+            } else {
+                gulp.git.push('origin', getVersionTag(), cb);
+            }
+        });
     });
 });
 
