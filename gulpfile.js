@@ -11,7 +11,6 @@ gulp.header = require('gulp-header');
 gulp.footer = require('gulp-footer');
 gulp.filter = require('gulp-filter');
 gulp.rename = require('gulp-rename');
-gulp.replace = require('gulp-replace');
 gulp.concat = require('gulp-concat');
 gulp.bower = require('gulp-bower');
 gulp.ngdocs = require('gulp-ngdocs');
@@ -157,17 +156,18 @@ var less2css = function () {
         .pipe(gulp.dest(dest));
 };
 
-var banner = lazypipe()
-    .pipe(gulp.header, '(function(window, document, undefined) {\n\'use strict\';\n')
-    .pipe(gulp.footer, '\n})(window, document);\n');
-
 var _concatenateAndUglify = function (name) {
+    var jsFilter = gulp.filter('**/*.js');
+
+    function applyJsFilter() {
+        return jsFilter;
+    }
+
     return lazypipe()
+        .pipe(applyJsFilter) // filter out '*.js.tpl' files
         .pipe(gulp.ngAnnotate, {gulpWarnings: false})
+        .pipe(jsFilter.restore) // restore all files
         .pipe(gulp.concat, name + '.js')
-        //.pipe(banner)
-        //.pipe(header, license)
-        //.pipe(header, license)
         .pipe(gulp.sourcemaps.write, '.', {sourceRoot: 'src'})
         .pipe(gulp.dest, config.paths.dist)
         .pipe(gulp.filter, ['**/*.js'])
@@ -179,7 +179,7 @@ var _concatenateAndUglify = function (name) {
 };
 
 var angularJs = function () {
-    return gulp.src('<%= paths.src %>/**/*.js')
+    return gulp.src(['src/main/util/js-header.js.tpl', '<%= paths.src %>/**/*.js', 'src/main/util/js-footer.js.tpl'])
         .pipe(gulp.sourcemaps.init())
         .pipe(_concatenateAndUglify(config.pkg.name));
 };
