@@ -15,7 +15,12 @@ gulp.replace = require('gulp-replace');
 gulp.concat = require('gulp-concat');
 gulp.bower = require('gulp-bower');
 gulp.ngdocs = require('gulp-ngdocs');
+gulp.bump = require('gulp-bump');
+gulp.git = require('gulp-git');
+gulp.util = require('gulp-util');
 
+var q = require('q');
+var prettyTime = require('pretty-hrtime');
 var path = require('path');
 var karma_server = require('karma').server;
 var lodash = require('lodash');
@@ -59,6 +64,24 @@ var config = {
     }
 };
 
+function getVersionTag() {
+    return 'v' + require('./' + config.paths.dist + '/bower.json').version;
+}
+
+function wrapInPromise(_function) {
+    var deferred = q.defer();
+
+    _function(function (err) {
+        if (!err) {
+            deferred.resolve();
+        } else {
+            deferred.reject(err);
+        }
+    });
+
+    return deferred.primise;
+}
+
 function template(templateString, data) {
     var options = data || config;
     if (lodash.isArray(templateString)) {
@@ -84,17 +107,17 @@ gulp.dest = function (glob) {
 };
 
 var watchLog = function (event) {
-    console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
+    gulp.util.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
 };
 
 var watch = function () {
-    console.log(template('Watching <%= paths.src %>/**/*'));
+    gulp.util.log(template('Watching <%= paths.src %>/**/*'));
     gulp.watch(template('<%= paths.src %>/**/*'), ['angular-js']).on('change', watchLog);
 
-    console.log(template('Watching <%= paths.resources %>/**/*.html'));
+    gulp.util.log(template('Watching <%= paths.resources %>/**/*.html'));
     gulp.watch(template('<%= paths.resources %>/**/*.html'), ['angular-templates']).on('change', watchLog);
 
-    console.log(template('Watching <%= paths.resources %>/**/*.less'));
+    gulp.util.log(template('Watching <%= paths.resources %>/**/*.less'));
     gulp.watch(template('<%= paths.resources %>/**/*.less'), ['less2css']).on('change', watchLog);
 };
 
@@ -178,12 +201,12 @@ var cleanTask = function (cb) {
     rimraf(config.paths.dist, cb);
 };
 
-var bowerInstall = function() {
+var bowerInstall = function () {
     return gulp.bower();
 };
 
 function jshint(src) {
-    return function() {
+    return function () {
         return gulp.src(src)
             .pipe(gulp.jshint())
             .pipe(gulp.jshint.reporter(config.jshint.reporters.dev));
@@ -238,12 +261,116 @@ gulp.task('docs', [], function () {
         .pipe(gulp.dest('./docs'));
 });
 
-gulp.task('watchDocs', ['docs'], function() {
-    console.log(template('Watching <%= paths.src %>/**/*'));
+gulp.task('watchDocs', ['docs'], function () {
+    gulp.util.log(template('Watching <%= paths.src %>/**/*'));
     gulp
         .watch(template([
             '<%= paths.src %>/**/*',
             'gulpfile.js'
         ]), ['docs'])
         .on('change', watchLog);
+});
+
+function bumpVersion(type) {
+    return gulp.src(['./package.json', 'bower.dist.json'])
+        .pipe(gulp.bump({type: type}))
+        .pipe(gulp.dest('./'));
+}
+
+gulp.task('bump-patch', function () {
+    return bumpVersion('patch');
+});
+
+function preRelease() {
+    return wrapInPromise(function (cb) {
+        gulp.git.tag('pre-release', 'pre-release', {args: '-f'}, cb);
+    });
+}
+
+function releaseTag() {
+    return wrapInPromise(function (cb) {
+        var version = getVersionTag();
+        gulp.git.tag(version, version, function (err) {
+            if (!!err) {
+                cb(err);
+            } else {
+                gulp.git.tag(version, version, {cwd: config.paths.dist}, cb);
+            }
+        });
+    });
+}
+
+gulp.task('pre-release', [], preRelease);
+gulp.task('release-tag', [], releaseTag);
+
+gulp.task('release-commit-dist', function () {
+    return gulp.src('./*', {cwd: config.paths.dist})
+        .pipe(gulp.git.commit(getVersionTag()));
+});
+
+gulp.task('release-commit', ['release-commit-dist'], function () {
+    return gulp.src('./*.json')
+        .pipe(gulp.git.commit(getVersionTag()));
+});
+
+gulp.task('release-push-dist', function () {
+    gulp.util.log('push!!!');
+    return wrapInPromise(function (cb) {
+        gulp.git.push('origin', 'master', {cwd: config.paths.dist}, cb);
+    });
+});
+
+gulp.task('release-push', ['release-push-dist'], function () {
+    gulp.util.log('push!!!');
+    return wrapInPromise(function (cb) {
+        gulp.git.push('origin', 'master', cb);
+    });
+});
+
+function runTaskFunction(task) {
+    return function () {
+        var deferred = q.defer();
+
+
+        var start = process.hrtime();
+
+
+        var onTaskErr = function (err) {
+            deferred.reject(err);
+        };
+        var onTaskStop = function (e) {
+            if (e.task === task) {
+                gulp.removeListener('task_stop', onTaskStop);
+                gulp.removeListener('task_err', onTaskErr);
+
+                var time = prettyTime(process.hrtime(start));
+                gulp.util.log(
+                    'Finished', '\'' + gulp.util.colors.cyan(task) + '\' with dependencies',
+                    'after', gulp.util.colors.magenta(time)
+                );
+
+                deferred.resolve(e);
+            }
+        };
+
+        gulp.on('task_stop', onTaskStop);
+        gulp.on('task_err', onTaskErr);
+        gulp.util.log('Starting \'' + gulp.util.colors.cyan(task) + '\' with dependencies');
+        gulp.start(task);
+
+        return deferred.promise;
+    };
+}
+
+function release(type) {
+    return runTaskFunction('pre-release')()
+        .then(runTaskFunction('bump-' + type))
+        .then(runTaskFunction('build'))
+        .then(runTaskFunction('release-commit'))
+        .then(runTaskFunction('release-tag'))
+        .then(runTaskFunction('release-push'));
+}
+
+gulp.task('release-patch', [], function () {
+    return release('patch');
 });
