@@ -17,7 +17,10 @@
     "url": "https://github.com/Catalysts/cat-angular/issues"
   },
   "scripts": {
-    "test": "./node_modules/.bin/gulp test-production"
+    "test": "./node_modules/.bin/gulp test-production",
+    "release-patch": "./node_modules/.bin/gulp release-patch",
+    "release-minor": "./node_modules/.bin/gulp release-minor",
+    "release-major": "./node_modules/.bin/gulp release-major"
   },
   "homepage": "https://github.com/Catalysts/cat-angular",
   "devDependencies": {

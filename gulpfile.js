@@ -305,7 +305,7 @@ gulp.task('release-tag', [], releaseTag);
 
 gulp.task('release-commit-dist', function () {
     return gulp.src('./*', {cwd: config.paths.dist})
-        .pipe(gulp.git.commit(getVersionTag()));
+        .pipe(gulp.git.commit(getVersionTag(), {cwd: config.paths.dist}));
 });
 
 gulp.task('release-commit', ['release-commit-dist'], function () {
@@ -314,14 +314,12 @@ gulp.task('release-commit', ['release-commit-dist'], function () {
 });
 
 gulp.task('release-push-dist', function () {
-    gulp.util.log('push!!!');
     return wrapInPromise(function (cb) {
         gulp.git.push('origin', 'master', {cwd: config.paths.dist}, cb);
     });
 });
 
 gulp.task('release-push', ['release-push-dist'], function () {
-    gulp.util.log('push!!!');
     return wrapInPromise(function (cb) {
         gulp.git.push('origin', 'master', cb);
     });
@@ -373,4 +371,12 @@ function release(type) {
 
 gulp.task('release-patch', [], function () {
     return release('patch');
+});
+
+gulp.task('release-minor', [], function () {
+    return release('minor');
+});
+
+gulp.task('release-major', [], function () {
+    return release('major');
 });
