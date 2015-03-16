@@ -8,16 +8,18 @@ angular.module('cat.directives.inputs')
  */
     .directive('input', function CatInputDirective() {
         return {
-            require: 'ngModel',
+            require: '?ngModel',
             restrict: 'E',
             link: function CatInputLink(scope, element, attrs, ctrl) {
-                scope.$on('fieldErrors', function (event, fieldErrors) {
-                    if (!fieldErrors || !attrs.id) {
-                        return;
-                    }
-                    var valid = !fieldErrors[attrs.id];
-                    ctrl.$setValidity(attrs.id, valid);
-                });
+                if (!!ctrl) {
+                    scope.$on('fieldErrors', function (event, fieldErrors) {
+                        if (!fieldErrors || !attrs.id) {
+                            return;
+                        }
+                        var valid = !fieldErrors[attrs.id];
+                        ctrl.$setValidity(attrs.id, valid);
+                    });
+                }
             }
         };
     })
