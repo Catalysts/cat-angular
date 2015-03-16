@@ -1,17 +1,18 @@
+        return 'cat';
     }
 
-    if (!!window.reguire && !!window.require.amd && !!window.define) {
+    if (!!window.require && !!window.define) {
         window.define([
             'jQuery',
             'lodash',
             'angular',
             'angular-spinner',
-            'angular-ui-bootstrap'
+            'angular-ui-select2',
+            'angular-ui-router',
+            'angular-ui-bootstrap',
+            './cat-angular.tpl.min'
         ], catAngular);
     } else {
-        catAngular(window.angular, window.jQuery, window._);
+        catAngular(window.jQuery, window._, window.angular);
     }
-
-    catAngular(window.angular, window.jQuery, window._);
-
 })(window);
