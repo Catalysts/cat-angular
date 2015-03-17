@@ -3,8 +3,6 @@ window.cat = {};
 angular.module('cat.filters.replaceText', []);
 angular.module('cat.filters', ['cat.filters.replaceText']);
 
-angular.module('cat.template', ['ui.bootstrap.tpls']);
-
 angular.module('cat.service.search', []);
 angular.module('cat.service.conversion', []);
 angular.module('cat.service.api', ['cat.service.conversion', 'cat.service.search']);
