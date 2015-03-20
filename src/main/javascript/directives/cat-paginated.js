@@ -99,7 +99,7 @@ angular.module('cat.directives.paginated')
                     }, delay || 0);
                 };
 
-                $rootScope.$on('cat-paginated-refresh', function () {
+                $scope.$on('cat-paginated-refresh', function () {
                     reload(0, true);
                 });
 
