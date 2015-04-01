@@ -17,6 +17,7 @@ gulp.ngdocs = require('gulp-ngdocs');
 gulp.bump = require('gulp-bump');
 gulp.git = require('gulp-git');
 gulp.util = require('gulp-util');
+gulp.header = require('gulp-header');
 
 var q = require('q');
 var prettyTime = require('pretty-hrtime');
@@ -156,18 +157,24 @@ var less2css = function () {
         .pipe(gulp.dest(dest));
 };
 
-var _concatenateAndUglify = function (name) {
+var _concatenateAndUglify = function (name, header) {
     var jsFilter = gulp.filter('**/*.js');
 
     function applyJsFilter() {
         return jsFilter;
     }
 
-    return lazypipe()
+    var pipe = lazypipe()
         .pipe(applyJsFilter) // filter out '*.js.tpl' files
         .pipe(gulp.ngAnnotate, {gulpWarnings: false})
         .pipe(jsFilter.restore) // restore all files
-        .pipe(gulp.concat, name + '.js')
+        .pipe(gulp.concat, name + '.js');
+
+    if (!!header) {
+        pipe = pipe.pipe(gulp.header, header);
+    }
+
+    return pipe
         .pipe(gulp.sourcemaps.write, '.', {sourceRoot: 'src'})
         .pipe(gulp.dest, config.paths.dist)
         .pipe(gulp.filter, ['**/*.js'])
@@ -184,11 +191,13 @@ var angularJs = function () {
         .pipe(_concatenateAndUglify(config.pkg.name));
 };
 
+var angularTemplatesHeader = 'angular.module(\'cat.template\', [\'ui.bootstrap.tpls\']);\n';
+
 var angularTemplates = function () {
     return gulp.src('<%= paths.resources %>/**/*.html')
         .pipe(gulp.sourcemaps.init())
-        .pipe(gulp.ngHtml2js({moduleName: 'cat.template', stripPrefix: 'resources/'}))
-        .pipe(_concatenateAndUglify(config.pkg.name + '.tpl'));
+        .pipe(gulp.ngHtml2js({moduleName: 'cat.template', stripPrefix: 'resources/', declareModule: false}))
+        .pipe(_concatenateAndUglify(config.pkg.name + '.tpl', angularTemplatesHeader));
 };
 
 var bowerJson = function () {
