@@ -111,7 +111,7 @@ function CatBreadcrumbsService(catBreadcrumbs, $state) {
     };
 }
 
-angular.module('cat.service.breadcrumbs')
+angular.module('cat.service.breadcrumbs', [])
 
 /**
  * @ngdoc overview

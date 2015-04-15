@@ -8,7 +8,7 @@
  * @ngdoc overview
  * @name cat.service.search
  */
-angular.module('cat.service.search')
+angular.module('cat.service.search', [])
 /**
  * @ngdoc service
  * @name cat.service.search:catUrlEncodingService

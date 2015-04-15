@@ -4,7 +4,7 @@
  * @ngdoc service
  * @name cat.service.loading:loadingService
  */
-angular.module('cat.service.loading')
+angular.module('cat.service.loading', ['angularSpinner'])
     .factory('loadingService', function CatLoadingService($rootScope, usSpinnerService, $timeout) {
         var timeout = 50;
         var animationDuration = 200;

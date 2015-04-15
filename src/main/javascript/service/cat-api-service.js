@@ -300,11 +300,8 @@ function EndpointConfig(name, config) {
     }
 }
 
-// this is saved outside so that both $api and catApiService use the same config - will be moved back inside
-// CatApiServiceProvider in a future release
-var _endpoints = {};
-
 function CatApiServiceProvider() {
+    var _endpoints = {};
     var _urlPrefix = '/api/';
 
     /**
@@ -369,7 +366,7 @@ function CatApiServiceProvider() {
  *
  * @constructor
  */
-angular.module('cat.service.api').provider('catApiService', CatApiServiceProvider);
+angular.module('cat.service.api', ['cat.service.conversion', 'cat.service.search']).provider('catApiService', CatApiServiceProvider);
 
 /**
  * @ngdoc service

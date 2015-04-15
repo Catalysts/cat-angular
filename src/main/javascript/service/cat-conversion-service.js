@@ -72,7 +72,7 @@ function _convertToClientData(serverData, context) {
 }
 
 
-angular.module('cat.service.conversion')
+angular.module('cat.service.conversion', [])
 /**
  * @ngdoc object
  * @name cat.service.conversion:catConversionFunctions

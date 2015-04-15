@@ -3,21 +3,7 @@ window.cat = {};
 angular.module('cat.filters.replaceText', []);
 angular.module('cat.filters', ['cat.filters.replaceText']);
 
-angular.module('cat.service.search', []);
-angular.module('cat.service.conversion', []);
-angular.module('cat.service.api', ['cat.service.conversion', 'cat.service.search']);
-angular.module('cat.service.breadcrumbs', []);
 angular.module('cat.service.i18n', []);
-angular.module('cat.service.listDataLoading', ['cat.service.api']);
-angular.module('cat.service.route', ['ui.router']);
-angular.module('cat.service.selectConfig', []);
-angular.module('cat.service.view.config', ['cat.service.api']);
-angular.module('cat.service.view', ['cat.service.api', 'cat.service.route', 'cat.service.view.config']);
-angular.module('cat.service.loading', ['angularSpinner']);
-angular.module('cat.service.message', []);
-angular.module('cat.service.validation', ['cat.service.message']);
-angular.module('cat.service.httpIntercept', ['cat.service.loading', 'cat.service.message', 'cat.service.validation']);
-angular.module('cat.service.menu', []);
 angular.module('cat.service', [
     'cat.service.conversion',
     'cat.service.api',

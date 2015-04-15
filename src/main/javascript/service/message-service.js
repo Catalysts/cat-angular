@@ -4,7 +4,7 @@
  * @ngdoc service
  * @name cat.service.message:$globalMessages
  */
-angular.module('cat.service.message').service('$globalMessages', function CatGlobalMessages($rootScope) {
+angular.module('cat.service.message', []).service('$globalMessages', function CatGlobalMessages($rootScope) {
     var messages = {};
 
     var self = this;

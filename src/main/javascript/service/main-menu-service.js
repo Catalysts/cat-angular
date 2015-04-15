@@ -190,4 +190,4 @@ function MainMenuProvider() {
     };
 }
 
-angular.module('cat.service.menu').provider('$mainMenu', MainMenuProvider);
+angular.module('cat.service.menu', []).provider('$mainMenu', MainMenuProvider);

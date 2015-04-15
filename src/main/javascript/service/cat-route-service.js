@@ -181,7 +181,7 @@ function CatRouteServiceProvider($stateProvider) {
     };
 }
 
-angular.module('cat.service.route')
+angular.module('cat.service.route', ['ui.router'])
     .provider('catRouteService', CatRouteServiceProvider)
     .run(function($rootScope, $log, $globalMessages, catBreadcrumbsService) {
         $rootScope.$on('$stateChangeError', function() {

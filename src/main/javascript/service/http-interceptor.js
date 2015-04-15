@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('cat.service.httpIntercept')
+angular.module('cat.service.httpIntercept', ['cat.service.message', 'cat.service.loading', 'cat.service.validation'])
 
 /**
  * @ngdoc service

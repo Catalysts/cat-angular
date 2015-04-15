@@ -63,4 +63,4 @@ function CatViewServiceProvider(catRouteServiceProvider, catApiServiceProvider) 
     };
 }
 
-angular.module('cat.service.view').provider('catViewService', CatViewServiceProvider);
+angular.module('cat.service.view', ['cat.service.api', 'cat.service.route', 'cat.service.view.config']).provider('catViewService', CatViewServiceProvider);

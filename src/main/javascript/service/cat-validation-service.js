@@ -7,7 +7,7 @@
  * @descripton
  * module wrapping the validation logic
  */
-angular.module('cat.service.validation')
+angular.module('cat.service.validation', ['cat.service.message'])
 /**
  * @ngdoc object
  * @name cat.service.validation:catValidations
