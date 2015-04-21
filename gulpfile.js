@@ -193,7 +193,11 @@ var _concatenateAndUglify = function (name, header) {
 var angularJs = function () {
     return gulp.src(['src/main/util/js-header.js.tpl', '<%= paths.src %>/**/*.js', 'src/main/util/js-footer.js.tpl'])
         .pipe(gulp.sourcemaps.init())
-        .pipe(_concatenateAndUglify(config.pkg.name));
+        .pipe(_concatenateAndUglify(config.pkg.name))
+        .pipe(gulp.filter('empty-pipe')) // empty the pipe
+        .pipe(gulp.src(['src/main/util/js-header-require.js.tpl', '<%= paths.src %>/**/*.js', 'src/main/util/js-footer-require.js.tpl']))
+        .pipe(gulp.sourcemaps.init())
+        .pipe(_concatenateAndUglify(config.pkg.name+'-require'));
 };
 
 var angularTemplatesHeader = 'angular.module(\'cat.template\', [\'ui.bootstrap.tpls\']);\n';

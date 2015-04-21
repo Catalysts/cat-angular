@@ -13,5 +13,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-(function ($, _, angular) {
-    'use strict';
+define([
+            'jQuery',
+            'lodash',
+            'angular',
+            'angular-spinner',
+            'angular-ui-select2',
+            'angular-ui-router',
+            'angular-ui-bootstrap',
+            './cat-angular.tpl.min'
+        ], function($, _, angular) {
+            'use strict';
