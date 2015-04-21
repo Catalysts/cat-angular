@@ -206,4 +206,5 @@ function CatBaseDetailController($scope, $state, $stateParams, $location, $windo
     }
 }
 
-angular.module('cat.controller.base.detail').controller('CatBaseDetailController', CatBaseDetailController);
+angular.module('cat.controller.base.detail', ['cat.service.breadcrumbs', 'cat.controller.base.tabs'])
+    .controller('CatBaseDetailController', CatBaseDetailController);

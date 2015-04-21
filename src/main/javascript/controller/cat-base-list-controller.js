@@ -75,6 +75,6 @@ function CatBaseListController($scope, $state, $controller, $log, catBreadcrumbs
 }
 
 
-angular.module('cat.controller.base.list')
+angular.module('cat.controller.base.list', ['cat.service.breadcrumbs'])
     .controller('CatBaseListController',
     ['$scope', '$state', '$controller', '$log', 'catBreadcrumbsService', 'catListDataLoadingService', 'config', CatBaseListController]);

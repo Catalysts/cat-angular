@@ -135,4 +135,4 @@ function CatBaseTabsController($scope, $controller, $stateParams, $location, con
     }];
 }
 
-angular.module('cat.controller.base.tabs').controller('CatBaseTabsController', CatBaseTabsController);
+angular.module('cat.controller.base.tabs', []).controller('CatBaseTabsController', CatBaseTabsController);

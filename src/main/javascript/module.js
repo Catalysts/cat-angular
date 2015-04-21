@@ -19,9 +19,6 @@ angular.module('cat.service', [
     'cat.service.search'
 ]);
 
-angular.module('cat.controller.base.list', ['cat.service.breadcrumbs']);
-angular.module('cat.controller.base.tabs', []);
-angular.module('cat.controller.base.detail', ['cat.service.breadcrumbs', 'cat.controller.base.tabs']);
 angular.module('cat.controller', ['cat.controller.base.detail', 'cat.controller.base.list']);
 
 angular.module('cat.directives', [
