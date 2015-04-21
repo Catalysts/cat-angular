@@ -1,7 +1,7 @@
 'use strict';
 
 
-angular.module('cat.filters.replaceText')
+angular.module('cat.filters.replaceText', [])
 
 /**
  * @ngdoc filter

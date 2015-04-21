@@ -4,7 +4,7 @@
  * @ngdoc directive
  * @name cat.directives.checkbox:catCheckbox
  */
-angular.module('cat.directives.checkbox')
+angular.module('cat.directives.checkbox', [])
     .directive('catCheckbox', function CatCheckboxDirective() {
         return {
             replace: true,

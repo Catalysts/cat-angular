@@ -1,6 +1,5 @@
 window.cat = {};
 
-angular.module('cat.filters.replaceText', []);
 angular.module('cat.filters', ['cat.filters.replaceText']);
 
 angular.module('cat.service.i18n', []);
@@ -19,29 +18,6 @@ angular.module('cat.service', [
     'cat.service.message',
     'cat.service.search'
 ]);
-
-angular.module('cat.directives.autofocus', []);
-angular.module('cat.directives.checkbox', []);
-angular.module('cat.directives.confirmClick', []);
-angular.module('cat.directives.fieldErrors', ['cat.service.validation']);
-angular.module('cat.directives.inputs', []);
-angular.module('cat.directives.loadMore', []);
-angular.module('cat.directives.menu', ['cat.service.menu']);
-angular.module('cat.directives.select', ['ui.select2', 'cat.service.api', 'cat.service.selectConfig']);
-
-angular.module('cat.directives.i18n', ['cat.service.i18n']);
-
-angular.module('cat.directives.paginated', [
-    'ui.bootstrap.pagination',
-    'cat.service.listDataLoading',
-    'cat.service.i18n',
-    'cat.service.search'
-]);
-angular.module('cat.directives.facets', ['cat.directives.paginated']);
-angular.module('cat.directives.sortable', ['cat.directives.paginated']);
-
-angular.module('cat.directives.form', []);
-angular.module('cat.directives.numbersOnly', []);
 
 angular.module('cat.controller.base.list', ['cat.service.breadcrumbs']);
 angular.module('cat.controller.base.tabs', []);

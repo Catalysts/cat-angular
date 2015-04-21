@@ -4,7 +4,7 @@
  * @ngdoc directive
  * @name cat.directives.numbersOnly:numbersOnly
  */
-angular.module('cat.directives.numbersOnly')
+angular.module('cat.directives.numbersOnly', [])
     .directive('numbersOnly', function CatNumbersOnlyDirective() {
         return {
             require: 'ngModel',

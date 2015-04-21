@@ -4,8 +4,13 @@
  * @ngdoc directive
  * @name cat.directives.paginated:catPaginated
  */
-angular.module('cat.directives.paginated')
-    .directive('catPaginated', function CatPaginatedDirective($log, catI18nService) {
+angular.module('cat.directives.paginated',
+    [
+        'ui.bootstrap.pagination',
+        'cat.service.listDataLoading',
+        'cat.service.i18n',
+        'cat.service.search'
+    ]).directive('catPaginated', function CatPaginatedDirective($log, catI18nService) {
         var SEARCH_PROP_KEY = 'cc.catalysts.cat-paginated.search.prop';
 
         return {

@@ -4,7 +4,7 @@
  * @ngdoc directive
  * @name cat.directives.sortable:catSortable
  */
-angular.module('cat.directives.sortable')
+angular.module('cat.directives.sortable', ['cat.directives.paginated'])
     .directive('catSortable', function CatSortableDirective($compile) {
         return {
             restrict: 'AC',

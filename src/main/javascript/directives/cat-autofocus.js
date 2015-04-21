@@ -4,7 +4,7 @@
  * @ngdoc directive
  * @name cat.directives.autofocus:catAutofocus
  */
-angular.module('cat.directives.autofocus')
+angular.module('cat.directives.autofocus', [])
     .directive('catAutofocus', function CatAutofocusDirective($timeout) {
         return {
             restrict: 'A',

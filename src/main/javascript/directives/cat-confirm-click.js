@@ -4,7 +4,7 @@
  * @ngdoc directive
  * @name cat.directives.confirmClick:catConfirmClick
  */
-angular.module('cat.directives.confirmClick')
+angular.module('cat.directives.confirmClick', [])
     .directive('catConfirmClick', function CatConfirmClickDirective() {
         return {
             restrict: 'A',

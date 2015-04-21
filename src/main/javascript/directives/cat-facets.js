@@ -4,7 +4,7 @@
  * @ngdoc directive
  * @name cat.directives.facets:catFacets
  */
-angular.module('cat.directives.facets')
+angular.module('cat.directives.facets', ['cat.directives.paginated'])
     .directive('catFacets', function CatFacetsDirective() {
         function _initDefaults(scope) {
             if (_.isUndefined(scope.listData)) {

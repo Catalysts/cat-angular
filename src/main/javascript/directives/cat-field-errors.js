@@ -4,7 +4,7 @@
  * @ngdoc directive
  * @name cat.directives.fieldError:catFieldErrors
  */
-angular.module('cat.directives.fieldErrors')
+angular.module('cat.directives.fieldErrors', ['cat.service.validation'])
     .directive('catFieldErrors', function CatFieldErrorsDirective() {
         return {
             replace: 'true',

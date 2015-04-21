@@ -4,7 +4,7 @@
  * @ngdoc directive
  * @name cat.directives.menu:catLoadMore
  */
-angular.module('cat.directives.menu')
+angular.module('cat.directives.menu', ['cat.service.menu'])
     .directive('catMainMenu', ['$mainMenu', '$rootScope', function CatMainMenuDirective($mainMenu, $rootScope) {
         return {
             restrict: 'E',
