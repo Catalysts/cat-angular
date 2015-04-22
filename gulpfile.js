@@ -22,6 +22,7 @@ gulp.header = require('gulp-header');
 var q = require('q');
 var prettyTime = require('pretty-hrtime');
 var path = require('path');
+var mergeStream = require('merge-stream');
 var karma_server = require('karma').server;
 var lodash = require('lodash');
 var lazypipe = require('lazypipe');
@@ -162,24 +163,18 @@ var less2css = function () {
         .pipe(gulp.dest(dest));
 };
 
-var _concatenateAndUglify = function (name, header) {
+var _concatenateAndUglify = function (name) {
     var jsFilter = gulp.filter('**/*.js');
 
     function applyJsFilter() {
         return jsFilter;
     }
 
-    var pipe = lazypipe()
+    return lazypipe()
         .pipe(applyJsFilter) // filter out '*.js.tpl' files
         .pipe(gulp.ngAnnotate, {gulpWarnings: false})
         .pipe(jsFilter.restore) // restore all files
-        .pipe(gulp.concat, name + '.js');
-
-    if (!!header) {
-        pipe = pipe.pipe(gulp.header, header);
-    }
-
-    return pipe
+        .pipe(gulp.concat, name + '.js')
         .pipe(gulp.sourcemaps.write, '.', {sourceRoot: 'src'})
         .pipe(gulp.dest, config.paths.dist)
         .pipe(gulp.filter, ['**/*.js'])
@@ -191,22 +186,35 @@ var _concatenateAndUglify = function (name, header) {
 };
 
 var angularJs = function () {
-    return gulp.src(['src/main/util/js-header.js.tpl', '<%= paths.src %>/**/*.js', 'src/main/util/js-footer.js.tpl'])
+    var defaultJs = gulp.src(['src/main/util/js-header.js.tpl', '<%= paths.src %>/**/*.js', 'src/main/util/js-footer.js.tpl'])
         .pipe(gulp.sourcemaps.init())
-        .pipe(_concatenateAndUglify(config.pkg.name))
-        .pipe(gulp.filter('empty-pipe')) // empty the pipe
-        .pipe(gulp.src(['src/main/util/js-header-require.js.tpl', '<%= paths.src %>/**/*.js', 'src/main/util/js-footer-require.js.tpl']))
+        .pipe(_concatenateAndUglify(config.pkg.name));
+
+    var requireJs = gulp.src(['src/main/util/js-header-require.js.tpl', '<%= paths.src %>/**/*.js', 'src/main/util/js-footer-require.js.tpl'])
         .pipe(gulp.sourcemaps.init())
         .pipe(_concatenateAndUglify(config.pkg.name+'-require'));
+
+    return mergeStream(defaultJs, requireJs);
 };
 
-var angularTemplatesHeader = 'angular.module(\'cat.template\', [\'ui.bootstrap.tpls\']);\n';
-
 var angularTemplates = function () {
-    return gulp.src('<%= paths.resources %>/**/*.html')
+    var htmlFilter = gulp.filter('**/*.html');
+    var defaultJs =  gulp.src(['src/main/util/tpl-header.js.tpl', '<%= paths.resources %>/**/*.html', 'src/main/util/tpl-footer.js.tpl'])
         .pipe(gulp.sourcemaps.init())
+        .pipe(htmlFilter)
         .pipe(gulp.ngHtml2js({moduleName: 'cat.template', stripPrefix: 'resources/', declareModule: false}))
-        .pipe(_concatenateAndUglify(config.pkg.name + '.tpl', angularTemplatesHeader));
+        .pipe(htmlFilter.restore())
+        .pipe(_concatenateAndUglify(config.pkg.name + '.tpl'));
+
+    var htmlFilter2 = gulp.filter('**/*.html');
+    var requireJs = gulp.src(['src/main/util/tpl-header-require.js.tpl', '<%= paths.resources %>/**/*.html', 'src/main/util/tpl-footer-require.js.tpl'])
+        .pipe(gulp.sourcemaps.init())
+        .pipe(htmlFilter2)
+        .pipe(gulp.ngHtml2js({moduleName: 'cat.template', stripPrefix: 'resources/', declareModule: false}))
+        .pipe(htmlFilter2.restore())
+        .pipe(_concatenateAndUglify(config.pkg.name+'-require.tpl'));
+
+    return mergeStream(defaultJs, requireJs);
 };
 
 var bowerJson = function () {

@@ -50,6 +50,7 @@
     "karma-phantomjs-launcher": "=0.1.4",
     "lazypipe": "=0.2.2",
     "lodash": "=2.4.1",
+    "merge-stream": "=0.1.7",
     "phantomjs": "=1.9.12",
     "pretty-hrtime": "=1.0.0",
     "pusher-client": "=0.2.3",
