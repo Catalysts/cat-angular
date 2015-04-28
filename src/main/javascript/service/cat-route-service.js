@@ -79,7 +79,7 @@ function CatRouteServiceProvider($stateProvider) {
             controller: 'CatBaseDetailController',
             reloadOnSearch: _config.reloadOnSearch,
             resolve: {
-                config: function($stateParams, catViewConfigService) {
+                config: function ($stateParams, catViewConfigService) {
                     // TODO $stateParams needs to be passed from here because otherwise it's empty...
                     return catViewConfigService.getDetailConfig(_config, $stateParams);
                 }
@@ -108,7 +108,7 @@ function CatRouteServiceProvider($stateProvider) {
             controllerAs: 'catBaseListController',
             templateUrl: _config.templateUrl || 'template/cat-base-list.tpl.html',
             resolve: {
-                config: function(catViewConfigService) {
+                config: function (catViewConfigService) {
                     return catViewConfigService.getListConfig(_config);
                 }
             }
@@ -155,6 +155,8 @@ function CatRouteServiceProvider($stateProvider) {
      */
     this.listAndDetailRoute = function (baseUrl, name, config) {
         var stateName = _getStateName(name, config);
+
+        var viewData = {viewData: !!config ? (config.viewData || {}) : {}};
         viewNames.push(stateName);
         if (_.isUndefined(config)) {
             config = {};
@@ -163,8 +165,8 @@ function CatRouteServiceProvider($stateProvider) {
         var listUrl = _getListUrl(baseUrl, name, config);
 
         _registerAbstractState(listUrl, stateName);
-        _registerDetailState(config.details, name);
-        _registerListState(config.list, name);
+        _registerDetailState(_.assign({}, config.details, viewData), name);
+        _registerListState(_.assign({}, config.list, viewData), name);
     };
 
     /**
@@ -183,13 +185,13 @@ function CatRouteServiceProvider($stateProvider) {
 
 angular.module('cat.service.route', ['ui.router'])
     .provider('catRouteService', CatRouteServiceProvider)
-    .run(function($rootScope, $log, $globalMessages, catBreadcrumbsService) {
-        $rootScope.$on('$stateChangeError', function() {
+    .run(function ($rootScope, $log, $globalMessages, catBreadcrumbsService) {
+        $rootScope.$on('$stateChangeError', function () {
             var exception = arguments[arguments.length - 1];
             $globalMessages.addMessage('warning', exception);
             $log.warn(exception);
         });
-        $rootScope.$on('$stateChangeSuccess', function() {
+        $rootScope.$on('$stateChangeSuccess', function () {
             catBreadcrumbsService.clear();
         });
     });

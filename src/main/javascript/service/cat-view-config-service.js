@@ -124,6 +124,7 @@ function CatViewConfigService($q, catApiService, catListDataLoadingService) {
         var endpoint = getEndpoint(endpointName, parentEndpointNames, $stateParams);
 
         var resolvedConfig = {
+            viewData: config.viewData,
             name: config.name,
             controller: config.controller || config.name + 'DetailsController',
             endpoint: endpoint,
@@ -165,6 +166,7 @@ function CatViewConfigService($q, catApiService, catListDataLoadingService) {
 
         var deferredConfig = $q.defer();
         var resolvedConfig = {
+            viewData: config.viewData,
             name: config.name,
             controller: config.controller || config.name + 'Controller',
             title: window.cat.util.pluralize(config.name),

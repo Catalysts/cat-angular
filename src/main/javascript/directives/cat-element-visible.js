@@ -11,7 +11,7 @@ angular.module('cat.directives.elementVisible', ['cat.service.elementVisibility'
                 restrict: 'A',
                 scope: {
                     identifier: '@catElementVisible',
-                    data: '@?catElementData'
+                    data: '=?catElementData'
                 },
                 link: function CatElementVisibleLink(scope, element) {
                     if (!catElementVisibilityService.isVisible(scope.identifier, scope.data)) {

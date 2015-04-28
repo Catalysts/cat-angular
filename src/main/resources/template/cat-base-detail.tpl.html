@@ -6,18 +6,21 @@
     <div class="panel-heading">
         <div class="pull-right edit-buttons" ng-if="!editDetail && !!editTemplate">
             <div class="btn-group">
-                <button type="button" class="btn btn-xs btn-default" cat-confirm-click cat-on-confirm="remove()"><span
-                        class="glyphicon glyphicon-trash"></span>
+                <button type="button" class="btn btn-xs btn-default" cat-confirm-click cat-on-confirm="remove()"
+                        cat-element-visible="cat.base.delete" cat-element-data="catBaseListController.config">
+                    <span class="glyphicon glyphicon-trash"></span>
                     <span cat-i18n="cc.catalysts.general.delete">Delete</span>
                 </button>
                 <button type="button" class="btn btn-xs btn-default" ng-click="edit()"
+                        cat-element-visible="cat.base.edit" cat-element-data="catBaseListController.config"
                         cat-activate-on-shortcut="alt+e"><span class="glyphicon glyphicon-edit"></span>
                     <span cat-i18n="cc.catalysts.general.edit">Edit</span>
                 </button>
             </div>
             &nbsp;
-            <a ui-sref="^.detail({id: 'new'})" class="btn btn-xs btn-default"><span
-                    class="glyphicon glyphicon-plus"></span>
+            <a ui-sref="^.detail({id: 'new'})" class="btn btn-xs btn-default"
+               cat-element-visible="cat.base.new" cat-element-data="catBaseListController.config">
+                <span class="glyphicon glyphicon-plus"></span>
                 <span cat-i18n="cc.catalysts.general.new">New</span></a>
         </div>
         <h5 ng-if="exists">{{title()}}</h5>
@@ -42,7 +45,7 @@
             <span cat-i18n="cc.catalysts.general.save">Save</span>
         </button>
     </div>
-    </div>
+</div>
 </div>
 <div ng-if="!editDetail && !!additionalViewTemplate" ng-include="additionalViewTemplate"
      ng-controller="baseTabsController"></div>
