@@ -4,44 +4,34 @@
  * @ngdoc directive
  * @name cat.directives.menu:catLoadMore
  */
-angular.module('cat.directives.menu', ['cat.service.menu'])
-    .directive('catMainMenu', ['$mainMenu', '$rootScope', function CatMainMenuDirective($mainMenu, $rootScope) {
-        return {
-            restrict: 'E',
-            scope: {},
-            link: function CatMainMenuLink(scope) {
-                scope.menus = $mainMenu.getMenus();
-                scope.isVisible = function (entry) {
-                    var visible = false;
-                    if (entry.isMenu() || entry.isGroup()) {
-                        _.forEach(entry.getEntries(), function (subEntry) {
-                            visible = visible || scope.isVisible(subEntry);
-                        });
-                        if (entry.isMenu()) {
-                            _.forEach(entry.getGroups(), function (groups) {
-                                visible = visible || scope.isVisible(groups);
+angular.module('cat.directives.menu', ['cat.service.menu', 'cat.service.elementVisibility'])
+    .directive('catMainMenu', ['$mainMenu', 'catElementVisibilityService',
+        function CatMainMenuDirective($mainMenu, catElementVisibilityService) {
+            return {
+                restrict: 'E',
+                scope: {},
+                link: function CatMainMenuLink(scope) {
+                    scope.getMenus = function() {
+                        return $mainMenu.getMenus();
+                    };
+
+                    scope.isVisible = function (entry) {
+                        var visible = false;
+                        if (entry.isMenu() || entry.isGroup()) {
+                            _.forEach(entry.getEntries(), function (subEntry) {
+                                visible = visible || scope.isVisible(subEntry);
                             });
-                        }
-                    } else {
-                        return scope.isAllowed(entry);
-                    }
-                    return visible;
-                };
-                scope.isAllowed = function (entry) {
-                    var rights = entry.getOptions().rights;
-                    if (!!rights) {
-                        if (_.isArray(rights)) {
-                            var allowed = true;
-                            for (var i = 0; i < rights.length; i++) {
-                                allowed = allowed && $rootScope.isAllowed(rights[i]);
+                            if (entry.isMenu()) {
+                                _.forEach(entry.getGroups(), function (groups) {
+                                    visible = visible || scope.isVisible(groups);
+                                });
                             }
-                            return allowed;
+                        } else {
+                            return catElementVisibilityService.isVisible('cat.menu.entry', entry);
                         }
-                        return $rootScope.isAllowed(rights);
-                    }
-                    return true;
-                };
-            },
-            templateUrl: 'template/cat-main-menu.tpl.html'
-        };
-    }]);
+                        return visible;
+                    };
+                },
+                templateUrl: 'template/cat-main-menu.tpl.html'
+            };
+        }]);
