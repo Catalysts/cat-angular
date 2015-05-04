@@ -131,12 +131,14 @@ function CatRouteServiceProvider($stateProvider) {
      */
     this.detailRoute = function (baseUrl, name, config) {
         var stateName = _getStateName(name, config);
+
+        var viewData = {viewData: !!config ? (config.viewData || {}) : {}};
         viewNames.push(stateName);
 
         var listUrl = _getListUrl(baseUrl, name, config);
 
         _registerAbstractState(listUrl, stateName);
-        _registerDetailState(config, name);
+        _registerDetailState(_.assign({}, config, viewData), name);
     };
 
     /**
