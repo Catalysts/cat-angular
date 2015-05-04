@@ -13,14 +13,21 @@
  * @param {Object} $controller The angular $controller service
  * @param {Object} $stateParams The ui-router $stateParams service
  * @param {Object} $location The angular $location service
+ * @param {Object} catElementVisibilityService The visibility service to check wheter or not a tab should be rendered
  * @param {Object} config The config as handled by state resolve
  */
-function CatBaseTabsController($scope, $controller, $stateParams, $location, config) {
+function CatBaseTabsController($scope, $controller, $stateParams, $location, catElementVisibilityService, config) {
     var endpoint = config.endpoint;
 
     $scope.tabs = config.tabs;
     $scope.tabNames = _.map(config.tabs, 'name');
     $scope.activeTab = {};
+
+    $scope.getVisibleTabs = function() {
+        return _.filter($scope.tabs, function(tab) {
+            return catElementVisibilityService.isVisible('cat.base.tab', tab);
+        });
+    };
 
     $scope.activateTab = function (tab) {
         $scope.$broadcast('tab-' + tab + '-active');
@@ -135,4 +142,4 @@ function CatBaseTabsController($scope, $controller, $stateParams, $location, con
     }];
 }
 
-angular.module('cat.controller.base.tabs', []).controller('CatBaseTabsController', CatBaseTabsController);
+angular.module('cat.controller.base.tabs', ['cat.service.elementVisibility']).controller('CatBaseTabsController', CatBaseTabsController);
