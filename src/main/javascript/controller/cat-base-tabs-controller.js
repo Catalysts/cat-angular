@@ -19,15 +19,11 @@
 function CatBaseTabsController($scope, $controller, $stateParams, $location, catElementVisibilityService, config) {
     var endpoint = config.endpoint;
 
-    $scope.tabs = config.tabs;
-    $scope.tabNames = _.map(config.tabs, 'name');
+    $scope.tabs = _.filter(config.tabs, function(tab) {
+        return catElementVisibilityService.isVisible('cat.base.tab', tab);
+    });
+    $scope.tabNames = _.map($scope.tabs, 'name');
     $scope.activeTab = {};
-
-    $scope.getVisibleTabs = function() {
-        return _.filter($scope.tabs, function(tab) {
-            return catElementVisibilityService.isVisible('cat.base.tab', tab);
-        });
-    };
 
     $scope.activateTab = function (tab) {
         $scope.$broadcast('tab-' + tab + '-active');
