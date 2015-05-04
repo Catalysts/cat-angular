@@ -4,21 +4,32 @@ function CatSelectLink(scope, element) {
     element.addClass('form-control');
 }
 
-var fetchElements = function (endpoint, sort) {
-    return function (queryParams) {
-        var searchRequest = new window.cat.SearchRequest(queryParams.data);
-        searchRequest.sort(sort || { property: 'name', isDesc: false });
-        return endpoint.list(searchRequest).then(queryParams.success);
-    };
-};
-
 function CatSelectController($scope, $log, catApiService, catSelectConfigService) {
+    function fetchElements(endpoint, sort, searchRequestAdapter) {
+        return function (queryParams) {
+            var searchRequest = new window.cat.SearchRequest(queryParams.data);
+            searchRequest.sort(sort || {property: 'name', isDesc: false});
+
+            if (_.isFunction(searchRequestAdapter)) {
+                searchRequest = searchRequestAdapter(searchRequest);
+            } else if (_.isObject(searchRequestAdapter)) {
+                _.assign(searchRequest, searchRequestAdapter);
+            } else {
+                $log.warn('searchRequestAdapter has to be either a function or an object but was ' + (typeof searchRequestAdapter));
+            }
+
+            return endpoint.list(searchRequest).then(queryParams.success);
+        };
+    }
+
 
     var options = catSelectConfigService.getConfig($scope.config, $scope.options);
 
     if (_.isUndefined(options)) {
         throw new Error('At least one of "config" or "options" has to be specified');
     }
+
+    var searchRequestAdapter = options.searchRequestAdapter || {};
 
     var transport,
         quietMillis,
@@ -42,7 +53,7 @@ function CatSelectController($scope, $log, catApiService, catSelectConfigService
         transport = options.endpoint;
         quietMillis = 500;
     } else if (_.isObject(options.endpoint)) {
-        transport = fetchElements(options.endpoint, options.sort);
+        transport = fetchElements(options.endpoint, options.sort, searchRequestAdapter);
         quietMillis = 500;
     } else if (_.isString(options.endpoint)) {
         var api = catApiService[options.endpoint];
@@ -51,7 +62,7 @@ function CatSelectController($scope, $log, catApiService, catSelectConfigService
             $scope.elements = [];
             return;
         }
-        transport = fetchElements(api, options.sort);
+        transport = fetchElements(api, options.sort, searchRequestAdapter);
         quietMillis = 500;
     } else {
         $log.error('The given endpoint has to be one of the following types: array, object, string or function - but was ' + (typeof options.endpoint));
