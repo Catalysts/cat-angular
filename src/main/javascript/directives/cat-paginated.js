@@ -122,7 +122,11 @@ angular.module('cat.directives.paginated',
                     }
                 }
 
-                $scope.$watch('listData.pagination', function () {
+                $scope.$watch('listData.pagination', function (newVal, oldVal) {
+                    // TODO check wheter or not this is necessary with angular >= 1.3
+                    if (angular.equals(newVal, oldVal)) {
+                        return;
+                    }
                     searchRequest.pagination($scope.listData.pagination);
                     updateLocation();
                     reload();
@@ -135,16 +139,24 @@ angular.module('cat.directives.paginated',
                     reload(delay);
                 };
 
-                var updateSearch = function (value) {
+                var updateSearch = function (newVal, oldVal) {
+                    // TODO check wheter or not this is necessary with angular >= 1.3
+                    if (angular.equals(newVal, oldVal)) {
+                        return;
+                    }
                     var search = searchRequest.search();
-                    _.assign(search, value);
-                    searchChanged(value, DELAY_ON_SEARCH);
+                    _.assign(search, newVal);
+                    searchChanged(newVal, DELAY_ON_SEARCH);
                 };
 
                 $scope.$watch('listData.search', updateSearch, true);
 
-                this.sort = function (value) {
-                    searchRequest.sort(value);
+                this.sort = function (newVal, oldVal) {
+                    // TODO check wheter or not this is necessary with angular >= 1.3
+                    if (angular.equals(newVal, oldVal)) {
+                        return;
+                    }
+                    searchRequest.sort(newVal);
                     updateLocation();
                     $scope.listData.pagination.page = 1;
                     reload();
