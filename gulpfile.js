@@ -74,20 +74,6 @@ function getVersionTag() {
     return 'v' + getVersion();
 }
 
-function wrapInPromise(_function) {
-    var deferred = q.defer();
-
-    _function(function (err) {
-        if (!err) {
-            deferred.resolve();
-        } else {
-            deferred.reject(err);
-        }
-    });
-
-    return deferred.primise;
-}
-
 function template(templateString, data) {
     var options = data || config;
     if (lodash.isArray(templateString)) {
@@ -307,22 +293,18 @@ gulp.task('bump-patch', function () {
     return bumpVersion('patch');
 });
 
-function preRelease() {
-    return wrapInPromise(function (cb) {
-        gulp.git.tag('pre-release', 'pre-release', {args: '-f'}, cb);
-    });
+function preRelease(cb) {
+    gulp.git.tag('pre-release', 'pre-release', {args: '-f'}, cb);
 }
 
-function releaseTag() {
-    return wrapInPromise(function (cb) {
-        var version = getVersionTag();
-        gulp.git.tag(version, version, function (err) {
-            if (!!err) {
-                cb(err);
-            } else {
-                gulp.git.tag(version, version, {cwd: config.paths.dist}, cb);
-            }
-        });
+function releaseTag(cb) {
+    var version = getVersionTag();
+    gulp.git.tag(version, version, function (err) {
+        if (!!err) {
+            cb(err);
+        } else {
+            gulp.git.tag(version, version, {cwd: config.paths.dist}, cb);
+        }
     });
 }
 
@@ -339,61 +321,55 @@ gulp.task('release-commit', ['release-commit-dist'], function () {
         .pipe(gulp.git.commit(getVersionTag()));
 });
 
-gulp.task('release-push-dist', function () {
-    return wrapInPromise(function (cb) {
-        gulp.git.push('origin', 'master', {cwd: config.paths.dist}, function (err) {
-            if (!!err) {
-                cb(err);
-            } else {
-                gulp.git.push('origin', getVersionTag(), {cwd: config.paths.dist}, cb);
-            }
-        });
+gulp.task('release-push-dist', function (cb) {
+    gulp.git.push('origin', 'master', {cwd: config.paths.dist}, function (err) {
+        if (!!err) {
+            cb(err);
+        } else {
+            gulp.git.push('origin', getVersionTag(), {cwd: config.paths.dist}, cb);
+        }
     });
 });
 
-gulp.task('release-push', ['release-push-dist'], function () {
-    return wrapInPromise(function (cb) {
-        gulp.git.push('origin', 'master', function (err) {
-            if (!!err) {
-                cb(err);
-            } else {
-                gulp.git.push('origin', getVersionTag(), cb);
-            }
-        });
+gulp.task('release-push', ['release-push-dist'], function (cb) {
+    gulp.git.push('origin', 'master', function (err) {
+        if (!!err) {
+            cb(err);
+        } else {
+            gulp.git.push('origin', getVersionTag(), cb);
+        }
     });
 });
 
 var webjarPusherKey = '4a4afe0fcb8715518169';
 
-gulp.task('release-webjar', [], function () {
-    return wrapInPromise(function (cb) {
-        var pusherClient = new PusherClient(webjarPusherKey);
-        var channelId = 'cat-angular-' + getVersion() + '_' + new Date().getTime();
-        var channel = pusherClient.subscribe(channelId);
-        channel.bind('update', function (data) {
-            gulp.util.log(data);
-        });
-        channel.bind('success', function (data) {
-            gulp.util.log(data);
-            channel.unbind();
-            cb();
-        });
-        channel.bind('failure', function (data) {
-            gulp.util.log('Received failure during webjar deploy!');
-            channel.unbind();
-            cb(data);
-        });
-
-        gulp.util.log('Starting webjar deploy');
-
-        request.post('http://www.webjars.org/deploy/bower/cat-angular/' + getVersion() + '?channelId=' + channelId,
-            function (error) {
-                if (!!error) {
-                    gulp.util.log('Post request for webjar deploy failed!');
-                    cb(error);
-                }
-            });
+gulp.task('release-webjar', [], function (cb) {
+    var pusherClient = new PusherClient(webjarPusherKey);
+    var channelId = 'cat-angular-' + getVersion() + '_' + new Date().getTime();
+    var channel = pusherClient.subscribe(channelId);
+    channel.bind('update', function (data) {
+        gulp.util.log(data);
     });
+    channel.bind('success', function (data) {
+        gulp.util.log(data);
+        channel.unbind();
+        cb();
+    });
+    channel.bind('failure', function (data) {
+        gulp.util.log('Received failure during webjar deploy!');
+        channel.unbind();
+        cb(data);
+    });
+
+    gulp.util.log('Starting webjar deploy');
+
+    request.post('http://www.webjars.org/deploy/bower/cat-angular/' + getVersion() + '?channelId=' + channelId,
+        function (error) {
+            if (!!error) {
+                gulp.util.log('Post request for webjar deploy failed!');
+                cb(error);
+            }
+        });
 });
 
 function runTaskFunction(task) {
