@@ -90,5 +90,5 @@ function CatI18nMessageSourceService($q, catI18nLocaleService, CAT_I18N_DEFAULT_
     };
 }
 
-angular.module('cat.service.i18n')
+angular.module('cat.service.i18n.message', ['cat.service.i18n.locale'])
     .service('catI18nMessageSourceService', ['$q', 'catI18nLocaleService', 'CAT_I18N_DEFAULT_LOCALE', CatI18nMessageSourceService]);

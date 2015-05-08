@@ -2,7 +2,6 @@ window.cat = {};
 
 angular.module('cat.filters', ['cat.filters.replaceText']);
 
-angular.module('cat.service.i18n', []);
 angular.module('cat.service', [
     'cat.service.conversion',
     'cat.service.api',
