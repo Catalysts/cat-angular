@@ -68,7 +68,11 @@ function Menu(menuId, options) {
         if (_.isUndefined(groupId)) {
             _menuEntries.push(new MenuEntry(menuEntryId, options, that));
         } else {
-            _menuGroups[groupId].addMenuEntry(menuEntryId, options);
+            var menuGroup = _menuGroups[groupId];
+            if (!menuGroup) {
+                throw new Error('No menu group for id \''+groupId+'\' available');
+            }
+            menuGroup.addMenuEntry(menuEntryId, options);
         }
     };
 
