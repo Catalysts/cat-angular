@@ -384,7 +384,7 @@ function CatApiServiceProvider() {
  */
 angular
     .module('cat.service.api', ['cat.service.conversion', 'cat.service.search'])
-    .constant('CAT_API_SERVICE_DEFAULTS', {endpointUrlPrefix: '/api/'})
+    .constant('CAT_API_SERVICE_DEFAULTS', {endpointUrlPrefix: 'api/'})
     .provider('catApiService', CatApiServiceProvider);
 
 /**
