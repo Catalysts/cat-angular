@@ -46,6 +46,10 @@ function MenuGroup(groupId, options, parent) {
     this.isMenu = function () {
         return false;
     };
+
+    this.isSubMenu = function() {
+        return (_options.displayAsSubMenu === true);
+    };
 }
 
 function Menu(menuId, options) {
@@ -87,7 +91,12 @@ function Menu(menuId, options) {
 
     this.getFlattened = function () {
         return _.flatten([_menuEntries, _.map(this.getGroups(), function (group) {
-            return[group, group.getEntries()];
+            if (group.getOptions().displayAsSubMenu === true) {
+                group.subEntries = group.getEntries();
+                return[group];
+            } else {
+                return[group, group.getEntries()];
+            }
         })]);
     };
 
