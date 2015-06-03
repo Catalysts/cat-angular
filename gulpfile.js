@@ -178,14 +178,14 @@ var angularJs = function () {
 
     var requireJs = gulp.src(['src/main/util/js-header-require.js.tpl', '<%= paths.src %>/**/*.js', 'src/main/util/js-footer-require.js.tpl'])
         .pipe(gulp.sourcemaps.init())
-        .pipe(_concatenateAndUglify(config.pkg.name+'-require'));
+        .pipe(_concatenateAndUglify(config.pkg.name + '-require'));
 
     return mergeStream(defaultJs, requireJs);
 };
 
 var angularTemplates = function () {
     var htmlFilter = gulp.filter('**/*.html');
-    var defaultJs =  gulp.src(['src/main/util/tpl-header.js.tpl', '<%= paths.resources %>/**/*.html', 'src/main/util/tpl-footer.js.tpl'])
+    var defaultJs = gulp.src(['src/main/util/tpl-header.js.tpl', '<%= paths.resources %>/**/*.html', 'src/main/util/tpl-footer.js.tpl'])
         .pipe(gulp.sourcemaps.init())
         .pipe(htmlFilter)
         .pipe(gulp.ngHtml2js({moduleName: 'cat.template', stripPrefix: 'resources/', declareModule: false}))
@@ -198,7 +198,7 @@ var angularTemplates = function () {
         .pipe(htmlFilter2)
         .pipe(gulp.ngHtml2js({moduleName: 'cat.template', stripPrefix: 'resources/', declareModule: false}))
         .pipe(htmlFilter2.restore())
-        .pipe(_concatenateAndUglify(config.pkg.name+'-require.tpl'));
+        .pipe(_concatenateAndUglify(config.pkg.name + '-require.tpl'));
 
     return mergeStream(defaultJs, requireJs);
 };
@@ -352,12 +352,10 @@ gulp.task('release-webjar', [], function (cb) {
     });
     channel.bind('success', function (data) {
         gulp.util.log(data);
-        channel.unbind();
         cb();
     });
     channel.bind('failure', function (data) {
         gulp.util.log('Received failure during webjar deploy!');
-        channel.unbind();
         cb(data);
     });
 
