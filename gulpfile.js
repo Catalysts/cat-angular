@@ -406,23 +406,22 @@ function runTaskFunction(task) {
 }
 
 function release(type) {
-    return runTaskFunction('pre-release')()
-        .then(runTaskFunction('bump-' + type))
-        .then(runTaskFunction('build'))
-        .then(runTaskFunction('release-commit'))
-        .then(runTaskFunction('release-tag'))
-        .then(runTaskFunction('release-push'))
-        .then(runTaskFunction('release-webjar'));
+    return function (cb) {
+        runTaskFunction('pre-release')()
+            .then(runTaskFunction('bump-' + type))
+            .then(runTaskFunction('build'))
+            .then(runTaskFunction('release-commit'))
+            .then(runTaskFunction('release-tag'))
+            .then(runTaskFunction('release-push'))
+            .then(runTaskFunction('release-webjar'))
+            .then(function () {
+                cb();
+            }, cb);
+    };
 }
 
-gulp.task('release-patch', [], function () {
-    return release('patch');
-});
+gulp.task('release-patch', [], release('patch'));
 
-gulp.task('release-minor', [], function () {
-    return release('minor');
-});
+gulp.task('release-minor', [], release('minor'));
 
-gulp.task('release-major', [], function () {
-    return release('major');
-});
+gulp.task('release-major', [], release('major'));
