@@ -1,5 +1,3 @@
-window.cat = {};
-
 angular.module('cat.filters', ['cat.filters.replaceText']);
 
 angular.module('cat.service', [

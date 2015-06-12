@@ -24,3 +24,4 @@ define([
             './cat-angular.tpl.min'
         ], function($, _, angular) {
             'use strict';
+            window.cat = window.cat || {};

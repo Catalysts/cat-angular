@@ -11,12 +11,12 @@ module.exports = function (config) {
             'bower_components/angular-ui-router/release/angular-ui-router.js',
             'bower_components/angular-spinner/angular-spinner.js',
             'bower_components/angular-mocks/angular-mocks.js',
+            // test util
+            'src/test/javascript/test-utils.js',
             // cat-angular
             'src/main/javascript/module.js',
             'src/main/javascript/**/*.js',
             'dist/cat-angular.tpl.js',
-            // test util
-            'src/test/javascript/test-utils.js',
             // tests
             'src/test/javascript/*/**/*.spec.js'
         ],

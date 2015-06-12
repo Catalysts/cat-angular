@@ -1,7 +1,5 @@
 'use strict';
 
-window.cat = window.cat || {};
-
 /**
  * @ngdoc function
  * @name cat.SearchRequest

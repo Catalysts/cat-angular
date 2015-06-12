@@ -15,3 +15,4 @@
  */
 (function ($, _, angular) {
     'use strict';
+    window.cat = window.cat || {};
