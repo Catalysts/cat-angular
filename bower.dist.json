@@ -24,6 +24,7 @@
     "dependencies": {
         "angular": "^1.2.26",
         "angular-ui-router": ">=0.2.13",
+        "angular-ui-select2": ">=0.0.5",
         "lodash": ">=2.4.1",
         "angular-spinner": ">=0.5.0",
         "angular-bootstrap": ">=0.12.0"
