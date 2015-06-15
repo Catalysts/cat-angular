@@ -1,0 +1,22 @@
+<div class="global-messages">
+    <div class="alert alert-success" ng-if="type === 'success' && hasMessages()">
+        <ul>
+            <li ng-repeat="message in getMessages()">{{message}}</li>
+        </ul>
+    </div>
+    <div class="alert alert-danger" ng-if="type === 'error' && hasMessages()">
+        <ul>
+            <li ng-repeat="message in getMessages()">{{message}}</li>
+        </ul>
+    </div>
+    <div class="alert alert-info" ng-if="type === 'info' && hasMessages()">
+        <ul>
+            <li ng-repeat="message in getMessages()">{{message}}</li>
+        </ul>
+    </div>
+    <div class="alert alert-warning" ng-if="type === 'warning' && hasMessages()">
+        <ul>
+            <li ng-repeat="message in getMessages()">{{message}}></li>
+        </ul>
+    </div>
+</div>

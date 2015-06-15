@@ -4,6 +4,26 @@ angular.module('cat.service.message', [])
 
 /**
  * @ngdoc service
+ * @name cat.service.message:catValidationMessageHandler
+ */
+    .service('catValidationMessageHandler', function CatValidationMessageHandler($globalMessages, catValidationService) {
+        this.handleRejectedResponse = function (rejection) {
+            $globalMessages.clearMessages('error');
+
+            if (!!rejection.data.error) {
+                var error = '[' + rejection.status + ' - ' + rejection.statusText + '] ' + rejection.data.error;
+                if (!!rejection.data.cause) {
+                    error += '\n' + rejection.data.cause;
+                }
+                $globalMessages.addMessage('error', error);
+            }
+
+            catValidationService.updateFromRejection(rejection);
+        };
+    })
+
+/**
+ * @ngdoc service
  * @name cat.service.message:$globalMessages
  */
     .service('$globalMessages', function CatGlobalMessages($rootScope) {
