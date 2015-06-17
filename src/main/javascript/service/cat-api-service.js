@@ -302,7 +302,6 @@ function EndpointConfig(name, config) {
 
 function CatApiServiceProvider() {
     var _endpoints = {};
-    var _urlPrefix = '/api/';
 
     /**
      * This method is used to either create or retrieve named endpoint configurations.
@@ -318,11 +317,11 @@ function CatApiServiceProvider() {
     };
 
 
-    this.$get = ['$http', 'catConversionService', 'catSearchService',
+    this.$get = ['$http', 'catConversionService', 'catSearchService', 'CAT_API_SERVICE_DEFAULTS',
         /**
          * @return {object} returns a map from names to CatApiEndpoints
          */
-            function $getCatApiService($http, catConversionService, catSearchService) {
+            function $getCatApiService($http, catConversionService, catSearchService, CAT_API_SERVICE_DEFAULTS) {
             var catApiService = {};
 
             var dynamicEndpoints = {};
@@ -342,14 +341,14 @@ function CatApiServiceProvider() {
                     if (_.isUndefined(settings)) {
                         throw new Error('Undefined dynamic endpoint settings');
                     }
-                    dynamicEndpoints[name] = new CatApiEndpoint(_urlPrefix,
+                    dynamicEndpoints[name] = new CatApiEndpoint(CAT_API_SERVICE_DEFAULTS.endpointUrlPrefix,
                         new EndpointConfig(name, settings), $http, catConversionService, catSearchService);
                 }
                 return dynamicEndpoints[name];
             };
 
             _.forEach(_.keys(_endpoints), function (path) {
-                catApiService[path] = new CatApiEndpoint(_urlPrefix, _endpoints[path], $http, catConversionService, catSearchService);
+                catApiService[path] = new CatApiEndpoint(CAT_API_SERVICE_DEFAULTS.endpointUrlPrefix, _endpoints[path], $http, catConversionService, catSearchService);
             });
 
             return catApiService;
@@ -366,7 +365,10 @@ function CatApiServiceProvider() {
  *
  * @constructor
  */
-angular.module('cat.service.api', ['cat.service.conversion', 'cat.service.search']).provider('catApiService', CatApiServiceProvider);
+angular
+    .module('cat.service.api', ['cat.service.conversion', 'cat.service.search'])
+    .constant('CAT_API_SERVICE_DEFAULTS', {endpointUrlPrefix: '/api/'})
+    .provider('catApiService', CatApiServiceProvider);
 
 /**
  * @ngdoc service
