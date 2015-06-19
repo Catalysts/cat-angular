@@ -12,6 +12,11 @@ angular.module('cat.directives.sortable', ['cat.directives.paginated'])
             link: function CatSortableLink(scope, element, attrs, catPaginatedController) {
                 var title = element.text();
                 var property = attrs.catSortable || title.toLowerCase().trim();
+                var i18n = 'cc.catalysts.cat-sortable.sort.' + property;
+
+                if (!!attrs.i18n) {
+                    i18n = attrs.i18n;
+                }
 
                 // todo - make configurable
                 scope.sort = scope.listData.searchRequest.sort();
@@ -27,7 +32,7 @@ angular.module('cat.directives.sortable', ['cat.directives.paginated'])
                 }
 
                 element.text('');
-                element.append($compile('<a class="sort-link" href="" ng-click="toggleSort(\'' + property + '\')" cat-i18n="cc.catalysts.cat-sortable.sort.' + property + '">' + title + ' <span class="glyphicon" ng-class="{\'' + icon + '\': sort.property == \'' + property + '\' && !sort.isDesc, \'' + icon + '-alt\': sort.property == \'' + property + '\' && sort.isDesc}"></span></a>')(scope));
+                element.append($compile('<a class="sort-link" href="" ng-click="toggleSort(\'' + property + '\')"><span cat-i18n="' + i18n + '">' + title + '</span><span class="glyphicon" ng-class="{\'' + icon + '\': sort.property == \'' + property + '\' && !sort.isDesc, \'' + icon + '-alt\': sort.property == \'' + property + '\' && sort.isDesc}"></span></a>')(scope));
             },
             controller: function CatSortableController($scope) {
                 $scope.toggleSort = function (property) {
