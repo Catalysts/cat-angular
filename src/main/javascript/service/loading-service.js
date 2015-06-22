@@ -5,14 +5,22 @@
  * @name cat.service.loading:loadingService
  */
 angular.module('cat.service.loading', ['angularSpinner'])
-    .factory('loadingService', function CatLoadingService($rootScope, usSpinnerService, $timeout) {
-        var timeout = 50;
-        var animationDuration = 200;
+    .constant('CAT_LOADING_SERVICE_DEFAULTS', {
+        timeout: 50,
+        animationDuration: 200
+    })
+    .service('loadingService', [
+        '$rootScope',
+        '$timeout',
+        'usSpinnerService',
+        'CAT_LOADING_SERVICE_DEFAULTS',
+        function CatLoadingService($rootScope, $timeout, usSpinnerService, CAT_LOADING_SERVICE_DEFAULTS) {
+            var that = this;
         var activeCount = 0;
         var startTime;
         var startTimer, stopTimer;
 
-        var start = function () {
+            this.start = function () {
             if (!activeCount && !startTimer) {
                 if (!!stopTimer) {
                     $timeout.cancel(stopTimer);
@@ -22,12 +30,12 @@ angular.module('cat.service.loading', ['angularSpinner'])
                     usSpinnerService.spin('loading-spinner');
                     $rootScope.loading = true;
                     startTime = new Date().getTime();
-                }, timeout);
+                }, CAT_LOADING_SERVICE_DEFAULTS.timeout);
             }
             activeCount++;
         };
 
-        var stop = function () {
+            this.stop = function () {
             activeCount--;
             if (!activeCount && !stopTimer) {
                 if (!!startTimer) {
@@ -35,7 +43,7 @@ angular.module('cat.service.loading', ['angularSpinner'])
                     startTimer = undefined;
                 }
                 var now = new Date().getTime();
-                var stopTimeout = timeout + (Math.max((animationDuration - (now - startTime)), 0));
+                var stopTimeout = CAT_LOADING_SERVICE_DEFAULTS.timeout + (Math.max((CAT_LOADING_SERVICE_DEFAULTS.animationDuration - (now - startTime)), 0));
                 stopTimer = $timeout(function () {
                     usSpinnerService.stop('loading-spinner');
                     $rootScope.loading = false;
@@ -44,18 +52,13 @@ angular.module('cat.service.loading', ['angularSpinner'])
         };
 
         $rootScope.$on('$stateChangeStart', function (event) {
-            start();
+            that.start();
 
         });
         $rootScope.$on('$stateChangeSuccess', function (event) {
-            stop();
+            that.stop();
         });
         $rootScope.$on('$stateChangeError', function (event) {
-            stop();
+            that.stop();
         });
-
-        return {
-            start: start,
-            stop: stop
-        };
-    });
+        }]);
