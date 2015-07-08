@@ -6,7 +6,7 @@
     <div class="panel-heading">
         <div class="pull-right edit-buttons" ng-if="!editDetail && !!editTemplate">
             <div class="btn-group">
-                <button type="button" class="btn btn-xs btn-default" cat-confirm-click cat-on-confirm="remove()"
+                <button type="button" class="btn btn-xs btn-default" cat-confirm-click="{{catConfirmDeleteMessage}}" cat-on-confirm="remove()"
                         cat-element-visible="cat.base.delete" cat-element-data="config">
                     <span class="glyphicon glyphicon-trash"></span>
                     <span cat-i18n="cc.catalysts.general.delete">Delete</span>
