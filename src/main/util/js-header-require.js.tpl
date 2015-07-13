@@ -20,8 +20,7 @@ define([
             'angular-spinner',
             'angular-ui-select2',
             'angular-ui-router',
-            'angular-ui-bootstrap',
-            './cat-angular.tpl.min'
+            'angular-ui-bootstrap'
         ], function($, _, angular) {
             'use strict';
             window.cat = window.cat || {};

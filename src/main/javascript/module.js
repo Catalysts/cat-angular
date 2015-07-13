@@ -20,7 +20,6 @@ angular.module('cat.service', [
 angular.module('cat.controller', ['cat.controller.base.detail', 'cat.controller.base.list']);
 
 angular.module('cat.directives', [
-    'cat.template',
     'cat.directives.autofocus',
     'cat.directives.checkbox',
     'cat.directives.confirmClick',
@@ -40,7 +39,6 @@ angular.module('cat.directives', [
 
 angular.module('cat', [
     'cat.service',
-    'cat.template',
     'cat.directives',
     'cat.filters',
     'cat.controller',
