@@ -17,7 +17,7 @@ function CatI18nService($q, $log, catI18nMessageSourceService, catI18nMessagePar
      * @param {String} key the key of the message to be translated
      * @param {Object|Array} [parameters] message parameters usable in the resolved message
      * @param {String} [locale = CAT_I18N_DEFAULT_LOCALE] the locale to use for translation
-     * @returns {Promise} Returns a promise of the translated key
+     * @returns {promise} Returns a promise of the translated key
      */
     this.translate = function (key, parameters, locale) {
         var deferred = $q.defer();
@@ -35,7 +35,13 @@ function CatI18nService($q, $log, catI18nMessageSourceService, catI18nMessagePar
                     catI18nMessageSourceService.getMessage(key, locale).then(
                         function (message) {
                             try {
-                                deferred.resolve(catI18nMessageParameterResolver(message, model));
+                                var translation = catI18nMessageParameterResolver(message, model);
+                                if (_.isString(translation)) {
+                                    deferred.resolve(translation);
+                                } else {
+                                    $log.warn('Didn\'t get a string from catI18nMessageParameterResolver');
+                                    deferred.reject(translation);
+                                }
                             } catch (e) {
                                 $log.warn(e);
                                 deferred.reject(e);
@@ -68,7 +74,7 @@ function CatI18nService($q, $log, catI18nMessageSourceService, catI18nMessagePar
      *
      * @param {String} key the key of the message to be translated
      * @param {String} [locale] the locale to use for translation
-     * @returns {Promise} Returns a promise which resolves to true when a message for the given key exists for the
+     * @returns {promise} Returns a promise which resolves to true when a message for the given key exists for the
      * specified locale
      */
     this.canTranslate = function (key, locale) {
