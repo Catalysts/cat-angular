@@ -88,7 +88,15 @@ function CatBaseTabsController($scope, $controller, $stateParams, $location, cat
     };
 
     var _getDefaultTabControllerName = function (tab) {
-        return window.cat.util.capitalize(endpoint.getEndpointName()) + window.cat.util.capitalize(tab.name) + 'Controller';
+        var name = window.cat.util.capitalize(endpoint.getEndpointName());
+        var parentEndpoint = endpoint.parentEndpoint;
+
+        while (parentEndpoint) {
+            name = window.cat.util.capitalize(parentEndpoint.getEndpointName()) + name;
+            parentEndpoint = parentEndpoint.parentEndpoint;
+        }
+
+        return name + window.cat.util.capitalize(tab.name) + 'Controller';
     };
 
     var _getTabControllerName = function (tab) {
