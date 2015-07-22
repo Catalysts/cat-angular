@@ -185,15 +185,23 @@ function CatRouteServiceProvider($stateProvider) {
     };
 }
 
-angular.module('cat.service.route', ['ui.router'])
+angular
+    .module('cat.service.route', [
+        'ui.router',
+        'cat.service.message',
+        'cat.service.breadcrumbs',
+        'cat.service.validation'
+    ])
     .provider('catRouteService', CatRouteServiceProvider)
-    .run(function ($rootScope, $log, $globalMessages, catBreadcrumbsService) {
-        $rootScope.$on('$stateChangeError', function () {
-            var exception = arguments[arguments.length - 1];
-            $globalMessages.addMessage('warning', exception);
-            $log.warn(exception);
-        });
-        $rootScope.$on('$stateChangeSuccess', function () {
-            catBreadcrumbsService.clear();
-        });
-    });
+    .run(['$rootScope', '$log', '$globalMessages', 'catBreadcrumbsService', 'catValidationService',
+        function ($rootScope, $log, $globalMessages, catBreadcrumbsService, catValidationService) {
+            $rootScope.$on('$stateChangeError', function () {
+                var exception = arguments[arguments.length - 1];
+                $globalMessages.addMessage('warning', exception);
+                $log.warn(exception);
+            });
+            $rootScope.$on('$stateChangeSuccess', function () {
+                catBreadcrumbsService.clear();
+                catValidationService.clearValidationErrors();
+            });
+        }]);
