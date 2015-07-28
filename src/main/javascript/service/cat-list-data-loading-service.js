@@ -4,7 +4,11 @@
  * @ngdoc service
  * @name cat.service.listDataLoading:catListDataLoadingService
  */
-angular.module('cat.service.listDataLoading', ['cat.service.api'])
+angular
+    .module('cat.service.listDataLoading', [
+        'cat.service.api',
+        'ui.router'
+    ])
     .factory('catListDataLoadingService', ['$state', '$location', '$q', 'catApiService', 'catSearchService', function CatListDataLoadingService($state, $location, $q, catApiService, catSearchService) {
         var load = function (endpoint, searchRequest) {
             var deferred = $q.defer();
