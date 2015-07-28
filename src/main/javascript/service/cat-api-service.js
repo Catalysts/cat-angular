@@ -357,7 +357,7 @@ function CatApiServiceProvider() {
 
 /**
  * @ngdoc service
- * @name cat.service.api:$api
+ * @name cat.service.api:catApiService
  *
  * @description
  * The CatApiServiceProvider exposes a single configuration method 'endpoint' which can be used to create or retrieve

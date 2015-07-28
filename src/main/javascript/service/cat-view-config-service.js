@@ -185,5 +185,9 @@ function CatViewConfigService($q, catApiService, catListDataLoadingService) {
     };
 }
 
-angular.module('cat.service.view.config', ['cat.service.api'])
+angular
+    .module('cat.service.view.config', [
+        'cat.service.api',
+        'cat.service.listDataLoading'
+    ])
     .service('catViewConfigService', CatViewConfigService);
