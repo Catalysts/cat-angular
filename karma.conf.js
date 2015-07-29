@@ -23,12 +23,10 @@ module.exports = function (config) {
         plugins: [
             'karma-jasmine',
             'karma-coverage',
-            'karma-phantomjs-launcher',
-            'karma-chrome-launcher'
+            'karma-phantomjs-launcher'
         ],
         reporters: ['progress', 'coverage'],
-        //browsers: ['PhantomJS'],
-        browsers: ['Chrome'],
+        browsers: ['PhantomJS'],
         preprocessors: {
             'src/main/javascript/**/*.js': 'coverage',
             'src/main/resources/**/*.tpl.html': ['ng-html2js']
