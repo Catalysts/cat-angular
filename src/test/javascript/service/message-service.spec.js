@@ -100,7 +100,7 @@ describe('CatGlobalMessages', function () {
            expect(result).not.toBeDefined();
 
            result = catMessageService.addMessage();
-           expect(result).not.toBeDefined()
+           expect(result).not.toBeDefined();
 
            result = catMessageService.addMessage(1,2);
 
