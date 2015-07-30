@@ -6,6 +6,7 @@ module.exports = function (config) {
         frameworks: ['jasmine'],
         files: [
             // libs
+            'bower_components/jquery/dist/jquery.js',
             'bower_components/lodash/dist/lodash.js',
             'bower_components/angular/angular.js',
             'bower_components/angular-ui-router/release/angular-ui-router.js',
