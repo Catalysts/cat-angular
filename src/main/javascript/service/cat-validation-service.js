@@ -24,12 +24,12 @@ angular.module('cat.service.validation', ['cat.service.message'])
  * @description
  * Service which maps the 'fieldErrors' list recieved from the backend to a usable map for the client
  */
-    .service('catValidationService', function CatErrorHttpInterceptor($rootScope, $globalMessages, catValidations) {
+    .service('catValidationService', function CatErrorHttpInterceptor($globalMessages, catValidations) {
         this.updateFromRejection = function (rejection) {
             delete catValidations.global;
 
             if (!!rejection.data.globalErrors) {
-                catValidations.global = rejection.data.error;
+                catValidations.global = rejection.data.globalErrors;
                 $globalMessages.addMessages('error', rejection.data.globalErrors);
             }
 
@@ -41,7 +41,6 @@ angular.module('cat.service.validation', ['cat.service.message'])
                     fieldErrors[fieldError.field] = fieldErrors[fieldError.field] || [];
                     fieldErrors[fieldError.field].push(fieldError.message);
                 });
-                $rootScope.$on('fieldErrors', fieldErrors);
             }
 
         };
