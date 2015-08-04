@@ -1,10 +1,11 @@
 'use strict';
 
-function CatSelectLink(scope, element) {
+function CatSelectLink(scope, element, attrs, ngModel) {
     element.addClass('form-control');
+    ngModel.$formatters = [];
 }
 
-function CatSelectController($scope, $log, catApiService, catSelectConfigService) {
+function CatSelectController($scope, $attrs, $log, catApiService, catSelectConfigService) {
     function fetchElements(endpoint, sort, searchRequestAdapter) {
         return function (queryParams) {
             var searchRequest = new window.cat.SearchRequest(queryParams.data);
@@ -23,7 +24,7 @@ function CatSelectController($scope, $log, catApiService, catSelectConfigService
     }
 
 
-    var options = catSelectConfigService.getConfig($scope.config, $scope.options);
+    var options = catSelectConfigService.getConfig($attrs.config, $scope.$eval($attrs.options));
 
     if (_.isUndefined(options)) {
         throw new Error('At least one of "config" or "options" has to be specified');
@@ -142,6 +143,7 @@ function CatSelectDirective() {
         restrict: 'EA',
         replace: true,
         priority: 1,
+        require: 'ngModel',
         scope: {
             options: '=?',
             id: '@',
