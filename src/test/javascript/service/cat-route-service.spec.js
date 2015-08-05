@@ -12,7 +12,7 @@ describe('CatRouteServiceProvider', function () {
         module('cat.service.route');
     });
 
-    it('returns right URL', function(){
+    it('returns right URL from listAndDetailRoute', function(){
         module(function(catRouteServiceProvider) {
             catRouteServiceProvider.listAndDetailRoute('root', 'Folder');
         });
@@ -33,6 +33,8 @@ describe('CatRouteServiceProvider', function () {
             var listState = $state.get('Folder.list');
             expect(listState).not.toBeNull();
             expect(listState.url).toEqual('');
+
         });
     });
+
 });

@@ -112,10 +112,10 @@ function CatBaseDetailController($scope, $state, $stateParams, $location, $windo
      * Creates a copy of the current object and triggers a switch into edit mode
      */
     $scope.edit = function () {
-        $scope.editDetail = angular.copy($scope.detail);
-        if (_.isFunction($scope.editDetail.setParent)) {
-            $scope.editDetail.setParent(config.parents[0]);
+        if (_.isFunction($scope.detail.setParent)) {
+            $scope.detail.setParent(config.parents[0]);
         }
+        $scope.editDetail = angular.copy($scope.detail);
     };
 
     /**

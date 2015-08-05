@@ -16,10 +16,10 @@
  * @param {Object} catElementVisibilityService The visibility service to check wheter or not a tab should be rendered
  * @param {Object} config The config as handled by state resolve
  */
-function CatBaseTabsController($scope, $controller, $stateParams, $location, catElementVisibilityService, config) {
+function CatBaseTabsController($scope, $controller, $stateParams, $location, catElementVisibilityService, config, urlResolverService) {
     var endpoint = config.endpoint;
 
-    $scope.tabs = _.filter(config.tabs, function(tab) {
+    $scope.tabs = _.filter(config.tabs, function (tab) {
         return catElementVisibilityService.isVisible('cat.base.tab', tab);
     });
     $scope.tabNames = _.map($scope.tabs, 'name');
@@ -69,22 +69,9 @@ function CatBaseTabsController($scope, $controller, $stateParams, $location, cat
     });
 
     // TODO replace by url resolver service as soon as it is available
-    var parentUrl = endpoint.getEndpointName();
-    var parentTemplateNamePrefix = endpoint.getEndpointName();
-
-    var currentEndpoint = endpoint;
-
-    while (!_.isUndefined(currentEndpoint.parentEndpoint)) {
-        currentEndpoint = endpoint.parentEndpoint;
-        var parentEndpointName = currentEndpoint.getEndpointName();
-
-        parentUrl = parentEndpointName + '/' + parentUrl;
-
-        parentTemplateNamePrefix = parentEndpointName + '-' + parentTemplateNamePrefix;
-    }
 
     $scope.getTabTemplate = function (tab) {
-        return parentUrl + '/' + tab + '/' + parentTemplateNamePrefix + '-' + tab + '-list.tpl.html';
+        return urlResolverService.getTabTemplate(tab, config);
     };
 
     var _getDefaultTabControllerName = function (tab) {
@@ -146,4 +133,8 @@ function CatBaseTabsController($scope, $controller, $stateParams, $location, cat
     }];
 }
 
-angular.module('cat.controller.base.tabs', ['cat.service.elementVisibility']).controller('CatBaseTabsController', CatBaseTabsController);
+angular
+    .module('cat.controller.base.tabs', [
+        'cat.service.elementVisibility',
+        'cat.url.resolver.service'
+    ]).controller('CatBaseTabsController', CatBaseTabsController);
