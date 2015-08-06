@@ -8,3 +8,6 @@ git:
 before_install:
     - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
     - git submodule update --init --recursive
+after_script:
+  - npm install coveralls
+  - cat build/coverage/*/lcov.info | ./node_modules/.bin/coveralls
