@@ -8,9 +8,6 @@ git:
 before_install:
     - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
     - git submodule update --init --recursive
-addons:
-  code_climate:
-    repo_token: f49212eb0581c1080d8930df432e301af05aad11c96795
 after_script:
-  - npm install -g codeclimate-test-reporter
-  - codeclimate-test-reporter < build/coverage/*/lcov.info
+  - npm install coveralls
+  - cat build/coverage/*/lcov.info | ./node_modules/.bin/coveralls

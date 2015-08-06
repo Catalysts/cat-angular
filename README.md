@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/Catalysts/cat-angular.svg)](https://travis-ci.org/Catalysts/cat-angular)
 [![Dependency Status](https://gemnasium.com/Catalysts/cat-angular.svg)](https://gemnasium.com/Catalysts/cat-angular)
 [![Code Climate](https://codeclimate.com/github/Catalysts/cat-angular/badges/gpa.svg)](https://codeclimate.com/github/Catalysts/cat-angular)
-[![Test Coverage](https://codeclimate.com/github/Catalysts/cat-angular/badges/coverage.svg)](https://codeclimate.com/github/Catalysts/cat-angular/coverage)
+[![Coverage Status](https://coveralls.io/repos/Catalysts/cat-angular/badge.svg?branch=master&service=github)](https://coveralls.io/github/Catalysts/cat-angular?branch=master)
 
 #CAT-ANGULAR#
 
