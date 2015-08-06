@@ -1,7 +1,10 @@
 'use strict';
 
-function CatSelectLink(scope, element) {
+function CatSelectLink(scope, element, attrs, ngModel) {
     element.addClass('form-control');
+    // clear formatters, otherwise $viewModel will be converted to a string
+    // see https://github.com/angular/angular.js/commit/1eda18365a348c9597aafba9d195d345e4f13d1e
+    ngModel.$formatters = [];
 }
 
 function CatSelectController($scope, $log, catApiService, catSelectConfigService) {
@@ -142,6 +145,7 @@ function CatSelectDirective() {
         restrict: 'EA',
         replace: true,
         priority: 1,
+        require: 'ngModel',
         scope: {
             options: '=?',
             id: '@',

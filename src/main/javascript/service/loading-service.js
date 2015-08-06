@@ -20,7 +20,7 @@ angular.module('cat.service.loading', ['angularSpinner'])
         var startTime;
         var startTimer, stopTimer;
 
-            this.start = function () {
+        this.start = function () {
             if (!activeCount && !startTimer) {
                 if (!!stopTimer) {
                     $timeout.cancel(stopTimer);
@@ -35,7 +35,7 @@ angular.module('cat.service.loading', ['angularSpinner'])
             activeCount++;
         };
 
-            this.stop = function () {
+        this.stop = function () {
             activeCount--;
             if (!activeCount && !stopTimer) {
                 if (!!startTimer) {
@@ -61,4 +61,4 @@ angular.module('cat.service.loading', ['angularSpinner'])
         $rootScope.$on('$stateChangeError', function (event) {
             that.stop();
         });
-        }]);
+    }]);

@@ -17,6 +17,14 @@ describe('Api Service', function () {
                 url: 'test',
                 model: cat.util.test.Model
             });
+
+            catApiServiceProvider.endpoint('user', {
+                url: 'user',
+                model: cat.util.test.Model
+            }).child('friend', {
+                url: 'friend',
+                model: cat.util.test.Model
+            });
         });
 
         module('cat.service.api');
@@ -122,4 +130,35 @@ describe('Api Service', function () {
         });
         $httpBackend.flush();
     });
+
+    it('should allow defining a dynamic endpoint', function () {
+        var endpoint1 = catApiService.dynamicEndpoint({
+            url: 'test',
+            model: cat.util.test.Model
+        });
+
+        var endpoint2 = catApiService.dynamicEndpoint('test');
+        expect(endpoint1).toBe(endpoint2);
+
+        // test dynamic endpoint functionality
+        $httpBackend.expectGET('/api/test/' + testData[0].id).respond(testData[0]);
+        endpoint2.get(testData[0].id).then(function (result) {
+            expect(result).toBeDefined();
+            cat.util.test.expectToEqualConverted(result, testData[0]);
+        });
+        $httpBackend.flush();
+    });
+
+    it('should allow endpoint children', function () {
+        var user2 = catApiService.user.res(2);
+
+        $httpBackend.expectGET('/api/user/2/friend').respond(testData);
+        user2.friend.list().then(function (result) {
+            expect(result).toBeDefined();
+            expect(result.length).toBe(2);
+            cat.util.test.expectToEqualConverted(result, testData);
+        });
+        $httpBackend.flush();
+    });
+
 });

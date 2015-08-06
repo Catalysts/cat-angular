@@ -24,7 +24,7 @@ function CatI18nMessageSourceService($q, catI18nLocaleService, CAT_I18N_DEFAULT_
 
         var messages = window.cat.i18n[localeId];
         if (_.isUndefined(messages)) {
-            messages = _getMessages(catI18nLocaleService.getLanguageOfLocale(localeId));
+            messages = _getMessages(catI18nLocaleService.getDefaultLocale());
         }
         if (localeId !== CAT_I18N_DEFAULT_LOCALE && _.isUndefined(messages)) {
             messages = _getMessages(CAT_I18N_DEFAULT_LOCALE);

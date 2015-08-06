@@ -12,7 +12,8 @@ describe('CatViewConfigService', function () {
     var childMockeEndpoint;
 
     beforeEach(function () {
-        angular.module('cat.service.listDataLoading', [])
+
+        angular.module('cat.service.view.config.test', ['cat.service.view.config'])
             .service('catListDataLoadingService', function ($q) {
                 this.resolve = function (endpointName, defaultSort) {
                     return $q.when({
@@ -20,9 +21,7 @@ describe('CatViewConfigService', function () {
                         defaultSort: defaultSort
                     });
                 };
-            });
-
-        angular.module('cat.service.api', [])
+            })
             .factory('catApiService', function ($q) {
                 mockEndpoint = {
                     get: function (id) {
@@ -61,7 +60,7 @@ describe('CatViewConfigService', function () {
                 };
             });
 
-        module('cat.service.view.config');
+        module('cat.service.view.config.test');
 
         inject(function (_catViewConfigService_, _$rootScope_) {
             catViewConfigService = _catViewConfigService_;
