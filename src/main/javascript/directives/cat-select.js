@@ -2,10 +2,12 @@
 
 function CatSelectLink(scope, element, attrs, ngModel) {
     element.addClass('form-control');
+    // clear formatters, otherwise $viewModel will be converted to a string
+    // see https://github.com/angular/angular.js/commit/1eda18365a348c9597aafba9d195d345e4f13d1e
     ngModel.$formatters = [];
 }
 
-function CatSelectController($scope, $attrs, $log, catApiService, catSelectConfigService) {
+function CatSelectController($scope, $log, catApiService, catSelectConfigService) {
     function fetchElements(endpoint, sort, searchRequestAdapter) {
         return function (queryParams) {
             var searchRequest = new window.cat.SearchRequest(queryParams.data);
@@ -24,7 +26,7 @@ function CatSelectController($scope, $attrs, $log, catApiService, catSelectConfi
     }
 
 
-    var options = catSelectConfigService.getConfig($attrs.config, $scope.$eval($attrs.options));
+    var options = catSelectConfigService.getConfig($scope.config, $scope.options);
 
     if (_.isUndefined(options)) {
         throw new Error('At least one of "config" or "options" has to be specified');
