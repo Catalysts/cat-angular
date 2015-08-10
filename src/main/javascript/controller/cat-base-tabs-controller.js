@@ -41,14 +41,6 @@ function CatBaseTabsController($scope, $controller, $stateParams, $location, cat
         $location.search('tab', tabName);
     };
 
-    var isTabActive = function (tab) {
-        if (tab.name === $scope.tabNames[0] && _.isUndefined($stateParams.tab)) {
-            // first tab is active if no parameter is given
-            return true;
-        }
-        return $stateParams.tab === tab.name;
-    };
-
     $scope.$watchCollection(function () {
         return $location.search();
     }, function (newValue) {
@@ -65,33 +57,15 @@ function CatBaseTabsController($scope, $controller, $stateParams, $location, cat
     };
 
     _.forEach($scope.tabs, function (tab) {
-        $scope.activeTab[tab.name] = isTabActive(tab);
+        $scope.activeTab[tab.name] = urlResolverService.isTabActive(tab, $scope, $stateParams);
     });
-
-    // TODO replace by url resolver service as soon as it is available
 
     $scope.getTabTemplate = function (tab) {
         return urlResolverService.getTabTemplate(tab, config);
     };
 
-    var _getDefaultTabControllerName = function (tab) {
-        var name = window.cat.util.capitalize(endpoint.getEndpointName());
-        var parentEndpoint = endpoint.parentEndpoint;
-
-        while (parentEndpoint) {
-            name = window.cat.util.capitalize(parentEndpoint.getEndpointName()) + name;
-            parentEndpoint = parentEndpoint.parentEndpoint;
-        }
-
-        return name + window.cat.util.capitalize(tab.name) + 'Controller';
-    };
-
-    var _getTabControllerName = function (tab) {
-        if (!!tab.controller) {
-            return tab.controller;
-        }
-
-        return _getDefaultTabControllerName(tab);
+    var _getTabControllerName = function(tab,config){
+        return urlResolverService.getTabControllerName(tab, endpoint);
     };
 
     var tabIndex = 0;

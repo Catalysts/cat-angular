@@ -44,6 +44,12 @@ function CatRouteServiceProvider($stateProvider) {
         $stateProvider
             .state(stateName + '.detail', detailConfig);
 
+        var editConfig = angular.copy(detailConfig);
+        editConfig.url += '/edit';
+
+        $stateProvider
+            .state(stateName + '.edit', editConfig);
+
         if (!!config && config.additionalViewTemplate === 'tabs') {
             $stateProvider
                 .state(stateName + '.tab', {
@@ -86,6 +92,25 @@ function CatRouteServiceProvider($stateProvider) {
             }
         };
     }
+
+    function _getEditConfig(config, name) {
+        var _config = _.assign({name: name}, config);
+
+        return {
+            url: _config.url || '/:id',
+            templateUrl: _config.templateUrl || 'template/cat-base-edit.tpl.html',
+            controller: 'CatBaseEditController',
+            reloadOnSearch: _config.reloadOnSearch,
+            resolve: {
+                config: function ($stateParams, catViewConfigService) {
+                    // TODO $stateParams needs to be passed from here because otherwise it's empty...
+                    return catViewConfigService.getDetailConfig(_config, $stateParams);
+                }
+            }
+        };
+    }
+
+
 
     /**
      * A helper function for list routes which applies a few optimizations and some auto configuration.

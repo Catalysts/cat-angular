@@ -39,7 +39,7 @@
  * @param {object} catBreadcrumbsService DOCTODO
  * @param {Object} config holds data like the current api endpoint, template urls, base url, the model constructor, etc.
  */
-function CatBaseDetailController($scope, $state, $stateParams, $location, $window, $globalMessages, $controller, $log, catValidationService, catBreadcrumbsService, config) {
+function CatBaseEditController($scope, $state, $stateParams, $location, $window, $globalMessages, $controller, $log, catValidationService, catBreadcrumbsService, config) {
     $scope.detail = config.detail;
     $scope.editDetail = undefined;
 
@@ -50,10 +50,10 @@ function CatBaseDetailController($scope, $state, $stateParams, $location, $windo
 
     $scope.uiStack = catBreadcrumbsService.generateFromConfig(config);
 
-    if ($stateParams.id === 'new') {
+    if ($stateParams.id === 'edit') {
         catBreadcrumbsService.push({
-            title: 'New',
-            key: 'cc.catalysts.general.new'
+            title: 'Edit',
+            key: 'cc.catalysts.general.edit'
         });
     } else {
         catBreadcrumbsService.push({});
@@ -206,5 +206,5 @@ function CatBaseDetailController($scope, $state, $stateParams, $location, $windo
     }
 }
 
-angular.module('cat.controller.base.detail', ['cat.service.breadcrumbs', 'cat.controller.base.tabs'])
-    .controller('CatBaseDetailController', CatBaseDetailController);
+angular.module('cat.controller.base.edit', ['cat.service.breadcrumbs', 'cat.controller.base.tabs'])
+    .controller('CatBaseEditController', CatBaseEditController);

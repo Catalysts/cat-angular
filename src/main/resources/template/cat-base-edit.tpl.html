@@ -1,0 +1,27 @@
+<div ng-repeat="parent in uiStack" class="alert alert-info"><a ng-href="{{parent.url}}">
+    {{parent.title}}
+</a></div>
+
+
+<div class="panel-body">
+    <form name="form" novalidate class="form-horizontal"
+          ng-if="!!editDetail && !!editTemplate">
+        <div ng-include="editTemplate"></div>
+    </form>
+
+    <div ng-include="mainViewTemplate" ng-if="!editDetail"></div>
+</div>
+<div class="panel-footer text-right" ng-if="!!editDetail">
+    <button type="button" class="btn btn-xs btn-default" ng-click="cancelEdit()"
+            cat-activate-on-shortcut="alt+esc"><span class="glyphicon glyphicon-remove"></span>
+        <span cat-i18n="cc.catalysts.general.cancel">Cancel</span>
+    </button>
+    <button type="submit" class="btn btn-xs btn-primary" ng-click="save()"
+            ng-disabled="form.$pristine"><span class="glyphicon glyphicon-floppy-disk"></span>
+        <span cat-i18n="cc.catalysts.general.save">Save</span>
+    </button>
+</div>
+
+
+<div ng-if="!editDetail && !!additionalViewTemplate" ng-include="additionalViewTemplate"
+     ng-controller="baseTabsController"></div>
