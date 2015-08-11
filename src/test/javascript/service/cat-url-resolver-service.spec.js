@@ -3,7 +3,7 @@
  */
 
 
-describe('CatGlobalMessages', function () {
+describe('CatUrlResolverService', function () {
     'use strict';
 
     var urlResolverService;
