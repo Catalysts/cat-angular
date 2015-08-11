@@ -68,8 +68,6 @@ function CatBaseTabsController($scope, $controller, $stateParams, $location, cat
         $scope.activeTab[tab.name] = isTabActive(tab);
     });
 
-    // TODO replace by url resolver service as soon as it is available
-
     $scope.getTabTemplate = function (tab) {
         return urlResolverService.getTabTemplate(tab, config);
     };
