@@ -72,6 +72,19 @@ function CatBaseTabsController($scope, $controller, $stateParams, $location, cat
         return urlResolverService.getTabTemplate(tab, config);
     };
 
+    $scope.getTabKey = function (tabName) {
+        var key = 'cc.catalysts.general.tab.' + endpoint.getEndpointName();
+
+        var parentEndpoint = endpoint.parentEndpoint;
+
+        while (parentEndpoint) {
+            key += '.';
+            key += parentEndpoint.getEndpointName();
+        }
+
+        return key + '.' + tabName;
+    };
+
     var _getDefaultTabControllerName = function (tab) {
         var name = window.cat.util.capitalize(endpoint.getEndpointName());
         var parentEndpoint = endpoint.parentEndpoint;
