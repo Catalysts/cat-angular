@@ -80,6 +80,7 @@ function CatBaseTabsController($scope, $controller, $stateParams, $location, cat
         while (parentEndpoint) {
             key += '.';
             key += parentEndpoint.getEndpointName();
+            parentEndpoint = parentEndpoint.parentEndpoint;
         }
 
         return key + '.' + tabName;
