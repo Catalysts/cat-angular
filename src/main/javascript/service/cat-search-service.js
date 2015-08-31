@@ -39,7 +39,16 @@ angular.module('cat.service.search', [])
     .service('catSearchService', function ($location, catUrlEncodingService) {
 
         var _encodeSort = function (_sort) {
-            return (!!_sort.property ? 'sort=' + _sort.property + ':' + ((_sort.isDesc === true || _sort.isDesc === 'true') ? 'desc' : 'asc') : '');
+            if(!!_sort.property) {
+                var properties = _sort.property.split(';');
+                var result = 'sort=';
+                for(var i = 0; i< properties.length; i++) {
+                    result += properties[i] + ':' + ((_sort.isDesc === true || _sort.isDesc === 'true') ? 'desc' : 'asc') + ';';
+                }
+                return result.slice(0, -1);
+            } else {
+                return '';
+            }
         };
 
         var _encodePagination = function (_pagination) {
