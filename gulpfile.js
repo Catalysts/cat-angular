@@ -361,7 +361,7 @@ gulp.task('release-webjar', [], function (cb) {
 
     gulp.util.log('Starting webjar deploy');
 
-    request.post('http://www.webjars.org/deploy/bower/cat-angular/' + getVersion() + '?channelId=' + channelId,
+    request.post('http://www.webjars.org/_bower/deploy?name=cat-angular&version=' + getVersion() + '&channelId=' + channelId,
         function (error) {
             if (!!error) {
                 gulp.util.log('Post request for webjar deploy failed!');
