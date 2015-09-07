@@ -87,7 +87,7 @@ function CatSelectController($scope, $log, catApiService, catSelectConfigService
             quietMillis: quietMillis,
             transport: transport,
             results: function (data, page) {
-                var more = (page * options.size || 100) < data.totalCount;
+                var more = (page * (options.size || 100)) < data.totalCount;
                 return {
                     results: _.filter(data.elements, filterFunc),
                     more: more
