@@ -51,14 +51,21 @@ angular.module('cat.service.loading', ['angularSpinner'])
             }
         };
 
+            var stateChangeInProgress = false;
+
         $rootScope.$on('$stateChangeStart', function (event) {
-            that.start();
+            if (!stateChangeInProgress) {
+                that.start();
+                stateChangeInProgress = true;
+            }
 
         });
         $rootScope.$on('$stateChangeSuccess', function (event) {
             that.stop();
+            stateChangeInProgress = false;
         });
         $rootScope.$on('$stateChangeError', function (event) {
             that.stop();
+            stateChangeInProgress = false;
         });
     }]);
