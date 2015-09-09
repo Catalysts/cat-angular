@@ -55,9 +55,9 @@ function CatBaseListController($scope, $state, $controller, $log, catBreadcrumbs
         return this.getUrlForId('new');
     };
 
-    this.remove = function(id) {
+    this.remove = function (id) {
         config.listData.endpoint.remove(id)
-            .then(function() {
+            .then(function () {
                 catListDataLoadingService.load(config.listData.endpoint, config.listData.searchRequest).then(
                     function (data) {
                         _.assign($scope.listData, data);
@@ -77,4 +77,4 @@ function CatBaseListController($scope, $state, $controller, $log, catBreadcrumbs
 
 angular.module('cat.controller.base.list', ['cat.service.breadcrumbs'])
     .controller('CatBaseListController',
-    ['$scope', '$state', '$controller', '$log', 'catBreadcrumbsService', 'catListDataLoadingService', 'config', CatBaseListController]);
+        ['$scope', '$state', '$controller', '$log', 'catBreadcrumbsService', 'catListDataLoadingService', 'config', CatBaseListController]);

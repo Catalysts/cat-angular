@@ -17,9 +17,10 @@ describe('CatViewServiceProvider', function () {
             result = catViewServiceProvider.$get();
         });
 
-        inject(function (catViewService) {});
+        inject(function (catViewService) {
+        });
 
-        inject(function(catViewService,catApiService){
+        inject(function (catViewService, catApiService) {
 
             expect(catApiService).toBeDefined();
             expect(result.views[0]).toBe('name');

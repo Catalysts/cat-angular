@@ -27,7 +27,10 @@ describe('CatValidationService', function () {
                 fieldErrors: [
                     {field: 'name', message: 'name too short'},
                     {field: 'password', message: 'password too short'},
-                    {field: 'password', message: 'password must contain uppercase letters, lowercase letters and numbers'}
+                    {
+                        field: 'password',
+                        message: 'password must contain uppercase letters, lowercase letters and numbers'
+                    }
                 ]
             }
         });

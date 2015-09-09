@@ -15,7 +15,8 @@
                       cat-i18n="cc.catalysts.cat-menu.group.{{entry.completeId}}">
                     {{entry.getOptions().name}}
                 </span>
-                <a ng-if="isVisible(entry) && entry.isGroup() && entry.isSubMenu()" href="" class="dropdown-toggle" data-toggle="dropdown">
+                <a ng-if="isVisible(entry) && entry.isGroup() && entry.isSubMenu()" href="" class="dropdown-toggle"
+                   data-toggle="dropdown">
                     <span cat-i18n="cc.catalysts.cat-menu.group.{{entry.completeId}}">{{entry.getOptions().name}}</span>
                     <ul ng-if="isVisible(entry) && entry.isGroup() && entry.isSubMenu()" class="dropdown-menu">
                         <li ng-repeat="entry in entry.subEntries track by entry.id" ng-if="isVisible(entry)">

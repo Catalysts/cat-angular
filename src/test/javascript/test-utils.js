@@ -27,7 +27,7 @@
         if (_.isArray(data)) {
             expect(_.isArray(converted)).toBe(true);
             expect(data.length).toBe(converted.length);
-            _.forEach(data, function(_data, idx) {
+            _.forEach(data, function (_data, idx) {
                 _expectToEqualConverted(_data, converted[idx]);
             });
         } else {

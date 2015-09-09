@@ -162,7 +162,7 @@ function CatBaseDetailController($scope, $state, $stateParams, $location, $windo
         endpoint.save(angular.copy($scope.editDetail)).then(function (data) {
             $globalMessages.clearMessages();
             catValidationService.clearValidationErrors();
-            if (stayInEdit){
+            if (stayInEdit) {
                 $scope.editDetail = data;
                 // Refresh-Breadcrumb:
                 $scope.reloadDetails();

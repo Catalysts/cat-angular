@@ -20,9 +20,8 @@ describe('CatGlobalMessages', function () {
 
         inject(function (_$globalMessages_, _$rootScope_) {
             catMessageService = _$globalMessages_;
-            $rootScope= _$rootScope_ ;
+            $rootScope = _$rootScope_;
         });
-
 
 
         //setMessage already tested here, otherwise all other tests would not work
@@ -90,29 +89,29 @@ describe('CatGlobalMessages', function () {
     });
 
 
-    describe('general empty/null returns', function(){
+    describe('general empty/null returns', function () {
 
-       it('should return empty arrays and objects', function(){
-          var result = catMessageService.getMessages();
-           expect(result).toEqual([]);
+        it('should return empty arrays and objects', function () {
+            var result = catMessageService.getMessages();
+            expect(result).toEqual([]);
 
-           result = catMessageService.clearMessages();
-           expect(result).not.toBeDefined();
+            result = catMessageService.clearMessages();
+            expect(result).not.toBeDefined();
 
-           result = catMessageService.addMessage();
-           expect(result).not.toBeDefined();
+            result = catMessageService.addMessage();
+            expect(result).not.toBeDefined();
 
-           result = catMessageService.addMessage(1,2);
+            result = catMessageService.addMessage(1, 2);
 
-           result = catMessageService.addMessages();
-           expect(result).not.toBeDefined();
+            result = catMessageService.addMessages();
+            expect(result).not.toBeDefined();
 
-           result = catMessageService.setMessages();
-           expect(result).not.toBeDefined();
+            result = catMessageService.setMessages();
+            expect(result).not.toBeDefined();
 
             $rootScope.$emit('$stateChangeSuccess');
 
-       });
+        });
     });
 
 })

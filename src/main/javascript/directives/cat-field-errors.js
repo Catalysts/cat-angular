@@ -18,16 +18,16 @@ angular.module('cat.directives.fieldErrors', ['cat.service.validation'])
                 var that = this;
 
                 if (angular.version.major === 1 && angular.version.minor === 2) {
-                    $scope.$watch('name', function(name) {
+                    $scope.$watch('name', function (name) {
                         that.name = name;
                     });
                 }
 
-                this.hasErrors = function() {
+                this.hasErrors = function () {
                     return catValidationService.hasFieldErrors(that.name);
                 };
 
-                this.getErrors = function() {
+                this.getErrors = function () {
                     return catValidationService.getFieldErrors(that.name);
                 };
             },

@@ -73,7 +73,7 @@ describe('catI18nLocaleService', function () {
     describe('testGetMessage', function () {
 
         it('should get the messages correctly when key is correct', function () {
-            var result = catI18nMessageSourceService.getMessage('cc.catalysts.general.new','de');
+            var result = catI18nMessageSourceService.getMessage('cc.catalysts.general.new', 'de');
             expect(result).toBeDefined();
 
             result.then(function (actualResult) {
@@ -84,13 +84,13 @@ describe('catI18nLocaleService', function () {
         });
 
         it('should get correct error when key is wrong', function () {
-            var result = catI18nMessageSourceService.getMessage('key','de');
+            var result = catI18nMessageSourceService.getMessage('key', 'de');
             expect(result).toBeDefined();
 
             result.then(function (actualResult) {
                 expect(actualResult).toEqual('Neu');
 
-            },function(errorResult){
+            }, function (errorResult) {
 
                 expect(errorResult.indexOf('No message found for key')).toEqual(0);
             });
@@ -102,7 +102,7 @@ describe('catI18nLocaleService', function () {
     describe('testHasMessage', function () {
 
         it('should return whether the message exists or not', function () {
-            var result = catI18nMessageSourceService.hasMessage('cc.catalysts.general.new','de');
+            var result = catI18nMessageSourceService.hasMessage('cc.catalysts.general.new', 'de');
             expect(result).toBeDefined();
 
             result.then(function (actualResult) {
@@ -126,7 +126,6 @@ describe('catI18nLocaleService', function () {
 
 
     });
-
 
 
 });

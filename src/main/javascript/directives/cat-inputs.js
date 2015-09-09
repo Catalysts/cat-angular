@@ -24,10 +24,10 @@ angular.module('cat.directives.inputs', [])
         };
     })
 
-/**
- * @ngdoc directive
- * @name cat.directives.inputs:catInputGroup
- */
+    /**
+     * @ngdoc directive
+     * @name cat.directives.inputs:catInputGroup
+     */
     .directive('catInputGroup', function CatInputGroupDirective() {
         return {
             restrict: 'A',

@@ -27,15 +27,15 @@ angular.module('cat.service.search', [])
             return '';
         };
     })
-/**
- * @ngdoc service
- * @name cat.service.search:catSearchService
- * @requires cat.service.search:catUrlEncodingService
- * @module cat.service.search
- *
- * @descripton
- * A helper service which encapsulates several operations which can be performed on a cat.SearchRequest
- */
+    /**
+     * @ngdoc service
+     * @name cat.service.search:catSearchService
+     * @requires cat.service.search:catUrlEncodingService
+     * @module cat.service.search
+     *
+     * @descripton
+     * A helper service which encapsulates several operations which can be performed on a cat.SearchRequest
+     */
     .service('catSearchService', function ($location, catUrlEncodingService) {
 
         var _encodeSort = function (_sort) {

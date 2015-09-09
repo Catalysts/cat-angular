@@ -161,7 +161,7 @@ function CatViewConfigService($q, catApiService, catListDataLoadingService) {
         return catListDataLoadingService.resolve(config.endpoint || name, config.defaultSort);
     }
 
-    this.getListConfig = function(config) {
+    this.getListConfig = function (config) {
         var name = toLowerCaseName(config.name);
 
         var deferredConfig = $q.defer();

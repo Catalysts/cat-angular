@@ -106,24 +106,24 @@ angular.module('cat.service.i18n', ['cat.service.i18n.message'])
         var result = _.template(message, parameters || {}, {interpolate: /{{([\s\S\d]+?)}}/g});
 
         // lodash >=3
-        if(_.isFunction(result)) {
+        if (_.isFunction(result)) {
             return result();
         }
         return result;  // lodash <3
     })
 
 
-/**
- * @ngdoc service
- * @name cat.service.i18n:catI18nService
- * @service
- *
- * @description
- * A service to translate message keys to messages of specific locales
- *
- * @param {object} $q DOCTODO
- * @param {object} catI18nMessageSourceService DOCTODO
- * @param {object} catI18nMessageParameterResolver DOCTODO
- * @constructor
- */
+    /**
+     * @ngdoc service
+     * @name cat.service.i18n:catI18nService
+     * @service
+     *
+     * @description
+     * A service to translate message keys to messages of specific locales
+     *
+     * @param {object} $q DOCTODO
+     * @param {object} catI18nMessageSourceService DOCTODO
+     * @param {object} catI18nMessageParameterResolver DOCTODO
+     * @constructor
+     */
     .service('catI18nService', ['$q', '$log', 'catI18nMessageSourceService', 'catI18nMessageParameterResolver', CatI18nService]);

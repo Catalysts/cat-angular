@@ -17,13 +17,13 @@ angular.module('cat.service.validation', ['cat.service.message'])
  */
     .value('catValidations', {fieldErrors: {}})
 
-/**
- * @ngdoc service
- * @name cat.service.validation:catValidationService
- *
- * @description
- * Service which maps the 'fieldErrors' list recieved from the backend to a usable map for the client
- */
+    /**
+     * @ngdoc service
+     * @name cat.service.validation:catValidationService
+     *
+     * @description
+     * Service which maps the 'fieldErrors' list recieved from the backend to a usable map for the client
+     */
     .service('catValidationService', function CatErrorHttpInterceptor($globalMessages, catValidations) {
         this.updateFromRejection = function (rejection) {
             delete catValidations.global;
@@ -45,24 +45,24 @@ angular.module('cat.service.validation', ['cat.service.message'])
 
         };
 
-        this.clearValidationErrors = function() {
+        this.clearValidationErrors = function () {
             delete catValidations.global;
             catValidations.fieldErrors = {};
         };
 
-        this.hasGlobalErrors = function() {
+        this.hasGlobalErrors = function () {
             return !!catValidations.global;
         };
 
-        this.getGlobalErrors = function() {
+        this.getGlobalErrors = function () {
             return catValidations.global;
         };
 
-        this.hasFieldErrors = function(fieldName) {
+        this.hasFieldErrors = function (fieldName) {
             return !!catValidations.fieldErrors[fieldName];
         };
 
-        this.getFieldErrors = function(fieldName) {
+        this.getFieldErrors = function (fieldName) {
             return catValidations.fieldErrors[fieldName];
         };
     });

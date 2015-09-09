@@ -66,7 +66,7 @@ describe('CatBreadcrumbsService', function () {
         expect(catBreadcrumbsService.length()).toBe(10);
 
         for (i = 0; i < 10; i++) {
-            expectBreadcrumbToBe(i, 9-i);
+            expectBreadcrumbToBe(i, 9 - i);
         }
     });
 

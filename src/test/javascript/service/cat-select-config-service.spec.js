@@ -42,7 +42,11 @@ describe('CatSelectConfigService', function () {
             }
         };
 
-        expect(catSelectConfigService.getConfig('select2', defaults).endpoint).toEqual({name: 'test', count: 10, sort: 'desc'});
+        expect(catSelectConfigService.getConfig('select2', defaults).endpoint).toEqual({
+            name: 'test',
+            count: 10,
+            sort: 'desc'
+        });
     });
 
 });

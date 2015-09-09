@@ -9,11 +9,11 @@ describe('CatUrlResolverService', function () {
     var urlResolverService;
     var config = {
         endpoint: {
-            getEndpointName: function() {
+            getEndpointName: function () {
                 return 'endpoint';
             },
             parentEndpoint: {
-                getEndpointName: function() {
+                getEndpointName: function () {
                     return 'parentEndpoint';
                 }
             }
@@ -34,8 +34,8 @@ describe('CatUrlResolverService', function () {
 
     describe('getTabTemplateTestWithoutParents', function () {
 
-        it('has to return correct tabTemplate', function(){
-           var result = urlResolverService.getTabTemplate('tab',config);
+        it('has to return correct tabTemplate', function () {
+            var result = urlResolverService.getTabTemplate('tab', config);
             expect(result).toBeDefined();
 
         });
@@ -44,8 +44,8 @@ describe('CatUrlResolverService', function () {
 
     describe('getTabTemplateTestWithParents', function () {
 
-        it('has to return correct tabTemplate', function(){
-            var result = urlResolverService.getTabTemplate('tab',config);
+        it('has to return correct tabTemplate', function () {
+            var result = urlResolverService.getTabTemplate('tab', config);
             expect(result).toBeDefined();
 
         });

@@ -39,7 +39,7 @@ describe('catI18nLocaleService', function () {
 
     });
 
-    describe('getCurrentLocale', function(){
+    describe('getCurrentLocale', function () {
 
         it('should return current locale id', function () {
             var result = catI18nLocaleService.getCurrentLocale();
@@ -48,7 +48,7 @@ describe('catI18nLocaleService', function () {
 
     });
 
-    describe('getDefaultLocale', function(){
+    describe('getDefaultLocale', function () {
 
         it('should return default locale id', function () {
             var result = catI18nLocaleService.getDefaultLocale();

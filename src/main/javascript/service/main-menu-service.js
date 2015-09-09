@@ -47,7 +47,7 @@ function MenuGroup(groupId, options, parent) {
         return false;
     };
 
-    this.isSubMenu = function() {
+    this.isSubMenu = function () {
         return (_options.displayAsSubMenu === true);
     };
 }
@@ -93,9 +93,9 @@ function Menu(menuId, options) {
         return _.flatten([_menuEntries, _.map(this.getGroups(), function (group) {
             if (group.getOptions().displayAsSubMenu === true) {
                 group.subEntries = group.getEntries();
-                return[group];
+                return [group];
             } else {
-                return[group, group.getEntries()];
+                return [group, group.getEntries()];
             }
         })]);
     };

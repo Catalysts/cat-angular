@@ -1,11 +1,11 @@
 /**
  * Created by Mustafa on 05.08.2015.
  */
-angular.module('cat.url.resolver.service', []).service('urlResolverService', function(){
+angular.module('cat.url.resolver.service', []).service('urlResolverService', function () {
 
     'use strict';
 
-    this.getTabTemplate = function(tab, config){
+    this.getTabTemplate = function (tab, config) {
 
         var parentUrl = config.endpoint.getEndpointName();
         var parentTemplateNamePrefix = config.endpoint.getEndpointName();

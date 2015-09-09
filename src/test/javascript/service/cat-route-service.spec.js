@@ -12,14 +12,15 @@ describe('CatRouteServiceProvider', function () {
         module('cat.service.route');
     });
 
-    it('returns right URL from listAndDetailRoute', function(){
-        module(function(catRouteServiceProvider) {
+    it('returns right URL from listAndDetailRoute', function () {
+        module(function (catRouteServiceProvider) {
             catRouteServiceProvider.listAndDetailRoute('root', 'Folder');
         });
 
-        inject(function(catRouteService) {});
+        inject(function (catRouteService) {
+        });
 
-        inject(function ($state)  {
+        inject(function ($state) {
             var abstractState = $state.get('Folder');
             expect(abstractState).not.toBeNull();
             expect(abstractState.url).toEqual('root/folders');

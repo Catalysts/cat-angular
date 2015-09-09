@@ -11,7 +11,7 @@ angular.module('cat.directives.menu', ['cat.service.menu', 'cat.service.elementV
                 restrict: 'E',
                 scope: {},
                 link: function CatMainMenuLink(scope) {
-                    scope.getMenus = function() {
+                    scope.getMenus = function () {
                         return $mainMenu.getMenus();
                     };
 

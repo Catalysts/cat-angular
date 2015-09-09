@@ -21,19 +21,19 @@ describe('CatI18nService', function () {
     });
 
     it('should fail when message key doesnt exist', function () {
-         catI18nService.translate('hello').then(function(msg) {
-             throw new Error('key should not exist');
-         }, function(err) {
-             expect(err).toBeDefined();
-         });
+        catI18nService.translate('hello').then(function (msg) {
+            throw new Error('key should not exist');
+        }, function (err) {
+            expect(err).toBeDefined();
+        });
 
-         $rootScope.$digest();
+        $rootScope.$digest();
     });
 
     it('should translate an existing message key', function () {
-        catI18nService.translate('cc.catalysts.general.new', {}, 'en').then(function(msg) {
+        catI18nService.translate('cc.catalysts.general.new', {}, 'en').then(function (msg) {
             expect(msg).toBe('New');
-        }, function(err) {
+        }, function (err) {
             throw err;
         });
 
@@ -41,9 +41,13 @@ describe('CatI18nService', function () {
     });
 
     it('should translate an existing message key with parameters', function () {
-        catI18nService.translate('cc.catalysts.cat-paginated.itemsFound', {count: 10, firstResult: 1, lastResult: 10}, 'en').then(function(msg) {
+        catI18nService.translate('cc.catalysts.cat-paginated.itemsFound', {
+            count: 10,
+            firstResult: 1,
+            lastResult: 10
+        }, 'en').then(function (msg) {
             expect(msg).toBe('10 entries found. Entries 1-10');
-        }, function(err) {
+        }, function (err) {
             throw err;
         });
 
@@ -51,9 +55,9 @@ describe('CatI18nService', function () {
     });
 
     it('should tell me that a key exists', function () {
-        catI18nService.canTranslate('cc.catalysts.general.new').then(function(result) {
+        catI18nService.canTranslate('cc.catalysts.general.new').then(function (result) {
             expect(result).toBe(true);
-        }, function(err) {
+        }, function (err) {
             throw err;
         });
 

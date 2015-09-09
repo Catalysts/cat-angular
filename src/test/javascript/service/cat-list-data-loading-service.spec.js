@@ -40,11 +40,11 @@ describe('CatListDataLoadingService', function () {
     it('should update the properties', function () {
         var paginatedTestData = {totalCount: 2, elements: testData};
         $httpBackend.expectGET('/api/test?page=0&size=100').respond(paginatedTestData);
-        catListDataLoadingService.load(catApiService.test, new window.cat.SearchRequest()).then(function(result) {
+        catListDataLoadingService.load(catApiService.test, new window.cat.SearchRequest()).then(function (result) {
             expect(result.count).toBe(2);
             expect(result.firstResult).toBe(1);
             expect(result.lastResult).toBe(2);
-        }, function(err) {
+        }, function (err) {
             throw err;
         });
 
@@ -54,11 +54,11 @@ describe('CatListDataLoadingService', function () {
     it('should update the properties and use sorting settings', function () {
         var paginatedTestData = {totalCount: 2, elements: testData};
         $httpBackend.expectGET('/api/test?page=0&size=100&sort=name:desc').respond(paginatedTestData);
-        catListDataLoadingService.resolve('test', {property: 'name', isDesc: true}).then(function(result) {
+        catListDataLoadingService.resolve('test', {property: 'name', isDesc: true}).then(function (result) {
             expect(result.count).toBe(2);
             expect(result.firstResult).toBe(1);
             expect(result.lastResult).toBe(2);
-        }, function(err) {
+        }, function (err) {
             throw err;
         });
 

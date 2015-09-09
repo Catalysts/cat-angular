@@ -16,56 +16,56 @@ angular.module('cat.service.loading', ['angularSpinner'])
         'CAT_LOADING_SERVICE_DEFAULTS',
         function CatLoadingService($rootScope, $timeout, usSpinnerService, CAT_LOADING_SERVICE_DEFAULTS) {
             var that = this;
-        var activeCount = 0;
-        var startTime;
-        var startTimer, stopTimer;
+            var activeCount = 0;
+            var startTime;
+            var startTimer, stopTimer;
 
-        this.start = function () {
-            if (!activeCount && !startTimer) {
-                if (!!stopTimer) {
-                    $timeout.cancel(stopTimer);
-                    stopTimer = undefined;
+            this.start = function () {
+                if (!activeCount && !startTimer) {
+                    if (!!stopTimer) {
+                        $timeout.cancel(stopTimer);
+                        stopTimer = undefined;
+                    }
+                    startTimer = $timeout(function () {
+                        usSpinnerService.spin('loading-spinner');
+                        $rootScope.loading = true;
+                        startTime = new Date().getTime();
+                    }, CAT_LOADING_SERVICE_DEFAULTS.timeout);
                 }
-                startTimer = $timeout(function () {
-                    usSpinnerService.spin('loading-spinner');
-                    $rootScope.loading = true;
-                    startTime = new Date().getTime();
-                }, CAT_LOADING_SERVICE_DEFAULTS.timeout);
-            }
-            activeCount++;
-        };
+                activeCount++;
+            };
 
-        this.stop = function () {
-            activeCount--;
-            if (!activeCount && !stopTimer) {
-                if (!!startTimer) {
-                    $timeout.cancel(startTimer);
-                    startTimer = undefined;
+            this.stop = function () {
+                activeCount--;
+                if (!activeCount && !stopTimer) {
+                    if (!!startTimer) {
+                        $timeout.cancel(startTimer);
+                        startTimer = undefined;
+                    }
+                    var now = new Date().getTime();
+                    var stopTimeout = CAT_LOADING_SERVICE_DEFAULTS.timeout + (Math.max((CAT_LOADING_SERVICE_DEFAULTS.animationDuration - (now - startTime)), 0));
+                    stopTimer = $timeout(function () {
+                        usSpinnerService.stop('loading-spinner');
+                        $rootScope.loading = false;
+                    }, stopTimeout);
                 }
-                var now = new Date().getTime();
-                var stopTimeout = CAT_LOADING_SERVICE_DEFAULTS.timeout + (Math.max((CAT_LOADING_SERVICE_DEFAULTS.animationDuration - (now - startTime)), 0));
-                stopTimer = $timeout(function () {
-                    usSpinnerService.stop('loading-spinner');
-                    $rootScope.loading = false;
-                }, stopTimeout);
-            }
-        };
+            };
 
             var stateChangeInProgress = false;
 
-        $rootScope.$on('$stateChangeStart', function (event) {
-            if (!stateChangeInProgress) {
-                that.start();
-                stateChangeInProgress = true;
-            }
+            $rootScope.$on('$stateChangeStart', function () {
+                if (!stateChangeInProgress) {
+                    that.start();
+                    stateChangeInProgress = true;
+                }
 
-        });
-        $rootScope.$on('$stateChangeSuccess', function (event) {
-            that.stop();
-            stateChangeInProgress = false;
-        });
-        $rootScope.$on('$stateChangeError', function (event) {
-            that.stop();
-            stateChangeInProgress = false;
-        });
-    }]);
+            });
+            $rootScope.$on('$stateChangeSuccess', function () {
+                that.stop();
+                stateChangeInProgress = false;
+            });
+            $rootScope.$on('$stateChangeError', function () {
+                that.stop();
+                stateChangeInProgress = false;
+            });
+        }]);

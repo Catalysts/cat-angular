@@ -45,10 +45,10 @@ describe('CatViewConfigService', function () {
                     endpoint: mockEndpoint,
                     endpointname: mockEndpoint,
                     parent1: {
-                        res: function() {
+                        res: function () {
                             return {
                                 parent2: {
-                                    res: function() {
+                                    res: function () {
                                         return {
                                             endpointname: childMockeEndpoint
                                         };

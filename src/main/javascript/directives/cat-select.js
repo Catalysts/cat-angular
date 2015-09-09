@@ -37,14 +37,14 @@ function CatSelectController($scope, $log, catApiService, catSelectConfigService
     var transport,
         quietMillis,
         searchRequestFunc = options.search || function (term, page) {
-            return {
-                'search.name': term,
-                page: page
-            };
-        },
+                return {
+                    'search.name': term,
+                    page: page
+                };
+            },
         filterFunc = options.filter || function (term) {
-            return true;
-        };
+                return true;
+            };
     if (_.isArray(options.endpoint)) {
         transport = function (queryParams) {
             return queryParams.success({
