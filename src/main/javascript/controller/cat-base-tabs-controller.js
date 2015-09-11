@@ -16,7 +16,7 @@
  * @param {Object} catElementVisibilityService The visibility service to check wheter or not a tab should be rendered
  * @param {Object} config The config as handled by state resolve
  */
-function CatBaseTabsController($scope, $controller, $stateParams, $location, catElementVisibilityService, config, urlResolverService) {
+function CatBaseTabsController($scope, $controller, $stateParams, $location, catElementVisibilityService, config, urlResolverService, catI18nService, $q) {
     var endpoint = config.endpoint;
 
     $scope.tabs = _.filter(config.tabs, function (tab) {
@@ -60,8 +60,27 @@ function CatBaseTabsController($scope, $controller, $stateParams, $location, cat
         }
     });
 
+    var tabNamePromises = {};
+
     $scope.getTabName = function (tab) {
-        return window.cat.util.pluralize(window.cat.util.capitalize(tab));
+        var i18n = tab.i18n || ('cc.catalysts.cat-tab.' + tab.name);
+        var key = i18n + ';;' + tab.name + ';;' + tab.$$hashKey;
+
+        if (!tabNamePromises[key]) {
+            var defer = $q.defer();
+            var promise = tabNamePromises[key] = defer.promise;
+
+            catI18nService.translate(i18n).then(
+                function (translated) {
+                    promise.value = translated;
+                },
+                function () {
+                    promise.value = window.cat.util.pluralize(window.cat.util.capitalize(tab.name));
+                }
+            );
+        }
+
+        return tabNamePromises[key];
     };
 
     _.forEach($scope.tabs, function (tab) {
