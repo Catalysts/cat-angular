@@ -1,6 +1,9 @@
 'use strict';
 
-angular.module('cat.directives.messages')
+angular.module('cat.directives.messages', [
+    'cat.config.messages',
+    'cat.service.validation'
+])
 
 /**
  * @ngdoc directive
@@ -11,8 +14,7 @@ angular.module('cat.directives.messages')
             restrict: 'A',
             templateUrl: 'template/cat-messages.tpl.html',
             scope: {
-                type: '=?',
-                context: '=?'
+                type: '=?'
             },
             require: '?^^catValidationGroup',
             link: function (scope, elem, attr, catValidationGroupCtrl) {

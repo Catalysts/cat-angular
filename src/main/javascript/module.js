@@ -20,7 +20,6 @@ angular.module('cat.service', [
 
 angular.module('cat.controller', ['cat.controller.base.detail', 'cat.controller.base.list']);
 
-angular.module('cat.directives.messages', ['cat.service.validation']);
 angular.module('cat.directives.validation', ['cat.service.validation']);
 
 

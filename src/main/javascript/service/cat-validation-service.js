@@ -59,7 +59,8 @@ angular.module('cat.service.validation', [
             catValidationContexts[uuid] = {
                 uuid: uuid,
                 global: undefined,
-                fieldErrors: {}
+                fieldErrors: {},
+                knownFields: []
             };
             return uuid;
         };
@@ -69,12 +70,34 @@ angular.module('cat.service.validation', [
         };
 
         this.updateFromRejection = function (rejection) {
-            var context = undefined;
+            var context;
             if (!!rejection.config) {
                 context = rejection.config.catValidationContext;
             }
 
             var validations = this.getValidations(context);
+
+            var fieldErrors = validations.fieldErrors = {};
+
+            if (!!rejection.data.fieldErrors) {
+                // group by field
+                _.forEach(rejection.data.fieldErrors, function (fieldError) {
+                    // Allow config to switch between displaying errors at the field and displaying errors at known fields or globally
+                    if (catMessagesConfig.knownFieldsActive === true) {
+                        // If the error is for a known field, show the error at the field.
+                        // If not, display it as a global error.
+                        if (_.indexOf(validations.knownFields, fieldError.field) > -1) {
+                            fieldErrors[fieldError.field] = fieldErrors[fieldError.field] || [];
+                            fieldErrors[fieldError.field].push(fieldError.message);
+                        } else {
+                            rejection.data.globalErrors.push(fieldError.message);
+                        }
+                    } else {
+                        fieldErrors[fieldError.field] = fieldErrors[fieldError.field] || [];
+                        fieldErrors[fieldError.field].push(fieldError.message);
+                    }
+                });
+            }
 
             if (!!rejection.data.globalErrors) {
                 validations.global = rejection.data.globalErrors;
@@ -82,17 +105,6 @@ angular.module('cat.service.validation', [
                 // TODO is this also context dependend? or even necessary?
                 $globalMessages.addMessages('error', rejection.data.globalErrors, context);
             }
-
-            var fieldErrors = validations.fieldErrors = {};
-
-            if (!!rejection.data.fieldErrors) {
-                // group by field
-                _.forEach(rejection.data.fieldErrors, function (fieldError) {
-                    fieldErrors[fieldError.field] = fieldErrors[fieldError.field] || [];
-                    fieldErrors[fieldError.field].push(fieldError.message);
-                });
-            }
-
         };
 
         this.clearValidationErrors = function (context) {

@@ -1,6 +1,8 @@
 'use strict';
 
-angular.module('cat.service.message', [])
+angular.module('cat.service.message', [
+    'cat.config.messages'
+])
 
 /**
  * @ngdoc service
