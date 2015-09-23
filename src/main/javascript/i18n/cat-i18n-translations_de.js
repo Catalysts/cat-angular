@@ -14,5 +14,7 @@ _.assign(window.cat.i18n.de, {
     'cc.catalysts.general.delete': 'Löschen',
     'cc.catalysts.general.copy': 'Kopieren',
     'cc.catalysts.general.save': 'Speichern',
-    'cc.catalysts.general.cancel': 'Abbrechen'
+    'cc.catalysts.general.cancel': 'Abbrechen',
+    'cc.catalysts.cat-breadcrumbs.entry.home': 'Zuhause',
+    'cc.catalysts.cat-breadcrumbs.entry.edit': 'Bearbeiten'
 });
