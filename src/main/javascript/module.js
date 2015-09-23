@@ -34,7 +34,8 @@ angular.module('cat.directives', [
     'cat.directives.facets',
     'cat.directives.sortable',
     'cat.directives.form',
-    'cat.directives.numbersOnly'
+    'cat.directives.numbersOnly',
+    'cat.directives.breadcrumbs'
 ]);
 
 angular.module('cat', [
