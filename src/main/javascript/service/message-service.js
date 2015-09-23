@@ -1,10 +1,12 @@
 'use strict';
 
+angular.module('cat.service.message', [])
+
 /**
  * @ngdoc service
  * @name cat.service.message:$globalMessages
  */
-angular.module('cat.service.message', []).service('$globalMessages', function CatGlobalMessages($rootScope) {
+    .service('$globalMessages', function CatGlobalMessages($rootScope) {
     var messages = {};
 
     var self = this;

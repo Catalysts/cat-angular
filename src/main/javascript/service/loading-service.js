@@ -1,14 +1,16 @@
 'use strict';
 
-/**
- * @ngdoc service
- * @name cat.service.loading:loadingService
- */
 angular.module('cat.service.loading', ['angularSpinner'])
+
     .constant('CAT_LOADING_SERVICE_DEFAULTS', {
         timeout: 50,
         animationDuration: 200
     })
+    
+/**
+ * @ngdoc service
+ * @name cat.service.loading:loadingService
+ */
     .service('loadingService', [
         '$rootScope',
         '$timeout',

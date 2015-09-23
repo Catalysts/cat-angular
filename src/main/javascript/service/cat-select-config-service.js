@@ -1,6 +1,5 @@
 'use strict';
 
-
 function assignDeep(target, source) {
     return _.assign(target, source, function (targetProperty, sourceProperty) {
         if (_.isObject(targetProperty) && _.isObject(sourceProperty)) {

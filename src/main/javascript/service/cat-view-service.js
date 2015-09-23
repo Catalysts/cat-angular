@@ -1,5 +1,11 @@
 'use strict';
 
+angular.module('cat.service.view', [
+        'cat.service.api',
+        'cat.service.route',
+        'cat.service.view.config'
+    ])
+
 /**
  * @ngdoc service
  * @name cat.service.view:catViewService
@@ -13,6 +19,8 @@
  * @param {CatApiServiceProvider} catApiServiceProvider DOCTODO
  * @constructor
  */
+    .provider('catViewService', CatViewServiceProvider);
+
 function CatViewServiceProvider(catRouteServiceProvider, catApiServiceProvider) {
     var viewNames = [];
     var endpointNames = [];
@@ -62,10 +70,3 @@ function CatViewServiceProvider(catRouteServiceProvider, catApiServiceProvider) 
         };
     };
 }
-
-angular.module('cat.service.view',
-    [
-        'cat.service.api',
-        'cat.service.route',
-        'cat.service.view.config'
-    ]).provider('catViewService', CatViewServiceProvider);
