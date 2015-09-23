@@ -12,6 +12,7 @@ _.assign(window.cat.i18n.en, {
     'cc.catalysts.general.new': 'New',
     'cc.catalysts.general.edit': 'Edit',
     'cc.catalysts.general.delete': 'Delete',
+    'cc.catalysts.general.copy': 'Copy',
     'cc.catalysts.general.save': 'Save',
     'cc.catalysts.general.cancel': 'Cancel'
 });

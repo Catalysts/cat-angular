@@ -168,6 +168,18 @@ function CatApiEndpoint(url, endpointConfig, $http, catConversionService, catSea
         });
     };
 
+    /**
+     * This method makes a GET request to the url available via #getEndpointUrl with the addition of '/copy' and the provided id at the end.
+     * @param id the id which will be appended as '/copy/:id' to the url
+     * @return {object} a promise wrapping a new instance of the configured model initialized with the data retrieved
+     * from the backend
+     */
+    this.copy = function (id) {
+        return $http.get(_endpointUrl + '/copy/' + id).then(function (response) {
+            return _mapResponse(response.data);
+        });
+    };
+
 
     /**
      * This method makes a GET the url available via #getEndpointUrl with the addition of the provided id at the end + the

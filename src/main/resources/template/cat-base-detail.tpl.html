@@ -11,6 +11,11 @@
                     <span class="glyphicon glyphicon-trash"></span>
                     <span cat-i18n="cc.catalysts.general.delete">Delete</span>
                 </button>
+                <button type="button" class="btn btn-xs btn-default" cat-confirm-click cat-on-confirm="copy()"
+                        cat-element-visible="cat.base.copy" cat-element-data="config">
+                    <span class="glyphicon glyphicon-duplicate"></span>
+                    <span cat-i18n="cc.catalysts.general.copy">Copy</span>
+                </button>
                 <button type="button" class="btn btn-xs btn-default" ng-click="edit()"
                         cat-element-visible="cat.base.edit" cat-element-data="config"
                         cat-activate-on-shortcut="alt+e"><span class="glyphicon glyphicon-edit"></span>
