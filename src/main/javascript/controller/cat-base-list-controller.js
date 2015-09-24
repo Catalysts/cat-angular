@@ -1,5 +1,6 @@
 'use strict';
 
+angular.module('cat.controller.base.list', ['cat.service.breadcrumbs'])
 
 /**
  * @ngdoc controller
@@ -26,6 +27,8 @@
  * @param {object} catListDataLoadingService catListDataLoadingService
  * @param {object} config holds data like the listData object, the template url, base url, the model constructor, etc.
  */
+    .controller('CatBaseListController', ['$scope', '$state', '$controller', '$log', 'catBreadcrumbsService', 'catListDataLoadingService', 'config', CatBaseListController]);
+
 function CatBaseListController($scope, $state, $controller, $log, catBreadcrumbsService, catListDataLoadingService, config) {
     if (!_.isUndefined(config.listData)) {
         this.titleKey = 'cc.catalysts.cat-breadcrumbs.entry.' + config.listData.endpoint.getEndpointName();
@@ -73,8 +76,3 @@ function CatBaseListController($scope, $state, $controller, $log, catBreadcrumbs
         $log.info('Couldn\'t instantiate controller with name ' + config.controller);
     }
 }
-
-
-angular.module('cat.controller.base.list', ['cat.service.breadcrumbs'])
-    .controller('CatBaseListController',
-    ['$scope', '$state', '$controller', '$log', 'catBreadcrumbsService', 'catListDataLoadingService', 'config', CatBaseListController]);

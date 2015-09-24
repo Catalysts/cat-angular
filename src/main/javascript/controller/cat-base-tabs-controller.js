@@ -1,5 +1,10 @@
 'use strict';
 
+angular.module('cat.controller.base.tabs', [
+    'cat.service.elementVisibility',
+    'cat.url.resolver.service'
+])
+    
 /**
  * @ngdoc controller
  * @name cat.controller.base.tabs:CatBaseTabsController
@@ -16,6 +21,8 @@
  * @param {Object} catElementVisibilityService The visibility service to check wheter or not a tab should be rendered
  * @param {Object} config The config as handled by state resolve
  */
+    .controller('CatBaseTabsController', CatBaseTabsController);
+
 function CatBaseTabsController($scope, $controller, $stateParams, $location, catElementVisibilityService, config, urlResolverService) {
     var endpoint = config.endpoint;
 
@@ -144,9 +151,3 @@ function CatBaseTabsController($scope, $controller, $stateParams, $location, cat
         }
     }];
 }
-
-angular
-    .module('cat.controller.base.tabs', [
-        'cat.service.elementVisibility',
-        'cat.url.resolver.service'
-    ]).controller('CatBaseTabsController', CatBaseTabsController);

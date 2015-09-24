@@ -1,5 +1,12 @@
 'use strict';
 
+angular.module('cat.service.breadcrumbs', [])
+
+/**
+ * @ngdoc overview
+ * @name cat.service.breadcrumbs:catBreadcrumbs
+ */
+    .value('catBreadcrumbs', [])
 
 /**
  * @ngdoc service
@@ -13,6 +20,8 @@
  *
  * @constructor
  */
+    .service('catBreadcrumbsService', CatBreadcrumbsService);
+
 function CatBreadcrumbsService(catBreadcrumbs, $state) {
     var that = this;
 
@@ -110,12 +119,3 @@ function CatBreadcrumbsService(catBreadcrumbs, $state) {
         return uiStack;
     };
 }
-
-angular.module('cat.service.breadcrumbs', [])
-
-/**
- * @ngdoc overview
- * @name cat.service.breadcrumbs:catBreadcrumbs
- */
-    .value('catBreadcrumbs', [])
-    .service('catBreadcrumbsService', CatBreadcrumbsService);
