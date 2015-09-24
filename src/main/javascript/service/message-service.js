@@ -1,10 +1,20 @@
 'use strict';
 
+angular.module('cat.service.message', [])
+
 /**
  * @ngdoc service
  * @name cat.service.message:$globalMessages
  */
-angular.module('cat.service.message', []).service('$globalMessages', function CatGlobalMessages($rootScope) {
+    .service('$globalMessages', function CatGlobalMessages($rootScope) {
+
+    function Message(data) {
+        data = data || {};
+        this.text = data.text || '';
+        this.type = data.type;
+        this.timeToLive = data.timeToLive || 0;
+    }
+
     var messages = {};
 
     var self = this;
@@ -14,7 +24,9 @@ angular.module('cat.service.message', []).service('$globalMessages', function Ca
             return [];
         }
 
-        return messages[type];
+        return _.map(messages[type], function (message) {
+            return message.text;
+        });
     };
 
     this.hasMessages = function (type) {
@@ -34,7 +46,15 @@ angular.module('cat.service.message', []).service('$globalMessages', function Ca
         messages[type] = [];
     };
 
-    this.addMessage = function (type, message) {
+    this.clearDeadMessages = function () {
+        for (var type in messages) {
+            messages[type] = _.filter(messages[type], function (message) {
+                return message.timeToLive > 0;
+            });
+        }
+    };
+
+    this.addMessage = function (type, message, flash) {
         if (!type) {
             return;
         }
@@ -43,7 +63,19 @@ angular.module('cat.service.message', []).service('$globalMessages', function Ca
             self.clearMessages(type);
         }
 
-        messages[type].push(message);
+        messages[type].push(new Message({
+            text: message,
+            type: type,
+            timeToLive: flash ? 1 : 0
+        }));
+    };
+
+    this.decreaseTimeToLive = function () {
+        for (var type in messages) {
+            _.forEach(messages[type], function (message) {
+                message.timeToLive--;
+            });
+        }
     };
 
     this.addMessages = function (type, messages) {
@@ -68,6 +100,7 @@ angular.module('cat.service.message', []).service('$globalMessages', function Ca
     };
 
     $rootScope.$on('$stateChangeSuccess', function () {
-        self.clearMessages();
+        self.clearDeadMessages();
+        self.decreaseTimeToLive();
     });
 });
