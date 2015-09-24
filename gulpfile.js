@@ -57,9 +57,7 @@ var config = {
         dist: 'dist'
     },
     jshint: {
-        reporters: {
-            dev: 'jshint-stylish'
-        }
+        reporter: 'fail'
     },
     karma: {
         configFile: path.resolve('./karma.conf.js')
@@ -221,7 +219,7 @@ function jshint(src) {
     return function () {
         return gulp.src(src)
             .pipe(gulp.jshint())
-            .pipe(gulp.jshint.reporter(config.jshint.reporters.dev));
+            .pipe(gulp.jshint.reporter(config.jshint.reporter));
     };
 }
 
@@ -235,7 +233,7 @@ gulp.task('default', ['build']);
 gulp.task('bower-json', bowerJson);
 gulp.task('build', ['test', 'less2css', 'bower-json']);
 gulp.task('build-production', ['test-production', 'less2css', 'bower-json']);
-gulp.task('test', ['angular', 'bower-install'], test(false));
+gulp.task('test', ['jshint', 'angular', 'bower-install'], test(false));
 gulp.task('test-production', ['angular', 'bower-install'], test(false, true));
 gulp.task('test-watch', ['angular', 'bower-install'], test(true));
 gulp.task('angular', ['angular-js', 'angular-templates']);
