@@ -20,6 +20,7 @@ function CatApiEndpoint(url, endpointConfig, $http, catConversionService, catSea
     var config = endpointConfig.config;
     var _endpointUrl = url + (config.url || endpointConfig.name);
     var _childEndpointSettings = endpointConfig.children;
+    var _endpointListConfig = config.list || {};
 
     /**
      * This helper function initializes all configured child endpoints by creating the appropriate url by appending
@@ -126,10 +127,13 @@ function CatApiEndpoint(url, endpointConfig, $http, catConversionService, catSea
     };
 
     /**
-     * This function calls the url available via #getEndpointUrl without further modification apart from adding search
-     * parameters if the searchRequest parameter is provided. It can handle either an array response in which case all
-     * elements will be mapped to the appropriate configured model or a 'paginated' result in which case an object
-     * with totalCount, facests and elements will be returned.
+     * This function calls by default the url available via #getEndpointUrl without further modification apart from
+     * adding search parameters if the searchRequest parameter is provided. In addition an alternative  endpoint url can
+     * be configured with `endpoint.list.endpoint`, such that the request will be send to another endpoint url.
+     * (#getEndpointUrl + additional_url).
+     * It can handle either an array response in which case all elements will be
+     * mapped to the appropriate configured model or a 'paginated' result in which case an object with totalCount,
+     * facests and elements will be returned.
      *
      * @param {SearchRequest} [searchRequest] if given searchRequest#urlEncoded() will be added to the request url
      * @return {[{object}]|{totalCount: {Number}, facets: [{Facet}], elements: []}} a promise wrapping either a list of
@@ -137,7 +141,8 @@ function CatApiEndpoint(url, endpointConfig, $http, catConversionService, catSea
      * as well
      */
     this.list = function (searchRequest) {
-        return $http.get(_endpointUrl + _getSearchQuery(searchRequest)).then(function (response) {
+        var url = !!_endpointListConfig.endpoint ? _endpointListConfig.endpoint : '';
+        return $http.get(_endpointUrl + url + _getSearchQuery(searchRequest)).then(function (response) {
             return _mapResponse(response.data);
         });
     };
