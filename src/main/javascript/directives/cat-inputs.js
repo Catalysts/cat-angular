@@ -34,7 +34,8 @@ angular.module('cat.directives.inputs', [])
             transclude: true,
             scope: {
                 label: '@',
-                name: '@'
+                name: '@',
+                labelI18n: '@'
             },
             link: function CatInputGroupLink(scope, element) {
                 element.addClass('form-group');

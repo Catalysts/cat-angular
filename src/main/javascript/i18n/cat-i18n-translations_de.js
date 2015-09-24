@@ -12,6 +12,7 @@ _.assign(window.cat.i18n.de, {
     'cc.catalysts.general.new': 'Neu',
     'cc.catalysts.general.edit': 'Bearbeiten',
     'cc.catalysts.general.delete': 'Löschen',
+    'cc.catalysts.general.copy': 'Kopieren',
     'cc.catalysts.general.save': 'Speichern',
     'cc.catalysts.general.cancel': 'Abbrechen'
 });
