@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('cat.directives.inputs', [])
+angular.module('cat.directives.input', ['cat.directives.fieldErrors'])
 
 /**
  * @ngdoc directive
@@ -21,25 +21,5 @@ angular.module('cat.directives.inputs', [])
                     });
                 }
             }
-        };
-    })
-
-    /**
-     * @ngdoc directive
-     * @name cat.directives.inputs:catInputGroup
-     */
-    .directive('catInputGroup', function CatInputGroupDirective() {
-        return {
-            restrict: 'A',
-            transclude: true,
-            scope: {
-                label: '@',
-                name: '@',
-                labelI18n: '@'
-            },
-            link: function CatInputGroupLink(scope, element) {
-                element.addClass('form-group');
-            },
-            templateUrl: 'template/cat-input.tpl.html'
         };
     });
