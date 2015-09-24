@@ -57,7 +57,10 @@ var config = {
         dist: 'dist'
     },
     jshint: {
-        reporter: 'fail'
+        reporters: {
+            dev: 'jshint-stylish',
+            prod: 'fail'
+        }
     },
     karma: {
         configFile: path.resolve('./karma.conf.js')
@@ -215,17 +218,20 @@ var bowerInstall = function () {
     return gulp.bower();
 };
 
-function jshint(src) {
+function jshint(src, env) {
     return function () {
         return gulp.src(src)
             .pipe(gulp.jshint())
-            .pipe(gulp.jshint.reporter(config.jshint.reporter));
+            .pipe(gulp.jshint.reporter(config.jshint.reporters[env || 'dev']));
     };
 }
 
 gulp.task('jshint-main', jshint('<%= paths.src %>/**/*.js'));
 gulp.task('jshint-test', jshint('<%= paths.test %>/**/*.js'));
 gulp.task('jshint', ['jshint-main', 'jshint-test']);
+gulp.task('jshint-main-prod', jshint('<%= paths.src %>/**/*.js', 'prod'));
+gulp.task('jshint-test-prod', jshint('<%= paths.test %>/**/*.js', 'prod'));
+gulp.task('jshint-prod', ['jshint-main-prod', 'jshint-test-prod']);
 gulp.task('bower-install', bowerInstall);
 gulp.task('watch', ['angular'], watch);
 gulp.task('less2css', less2css);
@@ -233,8 +239,8 @@ gulp.task('default', ['build']);
 gulp.task('bower-json', bowerJson);
 gulp.task('build', ['test', 'less2css', 'bower-json']);
 gulp.task('build-production', ['test-production', 'less2css', 'bower-json']);
-gulp.task('test', ['jshint', 'angular', 'bower-install'], test(false));
-gulp.task('test-production', ['angular', 'bower-install'], test(false, true));
+gulp.task('test', ['angular', 'bower-install'], test(false));
+gulp.task('test-production', ['jshint-prod', 'angular', 'bower-install'], test(false, true));
 gulp.task('test-watch', ['angular', 'bower-install'], test(true));
 gulp.task('angular', ['angular-js', 'angular-templates']);
 gulp.task('angular-js', ['jshint'], angularJs);
