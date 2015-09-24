@@ -5,8 +5,8 @@
  * @name cat.directives.menu:catLoadMore
  */
 angular.module('cat.directives.menu', ['cat.service.menu', 'cat.service.elementVisibility'])
-    .directive('catMainMenu', ['$mainMenu', 'catElementVisibilityService',
-        function CatMainMenuDirective($mainMenu, catElementVisibilityService) {
+    .directive('catMainMenu', ['$mainMenu', 'catElementVisibilityService', '$location',
+        function CatMainMenuDirective($mainMenu, catElementVisibilityService, $location) {
             return {
                 restrict: 'E',
                 scope: {},
@@ -30,6 +30,10 @@ angular.module('cat.directives.menu', ['cat.service.menu', 'cat.service.elementV
                             return catElementVisibilityService.isVisible('cat.menu.entry', entry);
                         }
                         return visible;
+                    };
+
+                    scope.isActive = function (path) {
+                        return $location.path().substr(0, path.length) === path;
                     };
                 },
                 templateUrl: 'template/cat-main-menu.tpl.html'
