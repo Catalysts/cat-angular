@@ -28,7 +28,7 @@ var lodash = require('lodash');
 var lazypipe = require('lazypipe');
 var rimraf = require('rimraf');
 var request = require('request');
-var PusherClient = require('pusher-client');
+var webjarDeploy = require('./bower-webjar-deploy.js');
 
 var license = '/*!\n ' +
     '* Copyright 2014-2015 the original author or authors.\n ' +
@@ -345,34 +345,7 @@ gulp.task('release-push', ['release-push-dist'], function (cb) {
     });
 });
 
-var webjarPusherKey = '4a4afe0fcb8715518169';
-
-gulp.task('release-webjar', [], function (cb) {
-    var pusherClient = new PusherClient(webjarPusherKey);
-    var channelId = 'cat-angular-' + getVersion() + '_' + new Date().getTime();
-    var channel = pusherClient.subscribe(channelId);
-    channel.bind('update', function (data) {
-        gulp.util.log(data);
-    });
-    channel.bind('success', function (data) {
-        gulp.util.log(data);
-        cb();
-    });
-    channel.bind('failure', function (data) {
-        gulp.util.log('Received failure during webjar deploy!');
-        cb(data);
-    });
-
-    gulp.util.log('Starting webjar deploy');
-
-    request.post('http://www.webjars.org/_bower/deploy?name=cat-angular&version=' + getVersion() + '&channelId=' + channelId,
-        function (error) {
-            if (!!error) {
-                gulp.util.log('Post request for webjar deploy failed!');
-                cb(error);
-            }
-        });
-});
+webjarDeploy('cat-angular', getVersion, {taskName: 'release-webjar'});
 
 function runTaskFunction(task) {
     return function () {
