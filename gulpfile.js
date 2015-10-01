@@ -23,7 +23,7 @@ var q = require('q');
 var prettyTime = require('pretty-hrtime');
 var path = require('path');
 var mergeStream = require('merge-stream');
-var karma_server = require('karma').server;
+var KarmaServer = require('karma').Server;
 var lodash = require('lodash');
 var lazypipe = require('lazypipe');
 var rimraf = require('rimraf');
@@ -82,7 +82,7 @@ function template(templateString, data) {
             return template(temp, options);
         });
     }
-    return lodash.template(templateString, options);
+    return lodash.template(templateString)(options);
 }
 
 // add support for lodash templates
@@ -136,7 +136,8 @@ var test = function (watch, production) {
                 suite: ''
             };
         }
-        karma_server.start(lodash.assign(options, config.karma, {singleRun: !watch, autoWatch: watch}), cb);
+        new KarmaServer(lodash.assign(options, config.karma, {singleRun: !watch, autoWatch: watch}), cb)
+            .start();
     };
 };
 
@@ -151,16 +152,21 @@ var less2css = function () {
 };
 
 var _concatenateAndUglify = function (name) {
-    var jsFilter = gulp.filter('**/*.js');
+    var jsFilter;
 
     function applyJsFilter() {
+        jsFilter = gulp.filter('**/*.js', {restore: true});
         return jsFilter;
+    }
+
+    function restore() {
+        return jsFilter.restore;
     }
 
     return lazypipe()
         .pipe(applyJsFilter) // filter out '*.js.tpl' files
         .pipe(gulp.ngAnnotate, {gulpWarnings: false})
-        .pipe(jsFilter.restore) // restore all files
+        .pipe(restore) // restore all files
         .pipe(gulp.concat, name + '.js')
         .pipe(gulp.sourcemaps.write, '.', {sourceRoot: 'src'})
         .pipe(gulp.dest, config.paths.dist)
@@ -185,20 +191,20 @@ var angularJs = function () {
 };
 
 var angularTemplates = function () {
-    var htmlFilter = gulp.filter('**/*.html');
+    var htmlFilter = gulp.filter('**/*.html', {restore: true});
     var defaultJs = gulp.src(['src/main/util/tpl-header.js.tpl', '<%= paths.resources %>/**/*.html', 'src/main/util/tpl-footer.js.tpl'])
         .pipe(gulp.sourcemaps.init())
         .pipe(htmlFilter)
         .pipe(gulp.ngHtml2js({moduleName: 'cat.template', stripPrefix: 'resources/', declareModule: false}))
-        .pipe(htmlFilter.restore())
+        .pipe(htmlFilter.restore)
         .pipe(_concatenateAndUglify(config.pkg.name + '.tpl'));
 
-    var htmlFilter2 = gulp.filter('**/*.html');
+    var htmlFilter2 = gulp.filter('**/*.html', {restore: true});
     var requireJs = gulp.src(['src/main/util/tpl-header-require.js.tpl', '<%= paths.resources %>/**/*.html', 'src/main/util/tpl-footer-require.js.tpl'])
         .pipe(gulp.sourcemaps.init())
         .pipe(htmlFilter2)
         .pipe(gulp.ngHtml2js({moduleName: 'cat.template', stripPrefix: 'resources/', declareModule: false}))
-        .pipe(htmlFilter2.restore())
+        .pipe(htmlFilter2.restore)
         .pipe(_concatenateAndUglify(config.pkg.name + '-require.tpl'));
 
     return mergeStream(defaultJs, requireJs);
