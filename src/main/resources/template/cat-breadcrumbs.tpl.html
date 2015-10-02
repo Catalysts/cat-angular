@@ -1,0 +1,7 @@
+<ol class="breadcrumb">
+    <li ng-if="showHome()"><a ui-sref="{{homeState}}" cat-i18n="cc.catalysts.cat-breadcrumbs.entry.home">Home</a></li>
+    <li ng-class="{'active':$last}" ng-repeat="bc in breadcrumbs">
+        <a ng-if="!$last" ng-href="{{bc.url}}" cat-i18n="{{bc.key}}">{{bc.title}}</a>
+        <span ng-if="$last" cat-i18n="{{bc.key}}">{{bc.title}}</span>
+    </li>
+</ol>
