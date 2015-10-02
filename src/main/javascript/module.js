@@ -7,6 +7,7 @@ angular.module('cat.service', [
     'cat.service.elementVisibility',
     'cat.service.i18n',
     'cat.service.listDataLoading',
+    'cat.service.state',
     'cat.service.route',
     'cat.service.selectConfig',
     'cat.service.view',
@@ -16,6 +17,8 @@ angular.module('cat.service', [
     'cat.service.message',
     'cat.service.search'
 ]);
+
+angular.module('cat.service.state', ['ui.router']);
 
 angular.module('cat.controller', ['cat.controller.base.detail', 'cat.controller.base.list']);
 
