@@ -1,5 +1,21 @@
 'use strict';
 
+function CatValidationController($scope, catValidationService) {
+    var contextId = catValidationService.createContext();
+
+    /**
+     * Retuns the context identifier
+     * @returns {string} context identifier
+     */
+    this.getContextId = function () {
+        return contextId;
+    };
+
+    $scope.$on('$destroy', function () {
+        catValidationService.destroyContext(contextId);
+    });
+}
+
 angular.module('cat.directives.validation')
 
 /**
@@ -15,16 +31,6 @@ angular.module('cat.directives.validation')
             restrict: 'A',
             controllerAs: 'catValidationGroupCtrl',
             bindToController: true,
-            controller: function ($scope, catValidationService) {
-                var context = catValidationService.createContext();
-
-                this.getContext = function () {
-                    return context;
-                };
-
-                $scope.$on('$destroy', function () {
-                    catValidationService.destroyContext(context);
-                });
-            }
+            controller: ['$scope', 'catValidationService', CatValidationController]
         };
     });

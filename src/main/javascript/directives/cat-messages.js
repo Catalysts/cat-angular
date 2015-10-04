@@ -17,22 +17,22 @@ angular.module('cat.directives.messages', [
                 type: '=?'
             },
             require: '?^^catValidationGroup',
-            link: function (scope, elem, attr, catValidationGroupCtrl) {
+            link: function (scope, elem, attr, /* CatValidationController */ catValidationGroupCtrl) {
                 if (!!catValidationGroupCtrl) {
-                    scope.context = catValidationGroupCtrl.getContext();
+                    scope.contextId = catValidationGroupCtrl.getContextId();
                 }
             },
-            controller: function ($scope, catValidationService) {
+            controller: function ($scope, /* CatValidationService */ catValidationService) {
                 if (!$scope.type) {
                     $scope.type = 'error';
                 }
 
                 $scope.hasMessages = function () {
-                    return catValidationService.hasGlobalErrors($scope.context);
+                    return catValidationService.hasGlobalErrors($scope.contextId);
                 };
 
                 $scope.getMessages = function () {
-                    return catValidationService.getGlobalErrors($scope.context);
+                    return catValidationService.getGlobalErrors($scope.contextId);
                 };
             }
         };

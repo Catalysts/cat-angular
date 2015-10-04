@@ -16,17 +16,10 @@ angular.module('cat.directives.inputGroup', [])
                 labelI18n: '@'
             },
             require: '?^^catValidationGroup',
-            link: function CatInputGroupLink(scope, element, attr, catValidationGroupCtrl) {
+            link: function CatInputGroupLink(scope, element, attr, /* CatValidationController */ catValidationGroupCtrl) {
                 if (!!catValidationGroupCtrl && !!catValidationService) {
-                    var validations = catValidationService.getValidations(catValidationGroupCtrl.getContext());
-
-                    if (!!validations) {
-                        var knownFields = validations.knownFields;
-
-                        if (_.indexOf(knownFields, scope.name) === -1) {
-                            knownFields.push(scope.name);
-                        }
-                    }
+                    var context = catValidationService.getContext(catValidationGroupCtrl.getContextId());
+                    context.registerField(scope.name);
                 }
 
                 element.addClass('form-group');

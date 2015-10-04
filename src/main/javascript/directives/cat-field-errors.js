@@ -17,12 +17,12 @@ angular.module('cat.directives.fieldErrors', ['cat.service.validation'])
             require: ['catFieldErrors', '?^^catValidationGroup'],
             link: function (scope, elem, attr, controllers) {
                 var catFieldErrors = controllers[0];
-                var catValidationGroupCtrl = controllers[1];
+                var /* CatValidationController */ catValidationGroupCtrl = controllers[1];
                 if (!!catValidationGroupCtrl) {
-                    catFieldErrors.context = catValidationGroupCtrl.getContext();
+                    catFieldErrors.contextId = catValidationGroupCtrl.getContextId();
                 }
             },
-            controller: function CatFieldErrorsController($scope, catValidationService) {
+            controller: function CatFieldErrorsController($scope, /* CatValidationService */  catValidationService) {
                 var that = this;
 
                 if (angular.version.major === 1 && angular.version.minor === 2) {
@@ -32,11 +32,11 @@ angular.module('cat.directives.fieldErrors', ['cat.service.validation'])
                 }
 
                 this.hasErrors = function() {
-                    return catValidationService.hasFieldErrors(that.name, this.context);
+                    return catValidationService.hasFieldErrors(that.name, this.contextId);
                 };
 
                 this.getErrors = function() {
-                    return catValidationService.getFieldErrors(that.name, this.context);
+                    return catValidationService.getFieldErrors(that.name, this.contextId);
                 };
             },
             template: '<div class="label label-danger" ng-show="catFieldErrors.hasErrors()"><ul><li ng-repeat="error in catFieldErrors.getErrors()">{{error}}</li></ul></div>'
