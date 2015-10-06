@@ -14,5 +14,7 @@ _.assign(window.cat.i18n.en, {
     'cc.catalysts.general.delete': 'Delete',
     'cc.catalysts.general.copy': 'Copy',
     'cc.catalysts.general.save': 'Save',
-    'cc.catalysts.general.cancel': 'Cancel'
+    'cc.catalysts.general.cancel': 'Cancel',
+    'cc.catalysts.cat-breadcrumbs.entry.home': 'Home',
+    'cc.catalysts.cat-breadcrumbs.entry.edit': 'Edit'
 });
