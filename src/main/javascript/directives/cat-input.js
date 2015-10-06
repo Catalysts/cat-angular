@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('cat.directives.input', ['cat.directives.fieldErrors'])
+angular.module('cat.directives.inputs', [])
 
 /**
  * @ngdoc directive

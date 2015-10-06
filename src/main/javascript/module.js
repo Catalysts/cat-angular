@@ -1,3 +1,4 @@
+angular.module('cat.filters.replaceText', []);
 angular.module('cat.filters', ['cat.filters.replaceText']);
 
 angular.module('cat.service', [
@@ -18,6 +19,9 @@ angular.module('cat.service', [
 ]);
 
 angular.module('cat.controller', ['cat.controller.base.detail', 'cat.controller.base.list']);
+
+angular.module('cat.directives.validation', ['cat.service.validation']);
+
 
 angular.module('cat.directives', [
     'cat.directives.autofocus',

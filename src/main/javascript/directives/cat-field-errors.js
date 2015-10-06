@@ -8,13 +8,21 @@ angular.module('cat.directives.fieldErrors', ['cat.service.validation'])
     .directive('catFieldErrors', function CatFieldErrorsDirective() {
         return {
             replace: 'true',
-            restrict: 'E',
+            restrict: 'EA',
             scope: {
                 name: '@'
             },
             bindToController: true,
             controllerAs: 'catFieldErrors',
-            controller: function CatFieldErrorsController($scope, catValidationService) {
+            require: ['catFieldErrors', '?^^catValidationGroup'],
+            link: function (scope, elem, attr, controllers) {
+                var catFieldErrors = controllers[0];
+                var /* CatValidationController */ catValidationGroupCtrl = controllers[1];
+                if (!!catValidationGroupCtrl) {
+                    catFieldErrors.contextId = catValidationGroupCtrl.getContextId();
+                }
+            },
+            controller: function CatFieldErrorsController($scope, /* CatValidationService */  catValidationService) {
                 var that = this;
 
                 if (angular.version.major === 1 && angular.version.minor === 2) {
@@ -23,12 +31,12 @@ angular.module('cat.directives.fieldErrors', ['cat.service.validation'])
                     });
                 }
 
-                this.hasErrors = function () {
-                    return catValidationService.hasFieldErrors(that.name);
+                this.hasErrors = function() {
+                    return catValidationService.hasFieldErrors(that.name, this.contextId);
                 };
 
-                this.getErrors = function () {
-                    return catValidationService.getFieldErrors(that.name);
+                this.getErrors = function() {
+                    return catValidationService.getFieldErrors(that.name, this.contextId);
                 };
             },
             template: '<div class="label label-danger" ng-show="catFieldErrors.hasErrors()"><ul><li ng-repeat="error in catFieldErrors.getErrors()">{{error}}</li></ul></div>'
