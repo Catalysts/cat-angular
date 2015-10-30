@@ -14,8 +14,8 @@ angular.module('cat.directives.sortable', ['cat.directives.paginated'])
                 var property = attrs.catSortable || title.toLowerCase().trim();
                 var i18n = 'cc.catalysts.cat-sortable.sort.' + property;
 
-                if (!!attrs.i18n) {
-                    i18n = attrs.i18n;
+                if (!!attrs.catI18nKey) {
+                    i18n = attrs.catI18nKey;
                 }
 
                 // todo - make configurable

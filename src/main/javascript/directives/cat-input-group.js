@@ -13,7 +13,7 @@ angular.module('cat.directives.inputGroup', [])
             scope: {
                 label: '@',
                 name: '@',
-                labelI18n: '@'
+                catI18nKey: '@'
             },
             require: '?^^catValidationGroup',
             link: function CatInputGroupLink(scope, element, attr, /* CatValidationController */ catValidationGroupCtrl) {
