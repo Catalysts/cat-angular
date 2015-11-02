@@ -1,10 +1,10 @@
 'use strict';
 
-angular.module('cat.directives.inputs', [])
+angular.module('cat.directives.input', [])
 
 /**
  * @ngdoc directive
- * @name cat.directives.inputs:input
+ * @name cat.directives.input:input
  */
     .directive('input', function CatInputDirective() {
         return {
