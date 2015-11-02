@@ -6,6 +6,7 @@
  * @constructor
  */
 function ValidationContext(uuid) {
+    var that = this;
     this.uuid = uuid;
     this.global = undefined;
     this.fieldErrors = {};
@@ -16,13 +17,14 @@ function ValidationContext(uuid) {
      * @param {string} name name of the field
      */
     this.registerField = function (name) {
-        if (!_.contains(this.knownFields, name)) {
-            this.knownFields.push(name);
+        if (!_.contains(that.knownFields, name)) {
+            that.knownFields.push(name);
         }
     };
 }
 
 function CatValidationService($globalMessages, catValidations, catValidationContexts, catMessagesConfig) {
+    var that = this;
 
     /**
      * Returns the validations context for a specific context identifier.
@@ -65,7 +67,7 @@ function CatValidationService($globalMessages, catValidations, catValidationCont
             contextId = rejection.config.catValidationContextId;
         }
 
-        var context = this.getContext(contextId);
+        var context = that.getContext(contextId);
 
         var fieldErrors = context.fieldErrors = {};
 
@@ -99,26 +101,27 @@ function CatValidationService($globalMessages, catValidations, catValidationCont
     };
 
     this.clearValidationErrors = function (contextId) {
-        delete this.getContext(contextId).global;
-        this.getContext(contextId).fieldErrors = {};
+        var context = that.getContext(contextId);
+        delete context.global;
+        context.fieldErrors = {};
     };
 
     this.hasGlobalErrors = function (contextId) {
-        var globalErrors = this.getContext(contextId).global;
+        var globalErrors = that.getContext(contextId).global;
         return !!globalErrors && globalErrors.length > 0;
     };
 
     this.getGlobalErrors = function (contextId) {
-        return this.getContext(contextId).global;
+        return that.getContext(contextId).global;
     };
 
     this.hasFieldErrors = function (fieldName, contextId) {
-        var fieldErrors = this.getContext(contextId).fieldErrors[fieldName];
+        var fieldErrors = that.getContext(contextId).fieldErrors[fieldName];
         return !!fieldErrors && fieldErrors.length > 0;
     };
 
     this.getFieldErrors = function (fieldName, contextId) {
-        return this.getContext(contextId).fieldErrors[fieldName];
+        return that.getContext(contextId).fieldErrors[fieldName];
     };
 
     this.prepareConfig = function (contextId, config) {
