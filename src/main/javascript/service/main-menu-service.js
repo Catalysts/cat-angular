@@ -97,7 +97,7 @@ function Menu(menuId, options) {
             } else {
                 return [group, group.getEntries()];
             }
-        })]);
+        })], !!_.flattenDeep);
     };
 
     this.isMenu = function () {
