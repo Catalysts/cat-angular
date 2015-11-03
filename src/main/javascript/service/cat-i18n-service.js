@@ -103,7 +103,7 @@ angular.module('cat.service.i18n', ['cat.service.i18n.message'])
  * A function which accepts a message and parameters and returns the resolved message
  */
     .value('catI18nMessageParameterResolver', function (message, parameters) {
-        var result = _.template(message, parameters || {}, {interpolate: /{{([\s\S\d]+?)}}/g});
+        var result = _.template(message, null, {interpolate: /{{([\s\S\d]+?)}}/g})(parameters || {});
 
         // lodash >=3
         if (_.isFunction(result)) {
