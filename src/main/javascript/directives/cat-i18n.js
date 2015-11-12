@@ -5,7 +5,15 @@
  * @name cat.directives.i18n:catI18n
  */
 angular.module('cat.directives.i18n', ['cat.service.i18n'])
-    .directive('catI18n', ['$log', '$rootScope', 'catI18nService', function CatI18nDirective($log, $rootScope, catI18nService) {
+    .service('catI18nResponseHandler', ['$log', function CatI18nResponseHandler($log) {
+        this.handleTranslationSuccess = function (translation, scope, element) {
+            element.text(translation);
+        };
+        this.handleTranslationError = function (reason, scope, element) {
+            element.text('##missingkey: ' + scope.key);
+        };
+    }])
+    .directive('catI18n', ['$log', '$rootScope', 'catI18nService', 'catI18nResponseHandler', function catI18nDirective($log, $rootScope, catI18nService, catI18nResponseHandler) {
         function _translate(scope, element) {
             if (!scope.key) {
                 $log.warn('No key was given for cat-i18n!');
@@ -13,9 +21,9 @@ angular.module('cat.directives.i18n', ['cat.service.i18n'])
             }
             catI18nService.translate(scope.key, scope.params).then(
                 function (message) {
-                    element.text(message);
+                    catI18nResponseHandler.handleTranslationSuccess(message, scope, element);
                 }, function (reason) {
-                    // TODO - introduce a handler service for this case - eg show '##missingkey: somekey##'
+                    catI18nResponseHandler.handleTranslationError(reason, scope, element);
                 }
             );
         }
