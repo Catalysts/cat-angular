@@ -1,0 +1,5 @@
+<div class="alert alert-danger" ng-show="catGlobalErrors.hasErrors()">
+    <ul ng-class="catGlobalErrors.getErrors().length === 1 ? 'list-unstyled unstyled' : ''">
+        <li ng-repeat="error in catGlobalErrors.getErrors()">{{error}}</li>
+    </ul>
+</div>

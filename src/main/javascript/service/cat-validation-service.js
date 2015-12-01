@@ -23,7 +23,12 @@ function ValidationContext(uuid) {
     };
 }
 
-function CatValidationService($globalMessages, catValidations, catValidationContexts, catMessagesConfig) {
+function CatValidationService($log,
+                              $globalMessages,
+                              catValidations,
+                              catValidationContexts,
+                              catMessagesConfig,
+                              catI18nService) {
     var that = this;
 
     /**
@@ -71,7 +76,21 @@ function CatValidationService($globalMessages, catValidations, catValidationCont
 
         var fieldErrors = context.fieldErrors = {};
 
-        if (!!rejection.data.fieldErrors) {
+        var rejectionData = rejection.data;
+        context.global = undefined;
+
+        if (!rejectionData) {
+            $log.warn('Network error occurred');
+            $log.warn(rejection);
+            catI18nService
+                .translate('cc.catalysts.cat-validation-service.networkError')
+                .then(function(message) {
+                    context.global = [message];
+                });
+            return;
+        }
+
+        if (!!rejectionData.fieldErrors) {
             // group by field
             _.forEach(rejection.data.fieldErrors, function (fieldError) {
                 // Allow config to switch between displaying errors at the field and displaying errors at known fields or globally
@@ -92,7 +111,7 @@ function CatValidationService($globalMessages, catValidations, catValidationCont
             });
         }
 
-        if (!!rejection.data.globalErrors) {
+        if (!!rejectionData.globalErrors) {
             context.global = rejection.data.globalErrors;
 
             // TODO is this also context dependend? or even necessary?
@@ -150,7 +169,8 @@ function CatValidationService($globalMessages, catValidations, catValidationCont
  * module wrapping the validation logic
  */
 angular.module('cat.service.validation', [
-        'cat.service.message'
+        'cat.service.message',
+        'cat.service.i18n'
     ])
     /**
      * @ngdoc object
@@ -179,4 +199,12 @@ angular.module('cat.service.validation', [
      * have a 'context' parameter as the last parameter. If no context is provided the global context will be used,
      * otherwise the field error messages will be assigned to the specified context.
      */
-    .service('catValidationService', ['$globalMessages', 'catValidations', 'catValidationContexts', 'catMessagesConfig', CatValidationService]);
+    .service('catValidationService', [
+        '$log',
+        '$globalMessages',
+        'catValidations',
+        'catValidationContexts',
+        'catMessagesConfig',
+        'catI18nService',
+        CatValidationService
+    ]);

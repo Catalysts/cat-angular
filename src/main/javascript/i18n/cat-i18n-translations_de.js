@@ -17,5 +17,6 @@ _.assign(window.cat.i18n.de, {
     'cc.catalysts.general.cancel': 'Abbrechen',
     'cc.catalysts.cat-breadcrumbs.entry.home': 'Zuhause',
     'cc.catalysts.cat-breadcrumbs.entry.edit': 'Bearbeiten',
-    'cc.catalysts.cat-field-errors-info.text': 'Beim speichern ist ein Fehler aufgetreten. Bitte überprüfen Sie Ihre Eingabe.'
+    'cc.catalysts.cat-field-errors-info.text': 'Beim speichern ist ein Fehler aufgetreten. Bitte überprüfen Sie Ihre Eingabe.',
+    'cc.catalysts.cat-validation-service.networkError': 'Es ist ein Netzwerkfehler aufgetreten.'
 });

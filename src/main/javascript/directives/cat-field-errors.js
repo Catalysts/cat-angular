@@ -16,6 +16,8 @@ angular.module('cat.directives.fieldErrors', ['cat.service.validation'])
             controllerAs: 'catFieldErrors',
             require: ['catFieldErrors', '?^^catValidationGroup'],
             link: function (scope, elem, attr, controllers) {
+                elem.addClass('cat-field-errors');
+
                 var catFieldErrors = controllers[0];
                 var /* CatValidationController */ catValidationGroupCtrl = controllers[1];
                 if (!!catValidationGroupCtrl) {

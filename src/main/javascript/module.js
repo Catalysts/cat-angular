@@ -30,6 +30,7 @@ angular.module('cat.directives', [
     'cat.directives.elementVisible',
     'cat.directives.fieldErrors',
     'cat.directives.fieldErrors.info',
+    'cat.directives.globalErrors',
     'cat.directives.input',
     'cat.directives.inputGroup',
     'cat.directives.loadMore',

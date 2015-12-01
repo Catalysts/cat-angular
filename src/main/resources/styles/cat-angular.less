@@ -4,11 +4,15 @@
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=@{msOpacity})";
 }
 
-.cat-input + .label {
-  float: left;
-  margin-bottom: 4px;
+.cat-input + .cat-field-errors {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+  float: left;
+}
+
+.cat-field-errors {
+  display: inline-block;
+  margin-bottom: 4px;
   > ul {
     margin: 0;
     -webkit-padding-start: 0;
