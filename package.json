@@ -1,6 +1,7 @@
 {
   "name": "cat-angular",
   "version": "0.0.61",
+  "license": "Apache-2.0",
   "description": "Common Catalysts angular js code",
   "repository": {
     "type": "git",
