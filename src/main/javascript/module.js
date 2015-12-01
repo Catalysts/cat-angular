@@ -29,6 +29,7 @@ angular.module('cat.directives', [
     'cat.directives.confirmClick',
     'cat.directives.elementVisible',
     'cat.directives.fieldErrors',
+    'cat.directives.fieldErrors.info',
     'cat.directives.input',
     'cat.directives.inputGroup',
     'cat.directives.loadMore',

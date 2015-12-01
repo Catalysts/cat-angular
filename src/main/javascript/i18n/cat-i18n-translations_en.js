@@ -16,5 +16,6 @@ _.assign(window.cat.i18n.en, {
     'cc.catalysts.general.save': 'Save',
     'cc.catalysts.general.cancel': 'Cancel',
     'cc.catalysts.cat-breadcrumbs.entry.home': 'Home',
-    'cc.catalysts.cat-breadcrumbs.entry.edit': 'Edit'
+    'cc.catalysts.cat-breadcrumbs.entry.edit': 'Edit',
+    'cc.catalysts.cat-field-errors-info.text': 'Errors occured during save. Please verify your input.'
 });

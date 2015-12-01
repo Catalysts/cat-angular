@@ -39,6 +39,6 @@ angular.module('cat.directives.fieldErrors', ['cat.service.validation'])
                     return catValidationService.getFieldErrors(that.name, this.contextId);
                 };
             },
-            template: '<div class="label label-danger" ng-show="catFieldErrors.hasErrors()"><ul><li ng-repeat="error in catFieldErrors.getErrors()">{{error}}</li></ul></div>'
+            templateUrl: 'template/cat-field-errors.tpl.html'
         };
     });

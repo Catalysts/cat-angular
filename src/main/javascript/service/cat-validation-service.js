@@ -120,6 +120,11 @@ function CatValidationService($globalMessages, catValidations, catValidationCont
         return !!fieldErrors && fieldErrors.length > 0;
     };
 
+    this.hasAnyFieldErrors = function (contextId) {
+        var fieldErrors = that.getContext(contextId).fieldErrors;
+        return !_.$isEmpty(fieldErrors);
+    };
+
     this.getFieldErrors = function (fieldName, contextId) {
         return that.getContext(contextId).fieldErrors[fieldName];
     };
@@ -139,33 +144,33 @@ function CatValidationService($globalMessages, catValidations, catValidationCont
  * module wrapping the validation logic
  */
 angular.module('cat.service.validation', [
-    'cat.service.message'
-])
-/**
- * @ngdoc object
- * @name cat.service.validation:catValidations
- *
- * @description
- * value holding 'global' and 'field' errors
- */
+        'cat.service.message'
+    ])
+    /**
+     * @ngdoc object
+     * @name cat.service.validation:catValidations
+     *
+     * @description
+     * value holding 'global' and 'field' errors
+     */
     .value('catValidations', new ValidationContext())
 
-/**
- * @ngdoc object
- * @name cat.service.validation:catValidationContexts
- *
- * @description
- * value holding 'global' and 'field' errors
- */
+    /**
+     * @ngdoc object
+     * @name cat.service.validation:catValidationContexts
+     *
+     * @description
+     * value holding 'global' and 'field' errors
+     */
     .value('catValidationContexts', {})
 
-/**
- * @ngdoc service
- * @name cat.service.validation:catValidationService
- *
- * @description
- * Service which maps the 'fieldErrors' list recieved from the backend to a usable map for the client. All methods
- * have a 'context' parameter as the last parameter. If no context is provided the global context will be used,
- * otherwise the field error messages will be assigned to the specified context.
- */
+    /**
+     * @ngdoc service
+     * @name cat.service.validation:catValidationService
+     *
+     * @description
+     * Service which maps the 'fieldErrors' list recieved from the backend to a usable map for the client. All methods
+     * have a 'context' parameter as the last parameter. If no context is provided the global context will be used,
+     * otherwise the field error messages will be assigned to the specified context.
+     */
     .service('catValidationService', ['$globalMessages', 'catValidations', 'catValidationContexts', 'catMessagesConfig', CatValidationService]);
