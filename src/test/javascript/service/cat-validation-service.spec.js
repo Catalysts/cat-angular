@@ -46,7 +46,10 @@ describe('CatValidationService', function () {
         expect(catValidationService.getFieldErrors('password')).toContain('password too short');
         expect(catValidationService.getFieldErrors('password')).toContain('password must contain uppercase letters, lowercase letters and numbers');
 
+        expect(catValidationService.hasFieldErrors('password')).toBe(true);
         expect(catValidationService.hasFieldErrors('mail')).toBe(false);
+        expect(catValidationService.hasAnyFieldErrors()).toBe(true);
+        expect(catValidationService.hasErrors()).toBe(true);
 
         catValidationService.clearValidationErrors();
         expect(catValidationService.hasGlobalErrors()).toBe(false);
@@ -155,6 +158,8 @@ describe('CatValidationService', function () {
 
             expect(catValidationService.hasGlobalErrors(contextId)).toBe(false);
             expect(catValidationService.hasFieldErrors('name', contextId)).toBe(true);
+            expect(catValidationService.hasAnyFieldErrors(contextId)).toBe(true);
+            expect(catValidationService.hasErrors(contextId)).toBe(true);
         });
     });
 

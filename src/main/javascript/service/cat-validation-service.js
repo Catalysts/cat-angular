@@ -129,6 +129,12 @@ function CatValidationService($globalMessages, catValidations, catValidationCont
         return that.getContext(contextId).fieldErrors[fieldName];
     };
 
+    this.hasErrors = function (contextId) {
+        var hasGlobalErrors = this.hasGlobalErrors(contextId);
+        var hasFieldErrors = this.hasAnyFieldErrors(contextId);
+        return hasGlobalErrors || hasFieldErrors;
+    };
+
     this.prepareConfig = function (contextId, config) {
         return _.assign(config || {}, {
             catValidationContextId: contextId
