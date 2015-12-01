@@ -122,7 +122,7 @@ function CatValidationService($globalMessages, catValidations, catValidationCont
 
     this.hasAnyFieldErrors = function (contextId) {
         var fieldErrors = that.getContext(contextId).fieldErrors;
-        return !_.$isEmpty(fieldErrors);
+        return !_.isEmpty(fieldErrors);
     };
 
     this.getFieldErrors = function (fieldName, contextId) {
