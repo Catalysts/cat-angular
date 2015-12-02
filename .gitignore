@@ -8,5 +8,8 @@ coverage/
 .gradle/
 docs/
 
+**/typescript/**/*.js
+**/*.map
+
 test-results.xml
 *.iml

@@ -1,90 +1,106 @@
-'use strict';
-
 /**
  * Validation Context which holds all information about a validation context
- * @param {string} uuid context identifier (optional)
- * @constructor
  */
-function ValidationContext(uuid) {
-    var that = this;
-    this.uuid = uuid;
-    this.global = undefined;
-    this.fieldErrors = {};
-    this.knownFields = [];
+class ValidationContext {
+    global:Array<string>;
+    fieldErrors:Object = {};
+    knownFields:Array<string> = [];
+
+    /**
+     * @param uuid context identifier
+     */
+    constructor(public uuid?:string) {
+    }
 
     /**
      * Registers a field name to be a known field which is visible in the ui
      * @param {string} name name of the field
      */
-    this.registerField = function (name) {
-        if (!_.contains(that.knownFields, name)) {
-            that.knownFields.push(name);
+    registerField(name:string) {
+        if (this.knownFields.indexOf(name) === -1) {
+            this.knownFields.push(name);
         }
-    };
+    }
 }
 
-function CatValidationService($log,
-                              $globalMessages,
-                              catValidations,
-                              catValidationContexts,
-                              catMessagesConfig,
-                              catI18nService) {
-    var that = this;
+interface Rejection<T> {
+    config:any;
+    data:T;
+}
+
+interface CatFieldError {
+    field:string;
+    message:string;
+}
+
+interface CatRejectionData {
+    fieldErrors: Array<CatFieldError>;
+    globalErrors: Array<string>;
+}
+
+class CatValidationService {
+    constructor(private $log,
+                private $globalMessages:CatMessageService,
+                private catValidations,
+                private catValidationContexts,
+                private catMessagesConfig,
+                private catI18nService) {
+    }
 
     /**
      * Returns the validations context for a specific context identifier.
      * @param {string} contextId context identifier
      * @returns {ValidationContext} validation context
      */
-    this.getContext = function (contextId) {
+    getContext(contextId):ValidationContext {
         if (contextId !== undefined) {
-            var validations = catValidationContexts[contextId];
+            let validations = this.catValidationContexts[contextId];
             if (validations === undefined) {
-                throw new Error('Unknown contextId: ' + contextId);
+                throw new Error(`Unknown contextId: ${contextId}`);
             }
             return validations;
         } else {
-            return catValidations;
+            return this.catValidations;
         }
-    };
+    }
 
     /**
      * Creates a new validation context.
      * @returns {string} context identifier
      */
-    this.createContext = function () {
-        var uuid = window.cat.util.generateUUID();
-        catValidationContexts[uuid] = new ValidationContext(uuid);
+    createContext():string {
+        let uuid = cat.util.generateUUID();
+        this.catValidationContexts[uuid] = new ValidationContext(uuid);
         return uuid;
-    };
+    }
 
     /**
      * Removes/unregisters the context from the validation service.
      * @param contextId context context identifier
      */
-    this.destroyContext = function (contextId) {
-        delete catValidationContexts[contextId];
-    };
+    destroyContext(contextId:string) {
+        delete this.catValidationContexts[contextId];
+    }
 
-    this.updateFromRejection = function (rejection) {
-        var contextId;
+    updateFromRejection(rejection:Rejection<CatRejectionData>) {
+        let contextId;
         if (!!rejection.config) {
             contextId = rejection.config.catValidationContextId;
         }
 
-        var context = that.getContext(contextId);
+        let context:ValidationContext = this.getContext(contextId);
 
-        var fieldErrors = context.fieldErrors = {};
+        let fieldErrors = context.fieldErrors = {};
 
-        var rejectionData = rejection.data;
+        let rejectionData:CatRejectionData = rejection.data;
         context.global = undefined;
 
         if (!rejectionData) {
-            $log.warn('Network error occurred');
-            $log.warn(rejection);
-            catI18nService
+            this.$log.warn('Network error occurred');
+            this.$log.warn(rejection);
+            this.catI18nService
                 .translate('cc.catalysts.cat-validation-service.networkError')
-                .then(function(message) {
+                .then(function (message) {
                     context.global = [message];
                 });
             return;
@@ -92,12 +108,12 @@ function CatValidationService($log,
 
         if (!!rejectionData.fieldErrors) {
             // group by field
-            _.forEach(rejection.data.fieldErrors, function (fieldError) {
+            rejectionData.fieldErrors.forEach((fieldError:CatFieldError) => {
                 // Allow config to switch between displaying errors at the field and displaying errors at known fields or globally
-                if (catMessagesConfig.knownFieldsActive === true) {
+                if (this.catMessagesConfig.knownFieldsActive === true) {
                     // If the error is for a known field, show the error at the field.
                     // If not, display it as a global error.
-                    if (_.contains(context.knownFields, fieldError.field)) {
+                    if (context.knownFields.indexOf(fieldError.field) !== -1) {
                         fieldErrors[fieldError.field] = fieldErrors[fieldError.field] || [];
                         fieldErrors[fieldError.field].push(fieldError.message);
                     } else {
@@ -115,50 +131,50 @@ function CatValidationService($log,
             context.global = rejection.data.globalErrors;
 
             // TODO is this also context dependend? or even necessary?
-            $globalMessages.addMessages('error', rejection.data.globalErrors, context);
+            this.$globalMessages.addMessages('error', rejection.data.globalErrors);
         }
-    };
+    }
 
-    this.clearValidationErrors = function (contextId) {
-        var context = that.getContext(contextId);
-        delete context.global;
+    clearValidationErrors(contextId) {
+        let context = this.getContext(contextId);
+        context.global = undefined;
         context.fieldErrors = {};
-    };
+    }
 
-    this.hasGlobalErrors = function (contextId) {
-        var globalErrors = that.getContext(contextId).global;
+    hasGlobalErrors(contextId) {
+        let globalErrors = this.getContext(contextId).global;
         return !!globalErrors && globalErrors.length > 0;
-    };
+    }
 
-    this.getGlobalErrors = function (contextId) {
-        return that.getContext(contextId).global;
-    };
+    getGlobalErrors(contextId) {
+        return this.getContext(contextId).global;
+    }
 
-    this.hasFieldErrors = function (fieldName, contextId) {
-        var fieldErrors = that.getContext(contextId).fieldErrors[fieldName];
+    hasFieldErrors(fieldName, contextId) {
+        let fieldErrors = this.getContext(contextId).fieldErrors[fieldName];
         return !!fieldErrors && fieldErrors.length > 0;
-    };
+    }
 
-    this.hasAnyFieldErrors = function (contextId) {
-        var fieldErrors = that.getContext(contextId).fieldErrors;
+    hasAnyFieldErrors(contextId) {
+        let fieldErrors = this.getContext(contextId).fieldErrors;
         return !_.isEmpty(fieldErrors);
-    };
+    }
 
-    this.getFieldErrors = function (fieldName, contextId) {
-        return that.getContext(contextId).fieldErrors[fieldName];
-    };
+    getFieldErrors(fieldName, contextId) {
+        return this.getContext(contextId).fieldErrors[fieldName];
+    }
 
-    this.hasErrors = function (contextId) {
-        var hasGlobalErrors = this.hasGlobalErrors(contextId);
-        var hasFieldErrors = this.hasAnyFieldErrors(contextId);
+    hasErrors(contextId) {
+        let hasGlobalErrors = this.hasGlobalErrors(contextId);
+        let hasFieldErrors = this.hasAnyFieldErrors(contextId);
         return hasGlobalErrors || hasFieldErrors;
-    };
+    }
 
-    this.prepareConfig = function (contextId, config) {
+    prepareConfig(contextId, config) {
         return _.assign(config || {}, {
             catValidationContextId: contextId
         });
-    };
+    }
 }
 
 /**
@@ -201,10 +217,10 @@ angular.module('cat.service.validation', [
      */
     .service('catValidationService', [
         '$log',
-        '$globalMessages',
+        'CatMessageService',
         'catValidations',
         'catValidationContexts',
         'catMessagesConfig',
         'catI18nService',
-        CatValidationService
+        CatValidationService.prototype.constructor
     ]);
