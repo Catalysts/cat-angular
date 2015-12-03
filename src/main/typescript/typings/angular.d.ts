@@ -12,6 +12,10 @@ interface AngularModule {
     constant(name:string, value:any);
 }
 
+interface ServiceProvider<T> {
+    $get(injectable:Function|Array<string|Function>):T;
+}
+
 interface Angular {
     module(name:string, deps?:Array<string>):AngularModule;
 }
