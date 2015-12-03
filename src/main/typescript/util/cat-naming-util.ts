@@ -1,5 +1,3 @@
-'use strict';
-
 window.cat.util = window.cat.util || {};
 
 /**

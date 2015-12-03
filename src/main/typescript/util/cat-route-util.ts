@@ -2,8 +2,6 @@
  * Created by tscheinecker on 01.08.2014.
  */
 
-'use strict';
-
 window.cat.util = window.cat.util || {};
 
 window.cat.models = window.cat.models || {};
