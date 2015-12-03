@@ -69,7 +69,7 @@ class CatValidationService {
      * @returns {string} context identifier
      */
     createContext():string {
-        let uuid = cat.util.generateUUID();
+        let uuid = window.cat.util.generateUUID();
         this.catValidationContexts[uuid] = new ValidationContext(uuid);
         return uuid;
     }

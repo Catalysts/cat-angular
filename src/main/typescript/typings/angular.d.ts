@@ -1,6 +1,8 @@
 interface AngularModule {
     service(name:string, def:Array<string|Object>);
     service(name:string, def:Object);
+    provider(name:string, def:Array<string|Object>);
+    provider(name:string, def:Object);
     config(def:Array<string|Function>);
     config(fun:Function);
     run();

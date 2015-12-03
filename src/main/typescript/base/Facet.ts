@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  /**
  * @ngdoc function
@@ -15,13 +13,18 @@
  * returned from the server.
  * @constructor
  */
-window.cat.FacetTerm = function (data) {
-    if (data === undefined) data = {};
+export class FacetTerm {
+    id;
+    name:string;
+    count:number;
 
-    this.id = data.id;
-    this.name = data.name;
-    this.count = data.count;
-};
+    constructor(data:any = {}) {
+        this.id = data.id;
+        this.name = data.name;
+        this.count = data.count;
+    }
+
+}
 
 /**
  * @ngdoc overview
@@ -36,11 +39,17 @@ window.cat.FacetTerm = function (data) {
  * returned from the server.
  * @constructor
  */
-window.cat.Facet = function (data) {
-    if (data === undefined) data = {};
+export class Facet {
+    name:string;
+    terms:Array<FacetTerm>;
 
-    this.name = data.name;
-    this.terms = _.map(data.facets, function (facet) {
-        return new window.cat.FacetTerm(facet);
-    });
-};
+    constructor(data:any = {}) {
+        this.name = data.name;
+        this.terms = _.map(data.facets, function (facet) {
+            return new FacetTerm(facet);
+        });
+    }
+}
+
+window.cat.Facet = Facet.prototype.constructor;
+window.cat.FacetTerm = FacetTerm.prototype.constructor;

@@ -1,4 +1,12 @@
-'use strict';
+interface CatApiEndpointConfig {
+    name: string;
+}
+
+interface CatApiCustom {
+    get(url:string, searchRequest);
+    put(url:string, object);
+    post(url:string, object);
+}
 
 /**
  * @name CatApiEndpoint
@@ -13,14 +21,70 @@
  * @param {object} catSearchService the catSearchService for handling all operations concerning cat.uitl.SearchRequest objects
  * @constructor
  */
-function CatApiEndpoint(url, endpointConfig, $http, catConversionService, catSearchService) {
-    var that = this;
+class CatApiEndpoint {
+    _endpointName:string;
+    config:CatApiEndpointConfig;
+    _endpointUrl:string;
+    _childEndpointSettings;
+    _endpointListConfig;
 
-    var _endpointName = endpointConfig.name;
-    var config = endpointConfig.config;
-    var _endpointUrl = url + (config.url || endpointConfig.name);
-    var _childEndpointSettings = endpointConfig.children;
-    var _endpointListConfig = config.list || {};
+    /**
+     * Simple wrapper object which contains the custom get, put and post methods
+     * @type {{}}
+     */
+    custom:CatApiCustom;
+
+    constructor(url,
+                endpointConfig,
+                private $http,
+                private catConversionService,
+                private catSearchService) {
+        let config = endpointConfig.config;
+        this._endpointName = endpointConfig.name;
+        this._endpointUrl = `${url}${config.url || endpointConfig.name}`;
+        this._childEndpointSettings = endpointConfig.children;
+        this._endpointListConfig = config.list || {};
+
+
+        /**
+         * This method executes a GET request to the url available via #getEndpointUrl joined with the provided one.
+         * Be aware that the result of the promise will not be mapped to the configured model but instead will be passed on directly.
+         * @param url the url to be appended to the endpoint url
+         * @param searchRequest an optional cat.SearchRequest to be applied to the request
+         * @return {*} The promise returned by the $http.get call
+         */
+        let get = (url, searchRequest) => {
+            return this.$http.get([this._endpointUrl, url].join('/') + this._getSearchQuery(searchRequest));
+        };
+
+        /**
+         * This method executes a POST request to the url available via #getEndpointUrl joined with the provided one.
+         * Be aware that the result of the promise will not be mapped to the configured model but instead will be passed on directly.
+         * @param url the url to be appended to the endpoint url
+         * @param object hte object to send as payload - not that it will be used as is for this request
+         * @return {*} The promise returned by the $http.post call
+         */
+        let post = (url, object) => {
+            return this.$http.post([this._endpointUrl, url].join('/'), object);
+        };
+
+        /**
+         * This method executes a PUT request to the url available via #getEndpointUrl joined with the provided one.
+         * Be aware that the result of the promise will not be mapped to the configured model but instead will be passed on directly.
+         * @param url the url to be appended to the endpoint url
+         * @param object hte object to send as payload - not that it will be used as is for this request
+         * @return {*} The promise returned by the $http.put call
+         */
+        let put = (url, object) => {
+            return this.$http.put([this._endpointUrl, url].join('/'), object);
+        };
+
+        this.custom = {
+            get: get,
+            put: put,
+            post: post
+        };
+    }
 
     /**
      * This helper function initializes all configured child endpoints by creating the appropriate url by appending
@@ -28,23 +92,28 @@ function CatApiEndpoint(url, endpointConfig, $http, catConversionService, catSea
      * @return {object} a object holding all resolved child endpoints for the given id
      * @private
      */
-    var _res = _.memoize(function (id) {
-        var url = _endpointUrl + '/' + id + '/';
-        var ret = {};
-        _.forEach(_.keys(_childEndpointSettings), function (path) {
-            ret[path] = new CatApiEndpoint(url, _childEndpointSettings[path], $http, catConversionService, catSearchService);
-            ret[path].parentEndpoint = that;
+    private _res = _.memoize((id) => {
+
+        let url = this._endpointUrl + '/' + id + '/';
+        let ret = {};
+        _.forEach(_.keys(this._childEndpointSettings), (path:string) => {
+            ret[path] = new CatApiEndpoint(url,
+                this._childEndpointSettings[path],
+                this.$http,
+                this.catConversionService,
+                this.catSearchService);
+            ret[path].parentEndpoint = this;
             ret[path].parentId = id;
-            ret[path].parentInfo = function () {
-                return that.info(id);
+            ret[path].parentInfo = () => {
+                return this.info(id);
             };
         });
         return ret;
     });
 
-    var _addChildEndpoints = function (data) {
-        _.merge(data, _res(data.id));
-    };
+    private _addChildEndpoints(data):void {
+        _.merge(data, this._res(data.id));
+    }
 
     /**
      * This helper method initializes a new instance of the configured model with the given data and adds all child
@@ -54,23 +123,23 @@ function CatApiEndpoint(url, endpointConfig, $http, catConversionService, catSea
      * endpoints
      * @private
      */
-    var _mapResponse = function (data) {
-        var object = catConversionService.toClient(data, config);
+    private _mapResponse(data):any {
+        let object = this.catConversionService.toClient(data, this.config);
 
         if (!_.isUndefined(object.id)) {
-            _addChildEndpoints(object);
+            this._addChildEndpoints(object);
         }
 
         if (_.isArray(object)) {
-            _.forEach(object, _addChildEndpoints);
+            _.forEach(object, this._addChildEndpoints);
         }
 
         if (_.isArray(object.elements)) {
-            _.forEach(object.elements, _addChildEndpoints);
+            _.forEach(object.elements, this._addChildEndpoints);
         }
 
         return object;
-    };
+    }
 
     /**
      * This helper methods deletes all child endpoints from the given object.
@@ -78,13 +147,13 @@ function CatApiEndpoint(url, endpointConfig, $http, catConversionService, catSea
      * @return {object} the passed in object without the child endpoints
      * @private
      */
-    var _removeEndpoints = function (object) {
-        var endpoints = _res(object.id);
-        _.forEach(_.keys(endpoints), function (key) {
+    private _removeEndpoints(object):Object {
+        let endpoints = this._res(object.id);
+        _.forEach<string>(_.keys(endpoints), (key) => {
             delete object[key];
         });
         return object;
-    };
+    }
 
     /**
      * This helper method turns a cat.SearchRequest in to en url encoded search query
@@ -92,13 +161,13 @@ function CatApiEndpoint(url, endpointConfig, $http, catConversionService, catSea
      * @return {string} either the url encoded search query or an empty string if no search request is given or it is not a instance of cat.SearchRequest
      * @private
      */
-    var _getSearchQuery = function (searchRequest) {
+    private _getSearchQuery(searchRequest):string {
         if (!!searchRequest && searchRequest instanceof window.cat.SearchRequest) {
-            return '?' + catSearchService.encodeAsUrl(searchRequest);
+            return '?' + this.catSearchService.encodeAsUrl(searchRequest);
         }
 
         return '';
-    };
+    }
 
     /**
      * This method is used to instantiate actual child api endpoints which are dependent on a certain parent id
@@ -106,25 +175,25 @@ function CatApiEndpoint(url, endpointConfig, $http, catConversionService, catSea
      * @return {object} a object which maps all child endpoint names to the actual endpoints where the url was resolved
      * with the provided id
      */
-    this.res = function (id) {
-        return _res(id);
-    };
+    res(id):Object {
+        return this._res(id);
+    }
 
     /**
      * A small helper function to retrieve the actual url this endpoint resolved to.
      * @return {string} the resolved url of this endpoint
      */
-    this.getEndpointUrl = function () {
-        return _endpointUrl;
-    };
+    getEndpointUrl():string {
+        return this._endpointUrl;
+    }
 
     /**
      * A small helper to retrieve the name of the endpoint.
      * @return {string} the name of this endpoint
      */
-    this.getEndpointName = function () {
-        return _endpointName;
-    };
+    getEndpointName():string {
+        return this._endpointName;
+    }
 
     /**
      * This function calls by default the url available via #getEndpointUrl without further modification apart from
@@ -140,12 +209,12 @@ function CatApiEndpoint(url, endpointConfig, $http, catConversionService, catSea
      * instances of the configured model or a wrapper object which holds not only the list but pagination information
      * as well
      */
-    this.list = function (searchRequest) {
-        var url = !!_endpointListConfig.endpoint ? _endpointListConfig.endpoint : '';
-        return $http.get(_endpointUrl + url + _getSearchQuery(searchRequest)).then(function (response) {
-            return _mapResponse(response.data);
+    list(searchRequest) {
+        let url = !!this._endpointListConfig.endpoint ? this._endpointListConfig.endpoint : '';
+        return this.$http.get(this._endpointUrl + url + this._getSearchQuery(searchRequest)).then((response) => {
+            return this._mapResponse(response.data);
         });
-    };
+    }
 
     /**
      * A helper function which adds '/all' to the request url available via #getEndpointUrl and maps the response to
@@ -153,13 +222,13 @@ function CatApiEndpoint(url, endpointConfig, $http, catConversionService, catSea
      * @return [{object}] a promise wrapping an array of new instances of the configured model initialized with the data retrieved from
      * the backend
      */
-    this.all = function () {
-        return $http.get(_endpointUrl + '/all').then(function (response) {
-            return _.map(response.data, function (elem) {
-                return _mapResponse(elem);
+    all() {
+        return this.$http.get(this._endpointUrl + '/all').then((response) => {
+            return _.map(response.data, (elem) => {
+                return this._mapResponse(elem);
             });
         });
-    };
+    }
 
     /**
      * This method makes a GET request to the url available via #getEndpointUrl with the addition of the provided id at the end.
@@ -167,11 +236,11 @@ function CatApiEndpoint(url, endpointConfig, $http, catConversionService, catSea
      * @return {object} a promise wrapping a new instance of the configured model initialized with the data retrieved
      * from the backend
      */
-    this.get = function (id) {
-        return $http.get(_endpointUrl + '/' + id).then(function (response) {
-            return _mapResponse(response.data);
+    get(id) {
+        return this.$http.get(this._endpointUrl + '/' + id).then((response) => {
+            return this._mapResponse(response.data);
         });
-    };
+    }
 
     /**
      * This method makes a GET request to the url available via #getEndpointUrl with the addition of '/copy' and the provided id at the end.
@@ -179,11 +248,11 @@ function CatApiEndpoint(url, endpointConfig, $http, catConversionService, catSea
      * @return {object} a promise wrapping a new instance of the configured model initialized with the data retrieved
      * from the backend
      */
-    this.copy = function (id) {
-        return $http.get(_endpointUrl + '/copy/' + id).then(function (response) {
-            return _mapResponse(response.data);
+    copy(id) {
+        return this.$http.get(this._endpointUrl + '/copy/' + id).then((response) => {
+            return this._mapResponse(response.data);
         });
-    };
+    }
 
 
     /**
@@ -192,11 +261,11 @@ function CatApiEndpoint(url, endpointConfig, $http, catConversionService, catSea
      * @param id the id which will be appended as '/:id' to the url
      * @return {*} a promise wrapping the data retrieved from the backend
      */
-    this.info = function (id) {
-        return $http.get(_endpointUrl + '/' + id + '?info').then(function (response) {
+    info(id) {
+        return this.$http.get(this._endpointUrl + '/' + id + '?info').then((response) => {
             return response.data;
         });
-    };
+    }
 
 
     /**
@@ -208,65 +277,27 @@ function CatApiEndpoint(url, endpointConfig, $http, catConversionService, catSea
      * @return {object} a promise wrapping a new instance of the configured model initialized with the data retrieved
      * from the backend
      */
-    this.save = function (object) {
+    save(object) {
+        var t = _<number>([34, 342]).value();
         if (!!object.id) {
-            return $http.put(_endpointUrl + '/' + object.id, _removeEndpoints(object)).then(function (response) {
-                return _mapResponse(response.data);
+            return this.$http.put(this._endpointUrl + '/' + object.id, this._removeEndpoints(object)).then((response) => {
+                return this._mapResponse(response.data);
             });
         } else {
-            return $http.post(_endpointUrl, _removeEndpoints(object)).then(function (response) {
-                return _mapResponse(response.data);
+            return this.$http.post(this._endpointUrl, this._removeEndpoints(object)).then((response) => {
+                return this._mapResponse(response.data);
             });
         }
-    };
+    }
 
     /**
      * This method executes a DELETE request to the url available via #getEndpointUrl with the addition of the provided url at the end.
      * @param url the url to be appended to the endpoint url - usually only the id of the object to delete
      * @return {*} The promise returned by the $http 'DELETE' call
      */
-    this.remove = function (url) {
-        return $http({method: 'DELETE', url: _endpointUrl + '/' + url});
-    };
-
-    /**
-     * Simple wrapper object which contains the custom get, put and post methods
-     * @type {{}}
-     */
-    this.custom = {};
-
-    /**
-     * This method executes a GET request to the url available via #getEndpointUrl joined with the provided one.
-     * Be aware that the result of the promise will not be mapped to the configured model but instead will be passed on directly.
-     * @param url the url to be appended to the endpoint url
-     * @param searchRequest an optional cat.SearchRequest to be applied to the request
-     * @return {*} The promise returned by the $http.get call
-     */
-    this.custom.get = function (url, searchRequest) {
-        return $http.get([_endpointUrl, url].join('/') + _getSearchQuery(searchRequest));
-    };
-
-    /**
-     * This method executes a POST request to the url available via #getEndpointUrl joined with the provided one.
-     * Be aware that the result of the promise will not be mapped to the configured model but instead will be passed on directly.
-     * @param url the url to be appended to the endpoint url
-     * @param object hte object to send as payload - not that it will be used as is for this request
-     * @return {*} The promise returned by the $http.post call
-     */
-    this.custom.post = function (url, object) {
-        return $http.post([_endpointUrl, url].join('/'), object);
-    };
-
-    /**
-     * This method executes a PUT request to the url available via #getEndpointUrl joined with the provided one.
-     * Be aware that the result of the promise will not be mapped to the configured model but instead will be passed on directly.
-     * @param url the url to be appended to the endpoint url
-     * @param object hte object to send as payload - not that it will be used as is for this request
-     * @return {*} The promise returned by the $http.put call
-     */
-    this.custom.put = function (url, object) {
-        return $http.put([_endpointUrl, url].join('/'), object);
-    };
+    remove(url) {
+        return this.$http({method: 'DELETE', url: this._endpointUrl + '/' + url});
+    }
 }
 
 /**
@@ -284,11 +315,22 @@ function CatApiEndpoint(url, endpointConfig, $http, catConversionService, catSea
  * without the need to call the #child method manually - this works to arbitrary deps.
  * @constructor
  */
-function EndpointConfig(name, config) {
-    var that = this;
-    this.config = config || {};
-    this.children = {};
-    this.name = name;
+class EndpointConfig {
+
+    children:Object = {};
+
+    constructor(public name:string,
+                public config:any = {}) {
+
+        // this takes care of mapping the 'old' config style to the new builder style
+        if (!_.isUndefined(config.children)) {
+            let childrenConfig = config.children;
+            delete config.children;
+            _.forEach(_.keys(childrenConfig), (childName) => {
+                this.child(childName, childrenConfig[childName]);
+            });
+        }
+    }
 
     /**
      * This method method either returns or creates and returns a child api endpoint of the current one.
@@ -298,27 +340,21 @@ function EndpointConfig(name, config) {
      * parent property of the created config will point to the current config
      * @return {EndpointConfig} the child endpoint config with the given name
      */
-    this.child = function (childName, childConfig) {
+    child(childName, childConfig) {
         if (!_.isUndefined(childConfig)) {
             this.children[childName] = new EndpointConfig(childName, childConfig);
             this.children[childName].parent = this;
         }
 
         return this.children[childName];
-    };
-
-    // this takes care of mapping the 'old' config style to the new builder style
-    if (!_.isUndefined(this.config.children)) {
-        var childrenConfig = this.config.children;
-        delete this.config.children;
-        _.forEach(_.keys(childrenConfig), function (childName) {
-            that.child(childName, childrenConfig[childName]);
-        });
     }
 }
 
-function CatApiServiceProvider() {
-    var _endpoints = {};
+class CatApiServiceProvider {
+    private _endpoints = {};
+
+    constructor() {
+    }
 
     /**
      * This method is used to either create or retrieve named endpoint configurations.
@@ -326,50 +362,51 @@ function CatApiServiceProvider() {
      * @param {object} [settings] if given a new {EndpointConfig} will be created with the given settings
      * @return {EndpointConfig} the endpoint config for the given name
      */
-    this.endpoint = function (name, settings) {
+    endpoint = (name, settings) => {
         if (!_.isUndefined(settings)) {
-            _endpoints[name] = new EndpointConfig(name, settings);
+            this._endpoints[name] = new EndpointConfig(name, settings);
         }
-        return _endpoints[name];
+        return this._endpoints[name];
     };
 
+    /**
+     * @return {object} returns a map from names to CatApiEndpoints
+     */
+    private $getCatApiService($http, catConversionService, catSearchService, CAT_API_SERVICE_DEFAULTS) {
+        let catApiService:any = {};
 
-    this.$get = ['$http', 'catConversionService', 'catSearchService', 'CAT_API_SERVICE_DEFAULTS',
+        let dynamicEndpoints = {};
+
         /**
-         * @return {object} returns a map from names to CatApiEndpoints
+         * This method allows to define (dynamic) endpoints after the configuration phase.
+         * @param {string} name (optional the name of the api endpoint to create or retrieve the configuration for
+         * @param {object} [settings] if given a new {EndpointConfig} will be created with the given settings
+         * @returns {CatApiEndpoint}
          */
-            function $getCatApiService($http, catConversionService, catSearchService, CAT_API_SERVICE_DEFAULTS) {
-            var catApiService = {};
-
-            var dynamicEndpoints = {};
-
-            /**
-             * This method allows to define (dynamic) endpoints after the configuration phase.
-             * @param {string} name (optional the name of the api endpoint to create or retrieve the configuration for
-             * @param {object} [settings] if given a new {EndpointConfig} will be created with the given settings
-             * @returns {CatApiEndpoint}
-             */
-            catApiService.dynamicEndpoint = function (name, settings) {
-                if (typeof name === 'object' && _.isUndefined(settings)) {
-                    settings = name;
-                    name = settings.url;
+        catApiService.dynamicEndpoint = (name, settings) => {
+            if (typeof name === 'object' && _.isUndefined(settings)) {
+                settings = name;
+                name = settings.url;
+            }
+            if (_.isUndefined(dynamicEndpoints[name])) {
+                if (_.isUndefined(settings)) {
+                    throw new Error('Undefined dynamic endpoint settings');
                 }
-                if (_.isUndefined(dynamicEndpoints[name])) {
-                    if (_.isUndefined(settings)) {
-                        throw new Error('Undefined dynamic endpoint settings');
-                    }
-                    dynamicEndpoints[name] = new CatApiEndpoint(CAT_API_SERVICE_DEFAULTS.endpointUrlPrefix,
-                        new EndpointConfig(name, settings), $http, catConversionService, catSearchService);
-                }
-                return dynamicEndpoints[name];
-            };
+                dynamicEndpoints[name] = new CatApiEndpoint(CAT_API_SERVICE_DEFAULTS.endpointUrlPrefix,
+                    new EndpointConfig(name, settings), $http, catConversionService, catSearchService);
+            }
+            return dynamicEndpoints[name];
+        };
 
-            _.forEach(_.keys(_endpoints), function (path) {
-                catApiService[path] = new CatApiEndpoint(CAT_API_SERVICE_DEFAULTS.endpointUrlPrefix, _endpoints[path], $http, catConversionService, catSearchService);
-            });
+        _.forEach(_.keys(this._endpoints), (path) => {
+            catApiService[path] = new CatApiEndpoint(CAT_API_SERVICE_DEFAULTS.endpointUrlPrefix, this._endpoints[path], $http, catConversionService, catSearchService);
+        });
 
-            return catApiService;
-        }];
+        return catApiService;
+    }
+
+
+    $get = ['$http', 'catConversionService', 'catSearchService', 'CAT_API_SERVICE_DEFAULTS', this.$getCatApiService];
 }
 
 /**
