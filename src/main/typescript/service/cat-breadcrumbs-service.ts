@@ -1,5 +1,10 @@
 'use strict';
 
+interface CatBreadcrumb {
+    url: string;
+    title: string;
+    key?: string;
+}
 
 /**
  * @ngdoc service
@@ -13,62 +18,62 @@
  *
  * @constructor
  */
-function CatBreadcrumbsService(catBreadcrumbs, $state) {
-    var that = this;
+class CatBreadcrumbsService {
 
-    this.clear = function () {
-        catBreadcrumbs.length = 0;
-    };
+    constructor(private catBreadcrumbs:Array<CatBreadcrumb>,
+                private $state) {
 
-    this.set = function (bcs) {
-        that.clear();
-        _.forEach(bcs, function (bc) {
-            catBreadcrumbs.push(bc);
-        });
-    };
-
-    this.get = function () {
-        return catBreadcrumbs;
-    };
-
-    this.addFirst = function (entry) {
-        catBreadcrumbs.unshift(entry);
-    };
-
-    this.removeFirst = function () {
-        return catBreadcrumbs.shift();
-    };
-
-    this.push = function (entry) {
-        catBreadcrumbs.push(entry);
-    };
-
-    this.pop = function () {
-        return catBreadcrumbs.pop();
-    };
-
-    this.length = function () {
-        return catBreadcrumbs.length;
-    };
-
-    function capitalize(string) {
-        return string.charAt(0).toUpperCase() + string.substring(1);
     }
 
-    this.replaceLast = function (newVal) {
-        catBreadcrumbs[catBreadcrumbs.length - 1] = newVal;
-    };
+    clear() {
+        this.catBreadcrumbs.length = 0;
+    }
+
+    set(bcs:Array<CatBreadcrumb>) {
+        this.clear();
+        _.forEach(bcs, (bc) => {
+            this.catBreadcrumbs.push(bc);
+        });
+    }
+
+    get() {
+        return this.catBreadcrumbs;
+    }
+
+    addFirst(entry:CatBreadcrumb) {
+        this.catBreadcrumbs.unshift(entry);
+    }
+
+    removeFirst() {
+        return this.catBreadcrumbs.shift();
+    }
+
+    push(entry:CatBreadcrumb) {
+        this.catBreadcrumbs.push(entry);
+    }
+
+    pop() {
+        return this.catBreadcrumbs.pop();
+    }
+
+    length() {
+        return this.catBreadcrumbs.length;
+    }
+
+    replaceLast(newVal:CatBreadcrumb) {
+        this.catBreadcrumbs[this.catBreadcrumbs.length - 1] = newVal;
+    }
 
     /**
      * This method auto-generates the breadcrumbs from a given view configuration
      * @param {Object} config a config object as provided to CatBaseDetailController
      * @return {Array} an array which represents the 'ui stack' of directly related parents
      */
-    this.generateFromConfig = function (config) {
-        that.clear();
+    generateFromConfig(config) {
+        this.clear();
         var uiStack = [];
 
-        var currentState = $state.$current.parent;
+        var currentState = this.$state.$current.parent;
         var currentEndpoint = config.endpoint;
         var count = 0;
         var parents = '^';
@@ -77,9 +82,9 @@ function CatBreadcrumbsService(catBreadcrumbs, $state) {
             var stateName = currentState.name;
 
             if (!/\.tab$/g.test(stateName)) {
-                var href = $state.href(parents);
+                var href = this.$state.href(parents);
 
-                var breadcrumb = {};
+                var breadcrumb:CatBreadcrumb;
 
                 if (config.parents.length > count) {
                     var parent = config.parents[count++];
@@ -94,13 +99,13 @@ function CatBreadcrumbsService(catBreadcrumbs, $state) {
                     uiStack.unshift(breadcrumb);
                 } else {
                     breadcrumb = {
-                        title: capitalize(window.cat.util.pluralize(currentEndpoint.getEndpointName())),
+                        title: window.cat.util.capitalize(window.cat.util.pluralize(currentEndpoint.getEndpointName())),
                         key: 'cc.catalysts.cat-breadcrumbs.entry.' + currentEndpoint.getEndpointName(),
                         url: href
                     };
                 }
 
-                that.addFirst(breadcrumb);
+                this.addFirst(breadcrumb);
                 currentEndpoint = currentEndpoint.parentEndpoint;
             }
 
@@ -108,7 +113,7 @@ function CatBreadcrumbsService(catBreadcrumbs, $state) {
             parents += '.^';
         }
         return uiStack;
-    };
+    }
 }
 
 angular.module('cat.service.breadcrumbs', [])
