@@ -18,6 +18,7 @@
     "url": "https://github.com/Catalysts/cat-angular/issues"
   },
   "scripts": {
+    "postinstall": "tsd install",
     "test": "./node_modules/.bin/gulp test-production",
     "release-patch": "./node_modules/.bin/gulp release-patch",
     "release-minor": "./node_modules/.bin/gulp release-minor",
@@ -59,6 +60,8 @@
     "pusher-client": "=0.2.3",
     "q": "=1.4.1",
     "request": "=2.64.0",
-    "rimraf": "=2.4.3"
+    "rimraf": "=2.4.3",
+    "tsd": "^0.6.5",
+    "typescript": "^1.7.3"
   }
 }

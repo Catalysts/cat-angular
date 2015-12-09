@@ -10,6 +10,7 @@ docs/
 
 **/typescript/**/*.js
 **/*.map
+**/typings/*/*
 
 test-results.xml
 *.iml

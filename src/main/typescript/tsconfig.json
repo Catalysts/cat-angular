@@ -10,7 +10,7 @@
     "noImplicitAny": false,
     "rootDir": ".",
     "sourceMap": true,
-    "sourceRoot": "/",
+    "sourceRoot": "./",
     "target": "es5"
   }
 }

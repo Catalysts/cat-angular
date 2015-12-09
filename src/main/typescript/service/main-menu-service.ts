@@ -1,3 +1,4 @@
+import IServiceProvider = angular.IServiceProvider;
 interface IMenuEntry {
     completeId:string;
     getOptions():any;
@@ -86,7 +87,7 @@ class Menu implements IMenuEntry {
         }
     }
 
-    getGroups() {
+    getGroups():Array<MenuGroup> {
         return _.sortBy(_.map(this.menuGroups, (menuGroup:MenuGroup) => {
             return menuGroup;
         }), function (menuGroup:MenuGroup) {
@@ -104,7 +105,7 @@ class Menu implements IMenuEntry {
     }
 
     getFlattened() {
-        return _.flatten([this.menuEntries, _.map(this.getGroups(), (group) => {
+        return _.flatten<any>([this.menuEntries, _.map(this.getGroups(), (group:any) => {
             if (group.getOptions().displayAsSubMenu === true) {
                 group.subEntries = group.getEntries();
                 return [group];
@@ -162,7 +163,7 @@ class MenuBar {
  * @name cat.service.menu:$mainMenu
  * @constructor
  */
-class MainMenuProvider implements ServiceProvider<MenuBar> {
+class MainMenuProvider implements IServiceProvider {
     private mainMenu = new MenuBar('main.menu', {});
     menus = [];
     private _groups = [];
