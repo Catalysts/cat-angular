@@ -3,7 +3,7 @@
  */
 
 
-describe('CatGlobalMessages', function () {
+describe('CatMessageService', function () {
     'use strict';
 
     var catMessageService;

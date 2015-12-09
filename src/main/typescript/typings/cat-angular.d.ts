@@ -1,15 +1,10 @@
-interface CatMessageService {
-    addMessages(type:string, messages:Array<string>):void;
+interface CatRequestConfig extends IRequestConfig {
+    catValidationContextId?:string;
 }
 
-
-//
-//declare var cat:{
-//    SearchRequest:()=>any,
-//    util:{
-//        generateUUID():string;
-//    };
-//};
+interface CatHttpPromiseCallbackArg<T> extends IHttpPromiseCallbackArg<T> {
+    config?:CatRequestConfig;
+}
 
 interface Window {
     cat: any;

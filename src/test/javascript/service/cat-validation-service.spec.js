@@ -2,7 +2,7 @@ describe('CatValidationService', function () {
     'use strict';
 
     /**
-     * @type CatGlobalMessages
+     * @type CatMessageService
      */
     var $globalMessages;
 

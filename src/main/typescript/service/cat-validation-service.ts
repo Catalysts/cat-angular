@@ -1,3 +1,5 @@
+import IHttpPromiseCallbackArg = angular.IHttpPromiseCallbackArg;
+import IRequestConfig = angular.IRequestConfig;
 /**
  * Validation Context which holds all information about a validation context
  */
@@ -21,11 +23,6 @@ class ValidationContext {
             this.knownFields.push(name);
         }
     }
-}
-
-interface Rejection<T> {
-    config:any;
-    data:T;
 }
 
 interface CatFieldError {
@@ -82,7 +79,7 @@ class CatValidationService {
         delete this.catValidationContexts[contextId];
     }
 
-    updateFromRejection(rejection:Rejection<CatRejectionData>) {
+    updateFromRejection(rejection:CatHttpPromiseCallbackArg<CatRejectionData>) {
         let contextId;
         if (!!rejection.config) {
             contextId = rejection.config.catValidationContextId;
