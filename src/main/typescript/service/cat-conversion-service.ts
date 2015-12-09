@@ -1,4 +1,7 @@
-'use strict';
+interface CatConversionFunctions {
+    toClient(serverData?:any, context?:any):any;
+    toServer(clientData?:any, context?:any):any;
+}
 
 /**
  * @ngdoc service
@@ -10,14 +13,18 @@
  *
  * @constructor
  */
-function CatConversionService(catConversionFunctions) {
-    this.toClient = function (serverData, context) {
-        return catConversionFunctions.toClient(serverData, context);
-    };
+class CatConversionService {
 
-    this.toServer = function (clientData) {
-        return catConversionFunctions.toServer(clientData);
-    };
+    constructor(private catConversionFunctions:CatConversionFunctions) {
+    }
+
+    toClient(serverData, context) {
+        return this.catConversionFunctions.toClient(serverData, context);
+    }
+
+    toServer(clientData) {
+        return this.catConversionFunctions.toServer(clientData);
+    }
 }
 
 function _convertToClientModel(data, context) {
@@ -70,7 +77,6 @@ function _convertToClientData(serverData, context) {
 
     return serverData;
 }
-
 
 angular.module('cat.service.conversion', [])
 /**
