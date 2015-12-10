@@ -16,7 +16,7 @@ function CatViewConfigService($q, catApiService, catListDataLoadingService) {
         var detailPromise;
 
         var detailId = $stateParams.id;
-        if (detailId === 'new') {
+        if (detailId === 'new' || detailId === undefined) {
             detailPromise = $q.when(new Model());
         } else {
             detailPromise = endpoint.get(detailId);

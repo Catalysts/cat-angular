@@ -96,26 +96,26 @@ describe('CatViewConfigService', function () {
     describe('.getDetailConfig', function () {
 
         it('should correctly initialize name and model', function () {
-            testDetailConfig({name: 'Test', model: 'model'}, {}, function (config) {
+            testDetailConfig({name: 'Test', model: 'model'}, {id: 42}, function (config) {
                 expect(config.Model).toEqual('model');
                 expect(config.name).toEqual('Test');
             });
         });
 
         it('should correctly apply controller', function () {
-            testDetailConfig({name: 'Test', model: 'model', controller: 'CTRL'}, {}, function (config) {
+            testDetailConfig({name: 'Test', model: 'model', controller: 'CTRL'}, {id: 42}, function (config) {
                 expect(config.controller).toEqual('CTRL');
             });
         });
 
         it('should correctly apply default controller', function () {
-            testDetailConfig({name: 'Test', model: 'model'}, {}, function (config) {
+            testDetailConfig({name: 'Test', model: 'model'}, {id: 42}, function (config) {
                 expect(config.controller).toEqual('TestDetailsController');
             });
         });
 
         it('should apply correct endpoint', function () {
-            testDetailConfig({name: 'Test', model: 'model', endpoint: 'endpoint'}, {}, function (config) {
+            testDetailConfig({name: 'Test', model: 'model', endpoint: 'endpoint'}, {id: 42}, function (config) {
                 expect(config.endpoint).toEqual(mockEndpoint);
             });
         });
@@ -128,7 +128,7 @@ describe('CatViewConfigService', function () {
                 endpoint: {
                     name: 'endpointname'
                 }
-            }, {}, function (config) {
+            }, {id: 42}, function (config) {
                 expect(config.endpoint).toEqual(mockEndpoint);
             });
         });
@@ -143,6 +143,7 @@ describe('CatViewConfigService', function () {
                     parents: ['parent1', 'parent2']
                 }
             }, {
+                id: 42,
                 parent1Id: 1,
                 parent2Id: 2
             }, function (config) {
@@ -158,7 +159,7 @@ describe('CatViewConfigService', function () {
                 view: 'endpoint/endpoint-details-view.tpl.html'
             };
 
-            testDetailConfig({name: 'Test', model: 'model', endpoint: 'endpoint'}, {}, function (config) {
+            testDetailConfig({name: 'Test', model: 'model', endpoint: 'endpoint'}, {id: 42}, function (config) {
                 expect(config.templateUrls.view).toBe(resultObj.view);
                 expect(config.templateUrls.edit).toBe(resultObj.edit);
             });
@@ -177,7 +178,9 @@ describe('CatViewConfigService', function () {
                 model: 'model',
                 endpoint: 'endpoint',
                 additionalViewTemplate: true
-            }, {}, function (config) {
+            }, {
+                id: 42
+            }, function (config) {
                 expect(config.templateUrls.view.main).toBe(resultObj.view);
             });
 
@@ -187,7 +190,9 @@ describe('CatViewConfigService', function () {
                 endpoint: 'endpoint',
                 additionalViewTemplate: 'tabs',
                 additionalViewTemplateTabs: 'result'
-            }, {}, function (config) {
+            }, {
+                id: 42
+            }, function (config) {
                 expect(config.tabs).toBe('result');
             });
         });
