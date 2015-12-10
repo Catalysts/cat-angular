@@ -1,11 +1,45 @@
+import {SearchRequest} from "../base/SearchRequest";
+import {Facet} from "../base/Facet";
+import IHttpPromise = angular.IHttpPromise;
+import IPromise = angular.IPromise;
+
+interface ICatApiService {
+    [key:string]:ICatApiEndpoint|Function;
+    dynamicEndpoint?:(name:string, settings:any)=>ICatApiEndpoint;
+}
+
 interface CatApiEndpointConfig {
     name: string;
+}
+
+interface ICatApiServiceProvider extends IServiceProvider {
+    endpoint(name:string, settings?:any):EndpointConfig;
 }
 
 interface CatApiCustom {
     get(url:string, searchRequest);
     put(url:string, object);
     post(url:string, object);
+}
+
+interface CatPagedResponse<T> {
+    elements:T[];
+    totalCount: number;
+    facets?:Facet[];
+}
+
+interface ICatApiEndpoint {
+    config:CatApiEndpointConfig;
+    custom:CatApiCustom;
+    getEndpointName():string;
+    getEndpointUrl():string;
+    get(id:any):any;
+    info(id:any):any;
+    copy(id:any):any;
+    list(searchRequest?:SearchRequest):IPromise<CatPagedResponse<any>>;
+    all():any[];
+    save(data:any):IPromise<any>;
+    remove(id:any):IHttpPromise<any>;
 }
 
 /**
@@ -21,7 +55,7 @@ interface CatApiCustom {
  * @param {object} catSearchService the catSearchService for handling all operations concerning cat.uitl.SearchRequest objects
  * @constructor
  */
-class CatApiEndpoint {
+class CatApiEndpoint implements ICatApiEndpoint {
     _endpointName:string;
     config:CatApiEndpointConfig;
     _endpointUrl:string;
@@ -350,11 +384,8 @@ class EndpointConfig {
     }
 }
 
-class CatApiServiceProvider {
+class CatApiServiceProvider implements ICatApiServiceProvider {
     private _endpoints = {};
-
-    constructor() {
-    }
 
     /**
      * This method is used to either create or retrieve named endpoint configurations.
@@ -362,7 +393,7 @@ class CatApiServiceProvider {
      * @param {object} [settings] if given a new {EndpointConfig} will be created with the given settings
      * @return {EndpointConfig} the endpoint config for the given name
      */
-    endpoint = (name, settings) => {
+    endpoint(name, settings) {
         if (!_.isUndefined(settings)) {
             this._endpoints[name] = new EndpointConfig(name, settings);
         }
@@ -373,7 +404,7 @@ class CatApiServiceProvider {
      * @return {object} returns a map from names to CatApiEndpoints
      */
     private $getCatApiService($http, catConversionService, catSearchService, CAT_API_SERVICE_DEFAULTS) {
-        let catApiService:any = {};
+        let catApiService:ICatApiService = {};
 
         let dynamicEndpoints = {};
 
