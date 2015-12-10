@@ -1,4 +1,9 @@
-import IServiceProvider = angular.IServiceProvider;
+interface IMainMenuProvider extends IServiceProvider {
+    menu(moduleId:string, options:any):void;
+    menuGroup(moduleId:string, groupId:string, options:any):void;
+    menuEntry(moduleId:string, groupId:string, entryId:string, options:any):void;
+}
+
 interface IMenuEntry {
     completeId:string;
     getOptions():any;
@@ -163,7 +168,7 @@ class MenuBar {
  * @name cat.service.menu:$mainMenu
  * @constructor
  */
-class MainMenuProvider implements IServiceProvider {
+class MainMenuProvider implements IMainMenuProvider {
     private mainMenu = new MenuBar('main.menu', {});
     menus = [];
     private _groups = [];
