@@ -2,8 +2,7 @@ import IHttpPromise = angular.IHttpPromise;
 import IPromise = angular.IPromise;
 
 interface ICatApiService {
-    [key:string]:ICatApiEndpoint|Function;
-    dynamicEndpoint?:(name:string, settings:any)=>ICatApiEndpoint;
+    [key:string]:ICatApiEndpoint;
 }
 
 interface CatApiEndpointConfig {
@@ -402,7 +401,7 @@ class CatApiServiceProvider implements ICatApiServiceProvider {
      * @return {object} returns a map from names to CatApiEndpoints
      */
     private $getCatApiService($http, catConversionService, catSearchService, CAT_API_SERVICE_DEFAULTS) {
-        let catApiService:ICatApiService = {};
+        let catApiService:any = {};
 
         let dynamicEndpoints = {};
 
@@ -412,7 +411,7 @@ class CatApiServiceProvider implements ICatApiServiceProvider {
          * @param {object} [settings] if given a new {EndpointConfig} will be created with the given settings
          * @returns {CatApiEndpoint}
          */
-        catApiService.dynamicEndpoint = (name, settings) => {
+        catApiService['dynamicEndpoint'] = (name, settings) => {
             if (typeof name === 'object' && _.isUndefined(settings)) {
                 settings = name;
                 name = settings.url;
