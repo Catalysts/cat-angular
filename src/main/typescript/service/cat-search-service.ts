@@ -1,4 +1,3 @@
-import {SearchRequest} from "../base/SearchRequest";
 /**
  * Created by Thomas on 08/03/2015.
  */

@@ -13,7 +13,7 @@
  * returned from the server.
  * @constructor
  */
-export class FacetTerm {
+class FacetTerm {
     id;
     name:string;
     count:number;
@@ -39,7 +39,7 @@ export class FacetTerm {
  * returned from the server.
  * @constructor
  */
-export class Facet {
+class Facet {
     name:string;
     terms:Array<FacetTerm>;
 

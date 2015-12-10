@@ -1,5 +1,3 @@
-'use strict';
-
 interface Sort {
     property?:string;
     isDesc?:boolean|string;
@@ -30,7 +28,7 @@ interface SearchUrlParams {
  * used to initialize the properties of the SearchRequest
  * @constructor
  */
-export class SearchRequest {
+class SearchRequest {
 
     private _pagination:Pagination = {
         page: 1,

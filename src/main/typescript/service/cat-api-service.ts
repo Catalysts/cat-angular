@@ -1,5 +1,3 @@
-import {SearchRequest} from "../base/SearchRequest";
-import {Facet} from "../base/Facet";
 import IHttpPromise = angular.IHttpPromise;
 import IPromise = angular.IPromise;
 
