@@ -1,10 +1,21 @@
+import ILogService = angular.ILogService;
 /**
  * Created by tscheinecker on 21.10.2014.
  */
-'use strict';
 
-function CatI18nService($q, $log, catI18nMessageSourceService, catI18nMessageParameterResolver) {
-    var that = this;
+interface ICatI18nService {
+    translate(key:string, parameters?:any, locale?:string):IPromise<string>;
+    canTranslate(key:string, locale?:string):IPromise<boolean>;
+}
+
+class CatI18nService implements ICatI18nService {
+
+    constructor(private $q:IQService,
+                private $log:ILogService,
+                private catI18nMessageSourceService:ICatI18nMessageSourceService,
+                private catI18nMessageParameterResolver:(string, any)=>string) {
+
+    }
 
     /**
      * @name catI18nService#translate
@@ -19,48 +30,38 @@ function CatI18nService($q, $log, catI18nMessageSourceService, catI18nMessagePar
      * @param {String} [locale = CAT_I18N_DEFAULT_LOCALE] the locale to use for translation
      * @returns {promise} Returns a promise of the translated key
      */
-    this.translate = function (key, parameters, locale) {
-        var deferred = $q.defer();
+    translate(key, parameters, locale) {
         var model = parameters;
 
         if (_.isArray(parameters)) {
-            parameters.forEach(function (value, idx) {
+            parameters.forEach((value, idx) => {
                 model['p' + idx] = value;
             });
         }
 
-        that.canTranslate(key, locale).then(
-            function (canTranslate) {
+        return this
+            .canTranslate(key, locale)
+            .then((canTranslate) => {
                 if (canTranslate) {
-                    catI18nMessageSourceService.getMessage(key, locale).then(
-                        function (message) {
-                            try {
-                                var translation = catI18nMessageParameterResolver(message, model);
-                                if (_.isString(translation)) {
-                                    deferred.resolve(translation);
-                                } else {
-                                    $log.warn('Didn\'t get a string from catI18nMessageParameterResolver');
-                                    deferred.reject(translation);
-                                }
-                            } catch (e) {
-                                $log.warn(e);
-                                deferred.reject(e);
-                            }
-                        },
-                        function (reason) {
-                            $log.warn(reason);
-                            deferred.reject(reason);
-                        }
-                    );
+                    return this.catI18nMessageSourceService.getMessage(key, locale)
                 } else {
                     var reason = 'No translation for key \'' + key + '\' available!';
-                    $log.warn(reason);
-                    deferred.reject(reason);
+                    return this.$q.reject(reason);
                 }
-            },
-            deferred.reject
-        );
-        return deferred.promise;
+            })
+            .then((message) => {
+                var translation = this.catI18nMessageParameterResolver(message, model);
+                if (_.isString(translation)) {
+                    return translation;
+                } else {
+                    this.$log.warn('Didn\'t get a string from catI18nMessageParameterResolver');
+                    return this.$q.reject(translation);
+                }
+            })
+            .then(undefined, (reason) => {
+                this.$log.warn(reason);
+                return this.$q.reject(reason);
+            });
     };
 
     /**
@@ -77,32 +78,28 @@ function CatI18nService($q, $log, catI18nMessageSourceService, catI18nMessagePar
      * @returns {promise} Returns a promise which resolves to true when a message for the given key exists for the
      * specified locale
      */
-    this.canTranslate = function (key, locale) {
-        var deferred = $q.defer();
-
-        catI18nMessageSourceService.getMessages(locale).then(
-            function (messages) {
-                deferred.resolve(!_.isUndefined(messages) && !_.isUndefined(messages[key]));
-            },
-            function (reason) {
-                $q.reject(reason);
-            }
-        );
-
-        return deferred.promise;
+    canTranslate(key, locale) {
+        return this.catI18nMessageSourceService
+            .getMessages(locale)
+            .then((messages) => {
+                return !_.isUndefined(messages) && !_.isUndefined(messages[key]);
+            });
     };
 }
 
-angular.module('cat.service.i18n', ['cat.service.i18n.message'])
-/**
- * @ngdoc service
- * @name cat.service.i18n:catI18nMessageParameterResolver
- * @value
- *
- * @description
- * A function which accepts a message and parameters and returns the resolved message
- */
-    .value('catI18nMessageParameterResolver', function (message, parameters) {
+angular
+    .module('cat.service.i18n', [
+        'cat.service.i18n.message'
+    ])
+    /**
+     * @ngdoc service
+     * @name cat.service.i18n:catI18nMessageParameterResolver
+     * @value
+     *
+     * @description
+     * A function which accepts a message and parameters and returns the resolved message
+     */
+    .value('catI18nMessageParameterResolver', (message, parameters) => {
         var result = _.template(message, null, {interpolate: /{{([\s\S\d]+?)}}/g})(parameters || {});
 
         // lodash >=3
