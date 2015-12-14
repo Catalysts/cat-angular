@@ -1,4 +1,8 @@
-'use strict';
+interface ICatI18nMessageSourceService {
+    getMessages(locale:string):IPromise<any>;
+    getMessage(key:string, locale?:string):IPromise<string>;
+    hasMessage(key:string, locale?:string):IPromise<boolean>;
+}
 
 /**
  * @ngdoc service
@@ -14,20 +18,27 @@
  * @param {string} CAT_I18N_DEFAULT_LOCALE DOCTODO
  * @constructor
  */
-function CatI18nMessageSourceService($q, catI18nLocaleService, CAT_I18N_DEFAULT_LOCALE) {
-    function _getLocale(locale) {
-        return locale || catI18nLocaleService.getDefaultLocale();
+class CatI18nMessageSourceService implements ICatI18nMessageSourceService {
+
+    constructor(private $q:IQService,
+                private catI18nLocaleService:ICatI18nLocaleService,
+                private CAT_I18N_DEFAULT_LOCALE:string) {
+
     }
 
-    function _getMessages(locale) {
-        var localeId = _getLocale(locale);
+    private _getLocale(locale) {
+        return locale || this.catI18nLocaleService.getDefaultLocale();
+    }
+
+    private _getMessages(locale) {
+        var localeId = this._getLocale(locale);
 
         var messages = window.cat.i18n[localeId];
         if (_.isUndefined(messages)) {
-            messages = _getMessages(catI18nLocaleService.getDefaultLocale());
+            messages = this._getMessages(this.catI18nLocaleService.getDefaultLocale());
         }
-        if (localeId !== CAT_I18N_DEFAULT_LOCALE && _.isUndefined(messages)) {
-            messages = _getMessages(CAT_I18N_DEFAULT_LOCALE);
+        if (localeId !== this.CAT_I18N_DEFAULT_LOCALE && _.isUndefined(messages)) {
+            messages = this._getMessages(this.CAT_I18N_DEFAULT_LOCALE);
         }
 
         return messages;
@@ -45,9 +56,9 @@ function CatI18nMessageSourceService($q, catI18nLocaleService, CAT_I18N_DEFAULT_
      * @param {String} [locale] the locale in which the messages should be retrieved
      * @returns {Promise} a promise holding the retrieved message bundle
      */
-    this.getMessages = function (locale) {
-        return $q.when(_getMessages(locale));
-    };
+    getMessages(locale) {
+        return this.$q.when(this._getMessages(locale));
+    }
 
     /**
      * @ngdoc function
@@ -62,13 +73,13 @@ function CatI18nMessageSourceService($q, catI18nLocaleService, CAT_I18N_DEFAULT_
      * @param {String} [locale = CAT_I18N_DEFAULT_LOCALE] the locale in which the messages should be retrieved
      * @returns {Promise} a promise holding the retrieved message
      */
-    this.getMessage = function (key, locale) {
-        var bundle = _getMessages(locale);
+    getMessage(key, locale) {
+        var bundle = this._getMessages(locale);
         if (_.isUndefined(bundle) || _.isUndefined(bundle[key])) {
-            return $q.reject('No message found for key \'' + key + '\' and the given locale \'' + _getLocale(locale) + '\'');
+            return $q.reject('No message found for key \'' + key + '\' and the given locale \'' + this._getLocale(locale) + '\'');
         }
         return $q.when(bundle[key]);
-    };
+    }
 
 
     /**
@@ -84,11 +95,19 @@ function CatI18nMessageSourceService($q, catI18nLocaleService, CAT_I18N_DEFAULT_
      * @param {String} [locale = CAT_I18N_DEFAULT_LOCALE] the locale in which the messages should be available
      * @returns {Promise} a promise holding <code>TRUE</code> if the key can be resolved for the given locale
      */
-    this.hasMessage = function (key, locale) {
-        var bundle = _getMessages(locale);
+    hasMessage(key, locale) {
+        var bundle = this._getMessages(locale);
         return $q.when(!_.isUndefined(bundle) && !_.isUndefined(bundle[key]));
     };
 }
 
-angular.module('cat.service.i18n.message', ['cat.service.i18n.locale'])
-    .service('catI18nMessageSourceService', ['$q', 'catI18nLocaleService', 'CAT_I18N_DEFAULT_LOCALE', CatI18nMessageSourceService]);
+angular
+    .module('cat.service.i18n.message', [
+        'cat.service.i18n.locale'
+    ])
+    .service('catI18nMessageSourceService', [
+        '$q',
+        'catI18nLocaleService',
+        'CAT_I18N_DEFAULT_LOCALE',
+        CatI18nMessageSourceService
+    ]);
