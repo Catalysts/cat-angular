@@ -1,6 +1,3 @@
-'use strict';
-
-
 function assignDeep(target, source) {
     return _.assign(target, source, function (targetProperty, sourceProperty) {
         if (_.isObject(targetProperty) && _.isObject(sourceProperty)) {
@@ -11,6 +8,10 @@ function assignDeep(target, source) {
     });
 }
 
+interface ICatSelectConfigService {
+    getConfig(name:string, options?:any):any;
+}
+
 /**
  * @ngdoc service
  * @name cat.service.selectConfig:catSelectConfigService
@@ -18,8 +19,11 @@ function assignDeep(target, source) {
  *
  * @constructor
  */
-function CatSelectConfigService(configs) {
-    var _configs = configs;
+class CatSelectConfigService implements ICatSelectConfigService {
+
+    constructor(private configs) {
+
+    }
 
     /**
      * @ngdoc function
@@ -32,8 +36,8 @@ function CatSelectConfigService(configs) {
      * @param {Object} [options] Optional options to use as default values
      * @returns {*} the named config object (with applied defaults) or undefined
      */
-    this.getConfig = function (name, options) {
-        var config = configs[name];
+    getConfig(name, options) {
+        var config = this.configs[name];
 
         if (_.isUndefined(config) && _.isUndefined(options)) {
             return undefined;
@@ -41,6 +45,10 @@ function CatSelectConfigService(configs) {
 
         return assignDeep(_.clone(config) || {}, options);
     };
+}
+
+interface ICatSelectConfigServiceProvider extends IServiceProvider {
+    config(name:string, config?:any):any;
 }
 
 /**
@@ -52,8 +60,8 @@ function CatSelectConfigService(configs) {
  *
  * @constructor
  */
-function CatSelectConfigServiceProvider() {
-    var configs = {};
+class CatSelectConfigServiceProvider implements ICatSelectConfigServiceProvider {
+    private configs = {};
 
     /**
      * @ngdoc function
@@ -66,17 +74,19 @@ function CatSelectConfigServiceProvider() {
      * @param {Object} [config] The config to save for the given name or undefined to receive the config
      * @returns {*} the named config object
      */
-    this.config = function (name, config) {
+    config(name, config) {
         if (!_.isUndefined(config)) {
-            configs[name] = config;
+            this.configs[name] = config;
         }
 
-        return configs[name];
-    };
+        return this.configs[name];
+    }
 
-    this.$get = function () {
-        return new CatSelectConfigService(configs);
-    };
+    $get = [() => {
+        return new CatSelectConfigService(this.configs);
+    }];
 }
 
-angular.module('cat.service.selectConfig', []).provider('catSelectConfigService', CatSelectConfigServiceProvider);
+angular
+    .module('cat.service.selectConfig', [])
+    .provider('catSelectConfigService', CatSelectConfigServiceProvider);
