@@ -1,4 +1,9 @@
-'use strict';
+import IServiceProvider = angular.IServiceProvider;
+
+interface ICatViewServiceProvider extends IServiceProvider {
+    listAndDetailView(baseUrl:string, name:string, config?:any):void;
+}
+
 
 /**
  * @ngdoc service
@@ -13,9 +18,13 @@
  * @param {CatApiServiceProvider} catApiServiceProvider DOCTODO
  * @constructor
  */
-function CatViewServiceProvider(catRouteServiceProvider, catApiServiceProvider) {
-    var viewNames = [];
-    var endpointNames = [];
+class CatViewServiceProvider implements ICatViewServiceProvider {
+    private viewNames:string[] = [];
+    private endpointNames:string[] = [];
+
+    constructor(private catRouteServiceProvider:ICatRouteServiceProvider,
+                private catApiServiceProvider:ICatApiServiceProvider) {
+    }
 
     /**
      * This function registers a new api endpoint with catApiServiceProvider and a list and detail route with
@@ -25,15 +34,15 @@ function CatViewServiceProvider(catRouteServiceProvider, catApiServiceProvider) 
      * @param {object} [config] the config object which can in turn hold objects used for configuration of the endpoint,
      * detail route or list route
      */
-    this.listAndDetailView = function (baseUrl, name, config) {
-        var endpointName = name.toLowerCase();
-        var url = window.cat.util.pluralize(endpointName);
+    listAndDetailView(baseUrl:string, name:string, config:ICatListAndDetailViewConfig) {
+        let endpointName = name.toLowerCase();
+        let url = window.cat.util.pluralize(endpointName);
 
         if (!!config) {
             url = config.url || url;
         }
 
-        var endpoint = {
+        let endpoint:CatApiEndpointSettings = {
             model: window.cat.util.defaultModelResolver(name),
             url: url
         };
@@ -43,11 +52,11 @@ function CatViewServiceProvider(catRouteServiceProvider, catApiServiceProvider) 
         }
 
 
-        viewNames.push(name);
-        endpointNames.push(endpointName);
+        this.viewNames.push(name);
+        this.endpointNames.push(endpointName);
 
-        catApiServiceProvider.endpoint(name.toLowerCase(), endpoint);
-        catRouteServiceProvider.listAndDetailRoute(baseUrl, name, config);
+        this.catApiServiceProvider.endpoint(name.toLowerCase(), endpoint);
+        this.catRouteServiceProvider.listAndDetailRoute(baseUrl, name, config);
     };
 
     /**
@@ -55,12 +64,12 @@ function CatViewServiceProvider(catRouteServiceProvider, catApiServiceProvider) 
      * to other service providers
      * @return {{views: Array, endpoints: Array}}
      */
-    this.$get = function () {
+    $get = [() => {
         return {
-            views: viewNames,
-            endpoints: endpointNames
+            views: this.viewNames,
+            endpoints: this.endpointNames
         };
-    };
+    }];
 }
 
 angular.module('cat.service.view',

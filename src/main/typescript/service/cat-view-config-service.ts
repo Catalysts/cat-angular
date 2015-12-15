@@ -4,6 +4,30 @@ import IControllerService = angular.IControllerService;
  * @author Thomas Scheinecker, Catalysts GmbH.
  */
 
+interface ICatViewConfig {
+    name?:string;
+    parent?:string;
+    viewData?:any;
+    url?:string;
+    templateUrl?:string;
+    reloadOnSearch?:boolean;
+    model?:new(any)=>any;
+    controller?:string;
+}
+
+interface ICatDetailViewConfig extends ICatViewConfig {
+    endpoint?:string|{name:string,parents?:string[]};
+    additionalViewTemplate?:boolean|string;
+    additionalViewTemplateTabs?:ICatTab[];
+}
+
+interface ICatListViewConfig extends ICatViewConfig {
+    endpoint?:string;
+    searchProps?:any;
+    listTemplateUrl?:string;
+    defaultSort?:Sort;
+}
+
 interface ICatTemplateUrls {
     edit: string;
     view: string|{main:string,additional:string};
@@ -18,15 +42,15 @@ interface ICatBaseViewConfig {
     viewData: any;
     name: string;
     controller: string|Function|(string|Function)[];
+    endpoint?: ICatApiEndpoint;
+    parents?: any[];
 }
 
 interface ICatDetailConfig extends ICatBaseViewConfig {
-    endpoint: ICatApiEndpoint;
     Model: Function;
     templateUrls: ICatTemplateUrls;
     tabs?: ICatTab[];
     detail?: any;
-    parents?: any[];
 }
 
 interface ICatListConfig extends ICatBaseViewConfig {
@@ -38,8 +62,8 @@ interface ICatListConfig extends ICatBaseViewConfig {
 
 interface ICatViewConfigService {
     getDetailData($stateParams, Model, endpoint):IPromise<any>;
-    getDetailConfig(config, $stateParams:IStateParamsService):IPromise<ICatDetailConfig>;
-    getListConfig(config:any):IPromise<ICatListConfig>;
+    getDetailConfig(config:ICatDetailViewConfig, $stateParams:IStateParamsService):IPromise<ICatDetailConfig>;
+    getListConfig(config:ICatListViewConfig):IPromise<ICatListConfig>;
 }
 
 class CatViewConfigService implements ICatViewConfigService {
@@ -109,14 +133,14 @@ class CatViewConfigService implements ICatViewConfigService {
         }
     }
 
-    getDetailConfig(config, $stateParams:IStateParamsService) {
+    getDetailConfig(config:ICatDetailViewConfig, $stateParams:IStateParamsService) {
         let endpointName, parentEndpointNames;
 
         if (_.isString(config.endpoint)) {
             endpointName = config.endpoint;
         } else if (_.isObject(config.endpoint)) {
-            parentEndpointNames = config.endpoint.parents;
-            endpointName = config.endpoint.name;
+            parentEndpointNames = config.endpoint['parents'];
+            endpointName = config.endpoint['name'];
         } else {
             endpointName = CatViewConfigService.toLowerCaseName(config.name);
         }
@@ -195,11 +219,11 @@ class CatViewConfigService implements ICatViewConfigService {
     };
 
 
-    private getListDataPromise(config, name) {
+    private getListDataPromise(config:ICatListViewConfig, name:string) {
         return this.catListDataLoadingService.resolve(config.endpoint || name, config.defaultSort);
     }
 
-    getListConfig(config) {
+    getListConfig(config:ICatListViewConfig) {
         let name = CatViewConfigService.toLowerCaseName(config.name);
 
         let deferredConfig = this.$q.defer();

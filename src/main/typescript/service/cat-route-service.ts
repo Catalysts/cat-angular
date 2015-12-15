@@ -1,17 +1,44 @@
-'use strict';
+import IState = angular.ui.IState;
+import ILogService = angular.ILogService;
+
+interface ICatRouteService extends Array<string> {
+
+}
+
+interface ICatStateConfig {
+    parent?:string;
+}
+
+interface ICatListAndDetailViewConfig extends ICatStateConfig {
+    url?:string;
+    list?:ICatListViewConfig;
+    details?:ICatDetailViewConfig;
+    viewData?:any;
+    endpoint?:CatApiEndpointSettings;
+}
+
+interface ICatRouteServiceProvider extends IServiceProvider {
+    detailRoute(baseUrl:string, name:string, config?:ICatDetailViewConfig):void;
+    listAndDetailRoute(baseUrl:string, name:string, config?:ICatListAndDetailViewConfig):void;
+}
+
 
 /**
  * @ngdoc service
  * @name cat.service.route:catRouteServiceProvider
  * @description
- * This service provider delegates to the $stateProvider and actually creates 2 separate routes after applying various
+ * This service provider delegates to the $stateProvider and actually creates 2 separate routes after applying letious
  * conventions / defaults
  */
-function CatRouteServiceProvider($stateProvider) {
-    var viewNames = [];
+class CatRouteServiceProvider implements ICatRouteServiceProvider {
+    private viewNames:string[] = [];
 
-    function _getListUrl(baseUrl, name, config) {
-        var listUrl = baseUrl + '/' + window.cat.util.pluralize(name.toLowerCase());
+    constructor(private $stateProvider) {
+
+    }
+
+    private static _getListUrl(baseUrl:string, name:string, config:ICatViewConfig) {
+        let listUrl = baseUrl + '/' + window.cat.util.pluralize(name.toLowerCase());
 
         if (!!config && config.url) {
             listUrl = baseUrl + '/' + config.url;
@@ -20,8 +47,8 @@ function CatRouteServiceProvider($stateProvider) {
         return listUrl;
     }
 
-    function _registerAbstractState(url, name) {
-        $stateProvider
+    private _registerAbstractState(url, name) {
+        this.$stateProvider
             .state(name, {
                 abstract: true,
                 template: '<ui-view></ui-view>',
@@ -29,7 +56,7 @@ function CatRouteServiceProvider($stateProvider) {
             });
     }
 
-    function _getStateName(name, config) {
+    private static _getStateName(name:string, config:ICatStateConfig):string {
         if (!!config && !!config.parent) {
             return config.parent + '.' + name;
         }
@@ -37,15 +64,15 @@ function CatRouteServiceProvider($stateProvider) {
         return name;
     }
 
-    function _registerDetailState(config, name) {
-        var stateName = _getStateName(name, config);
-        var detailConfig = _getDetailConfig(config, name);
+    private _registerDetailState(config:ICatDetailViewConfig, name) {
+        let stateName:string = CatRouteServiceProvider._getStateName(name, config);
+        let detailConfig:IState = this._getDetailConfig(config, name);
 
-        $stateProvider
+        this.$stateProvider
             .state(stateName + '.detail', detailConfig);
 
         if (!!config && config.additionalViewTemplate === 'tabs') {
-            $stateProvider
+            this.$stateProvider
                 .state(stateName + '.tab', {
                     abstract: true,
                     template: '<ui-view></ui-view>',
@@ -54,10 +81,10 @@ function CatRouteServiceProvider($stateProvider) {
         }
     }
 
-    function _registerListState(config, name) {
-        var stateName = _getStateName(name, config);
-        var listConfig = _getListConfig(config, name);
-        $stateProvider
+    private _registerListState(config, name) {
+        let stateName = CatRouteServiceProvider._getStateName(name, config);
+        let listConfig = this._getListConfig(config, name);
+        this.$stateProvider
             .state(stateName + '.list', listConfig);
     }
 
@@ -68,10 +95,11 @@ function CatRouteServiceProvider($stateProvider) {
      * (templateUrls, parents, detail, endpoint, etc.) this function also takes care of providing the correct 'resolve'
      * object which pre-loads all the necessary data.
      * @param {Object} config the route config object which will be used to generate the actual route configuration
+     * @param {string} name the name of the state
      * @returns {{templateUrl: (string), controller: string, reloadOnSearch: (boolean), resolve: {config: (object)}}}
      */
-    function _getDetailConfig(config, name) {
-        var _config = _.assign({name: name}, config);
+    private _getDetailConfig(config:ICatDetailViewConfig, name:string):IState {
+        let _config:ICatDetailViewConfig = _.assign({name: name}, config);
 
         return {
             url: _config.url || '/:id',
@@ -79,7 +107,7 @@ function CatRouteServiceProvider($stateProvider) {
             controller: 'CatBaseDetailController',
             reloadOnSearch: _config.reloadOnSearch,
             resolve: {
-                config: function ($stateParams, catViewConfigService) {
+                config: ($stateParams:IStateParamsService, catViewConfigService:ICatViewConfigService) => {
                     // TODO $stateParams needs to be passed from here because otherwise it's empty...
                     return catViewConfigService.getDetailConfig(_config, $stateParams);
                 }
@@ -96,10 +124,11 @@ function CatRouteServiceProvider($stateProvider) {
      * * resolve - a object with a 'listData' property is returned which is resolved via the correct endpoint
      *
      * @param {Object} config the route config object which will be used to generate the actual route configuration
+     * @param {string} name the name of the sate
      * @return {{reloadOnSearch: boolean, controller: string, templateUrl: (string), resolve: {config: Object}}}
      */
-    function _getListConfig(config, name) {
-        var _config = _.assign({name: name}, config);
+    private _getListConfig(config:ICatListViewConfig, name:string):IState {
+        let _config:any = _.assign({name: name}, config);
 
         return {
             url: _config.url || '',
@@ -129,16 +158,16 @@ function CatRouteServiceProvider($stateProvider) {
      * @param {string} name the name for which the routes will be created
      * @param {Object} [config] the config object which wraps the configurations for the list and detail route
      */
-    this.detailRoute = function (baseUrl, name, config) {
-        var stateName = _getStateName(name, config);
+    detailRoute(baseUrl, name, config:ICatDetailViewConfig) {
+        let stateName:string = CatRouteServiceProvider._getStateName(name, config);
 
-        var viewData = {viewData: !!config ? (config.viewData || {}) : {}};
-        viewNames.push(stateName);
+        let viewData:any = {viewData: !!config ? (config.viewData || {}) : {}};
+        this.viewNames.push(stateName);
 
-        var listUrl = _getListUrl(baseUrl, name, config);
+        let listUrl:string = CatRouteServiceProvider._getListUrl(baseUrl, name, config);
 
-        _registerAbstractState(listUrl, stateName);
-        _registerDetailState(_.assign({}, config, viewData), name);
+        this._registerAbstractState(listUrl, stateName);
+        this._registerDetailState(_.assign({}, config, viewData), name);
     };
 
     /**
@@ -155,20 +184,17 @@ function CatRouteServiceProvider($stateProvider) {
      * @param {string} name the name for which the routes will be created
      * @param {Object} [config] the config object which wraps the configurations for the list and detail route
      */
-    this.listAndDetailRoute = function (baseUrl, name, config) {
-        var stateName = _getStateName(name, config);
+    listAndDetailRoute(baseUrl:string, name:string, config:ICatListAndDetailViewConfig = {}) {
+        let stateName:string = CatRouteServiceProvider._getStateName(name, config);
 
-        var viewData = {viewData: !!config ? (config.viewData || {}) : {}};
-        viewNames.push(stateName);
-        if (_.isUndefined(config)) {
-            config = {};
-        }
+        let viewData:any = {viewData: config.viewData || {}};
+        this.viewNames.push(stateName);
 
-        var listUrl = _getListUrl(baseUrl, name, config);
+        let listUrl:string = CatRouteServiceProvider._getListUrl(baseUrl, name, config);
 
-        _registerAbstractState(listUrl, stateName);
-        _registerDetailState(_.assign({}, config.details, viewData), name);
-        _registerListState(_.assign({}, config.list, viewData), name);
+        this._registerAbstractState(listUrl, stateName);
+        this._registerDetailState(_.assign({}, config.details, viewData), name);
+        this._registerListState(_.assign({}, config.list, viewData), name);
     };
 
     /**
@@ -180,9 +206,9 @@ function CatRouteServiceProvider($stateProvider) {
      * This service simply exposes the created view and endpoint names, as the provider basically only delegates
      * to the $stateProvider
      */
-    this.$get = function () {
-        return viewNames;
-    };
+    $get = [():ICatRouteService=> {
+        return this.viewNames;
+    }];
 }
 
 angular
@@ -194,9 +220,13 @@ angular
     ])
     .provider('catRouteService', CatRouteServiceProvider)
     .run(['$rootScope', '$log', '$globalMessages', 'catBreadcrumbsService', 'catValidationService',
-        function ($rootScope, $log, $globalMessages, catBreadcrumbsService, catValidationService) {
+        ($rootScope:IRootScopeService,
+         $log:ILogService,
+         $globalMessages:ICatMessagesService,
+         catBreadcrumbsService:ICatBreadcrumbsService,
+         catValidationService) => {
             $rootScope.$on('$stateChangeError', function () {
-                var exception = arguments[arguments.length - 1];
+                let exception:string = arguments[arguments.length - 1];
                 $globalMessages.addMessage('warning', exception);
                 $log.warn(exception);
             });

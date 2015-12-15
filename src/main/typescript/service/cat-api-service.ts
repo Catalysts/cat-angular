@@ -5,12 +5,20 @@ interface ICatApiService {
     [key:string]:ICatApiEndpoint;
 }
 
+interface CatApiEndpointSettings {
+    name?: string;
+    url?:string;
+    model?:new(data?:any)=>any;
+    children?:CatApiEndpointSettings[];
+}
+
 interface CatApiEndpointConfig {
     name: string;
+    model:new(data?:any)=>any;
 }
 
 interface ICatApiServiceProvider extends IServiceProvider {
-    endpoint(name:string, settings?:any):EndpointConfig;
+    endpoint(name:string, settings?:CatApiEndpointSettings):EndpointConfig;
 }
 
 interface CatApiCustom {
@@ -26,6 +34,7 @@ interface CatPagedResponse<T> {
 }
 
 interface ICatApiEndpoint {
+    parentEndpoint?:ICatApiEndpoint;
     config:CatApiEndpointConfig;
     custom:CatApiCustom;
     getEndpointName():string;
@@ -65,7 +74,7 @@ class CatApiEndpoint implements ICatApiEndpoint {
      */
     custom:CatApiCustom;
 
-    constructor(url,
+    constructor(url:string,
                 endpointConfig,
                 private $http,
                 private catConversionService,
@@ -347,11 +356,11 @@ class CatApiEndpoint implements ICatApiEndpoint {
  * @constructor
  */
 class EndpointConfig {
-
-    children:Object = {};
+    parent:EndpointConfig;
+    children:{[key:string]:EndpointConfig} = {};
 
     constructor(public name:string,
-                public config:any = {}) {
+                public config:CatApiEndpointSettings = {}) {
 
         // this takes care of mapping the 'old' config style to the new builder style
         if (!_.isUndefined(config.children)) {
@@ -371,7 +380,7 @@ class EndpointConfig {
      * parent property of the created config will point to the current config
      * @return {EndpointConfig} the child endpoint config with the given name
      */
-    child(childName, childConfig) {
+    child(childName:string, childConfig:CatApiEndpointSettings):EndpointConfig {
         if (!_.isUndefined(childConfig)) {
             this.children[childName] = new EndpointConfig(childName, childConfig);
             this.children[childName].parent = this;

@@ -2,7 +2,7 @@ import ILocationService = angular.ILocationService;
 import IStateService = angular.ui.IStateService;
 
 interface ICatListDataLoadingService {
-    load(endpoint, searchRequest?:SearchRequest);
+    load(endpoint:ICatApiEndpoint, searchRequest:SearchRequest);
     resolve(endpointName:string, defaultSort?:Sort);
 }
 
@@ -15,7 +15,7 @@ class CatListDataLoadingService implements ICatListDataLoadingService {
 
     }
 
-    load(endpoint, searchRequest) {
+    load(endpoint:ICatApiEndpoint, searchRequest) {
         let deferred = this.$q.defer();
         endpoint.list(searchRequest).then(
             function success(data) {

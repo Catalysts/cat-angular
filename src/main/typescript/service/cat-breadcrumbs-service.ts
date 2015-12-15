@@ -6,6 +6,19 @@ interface CatBreadcrumb {
     key?: string;
 }
 
+interface ICatBreadcrumbsService {
+    clear():void;
+    set(bcs:CatBreadcrumb[]);
+    get():CatBreadcrumb[];
+    addFirst(entry:CatBreadcrumb):void;
+    removeFirst():CatBreadcrumb;
+    push(entry:CatBreadcrumb):void;
+    pop():CatBreadcrumb;
+    length():number;
+    replaceLast(newVal:CatBreadcrumb):void;
+    generateFromConfig(config:ICatBaseViewConfig):CatBreadcrumb[];
+}
+
 /**
  * @ngdoc service
  * @name cat.service.breadcrumbs:catBreadcrumbService
@@ -18,10 +31,10 @@ interface CatBreadcrumb {
  *
  * @constructor
  */
-class CatBreadcrumbsService {
+class CatBreadcrumbsService implements ICatBreadcrumbsService {
 
     constructor(private catBreadcrumbs:Array<CatBreadcrumb>,
-                private $state) {
+                private $state:IStateService) {
 
     }
 
@@ -69,14 +82,14 @@ class CatBreadcrumbsService {
      * @param {Object} config a config object as provided to CatBaseDetailController
      * @return {Array} an array which represents the 'ui stack' of directly related parents
      */
-    generateFromConfig(config) {
+    generateFromConfig(config:ICatBaseViewConfig):CatBreadcrumb[] {
         this.clear();
-        var uiStack = [];
+        var uiStack:CatBreadcrumb[] = [];
 
-        var currentState = this.$state.$current.parent;
-        var currentEndpoint = config.endpoint;
-        var count = 0;
-        var parents = '^';
+        var currentState = this.$state.$current['parent'];
+        var currentEndpoint:ICatApiEndpoint = config.endpoint;
+        var count:number = 0;
+        var parents:string = '^';
 
         while (!!currentState && !!currentState.parent) {
             var stateName = currentState.name;
@@ -118,9 +131,9 @@ class CatBreadcrumbsService {
 
 angular.module('cat.service.breadcrumbs', [])
 
-/**
- * @ngdoc overview
- * @name cat.service.breadcrumbs:catBreadcrumbs
- */
+    /**
+     * @ngdoc overview
+     * @name cat.service.breadcrumbs:catBreadcrumbs
+     */
     .value('catBreadcrumbs', [])
     .service('catBreadcrumbsService', CatBreadcrumbsService);
