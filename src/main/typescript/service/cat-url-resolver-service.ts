@@ -1,12 +1,13 @@
 /**
  * Created by Mustafa on 05.08.2015.
  */
-angular.module('cat.url.resolver.service', []).service('urlResolverService', function () {
 
-    'use strict';
+interface ICatUrlResolverService {
+    getTabTemplate(tab:string, config:ICatDetailConfig):string;
+}
 
-    this.getTabTemplate = function (tab, config) {
-
+class CatUrlResolverService implements ICatUrlResolverService {
+    getTabTemplate(tab:string, config:ICatDetailConfig) {
         var parentUrl = config.endpoint.getEndpointName();
         var parentTemplateNamePrefix = config.endpoint.getEndpointName();
         var currentEndpoint = config.endpoint;
@@ -21,5 +22,10 @@ angular.module('cat.url.resolver.service', []).service('urlResolverService', fun
         }
         return parentUrl + '/' + tab + '/' + parentTemplateNamePrefix + '-' + tab + '-list.tpl.html';
     };
-});
+}
+
+
+angular
+    .module('cat.url.resolver.service', [])
+    .service('urlResolverService', [CatUrlResolverService]);
 
