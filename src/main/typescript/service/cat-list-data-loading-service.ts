@@ -14,8 +14,8 @@ interface ICatListData<T> {
 }
 
 interface ICatListDataLoadingService {
-    load(endpoint:ICatApiEndpoint, searchRequest:SearchRequest):IPromise<ICatListData>;
-    resolve(endpointName:string, defaultSort?:Sort):IPromise<ICatListData>;
+    load<T>(endpoint:ICatApiEndpoint, searchRequest:SearchRequest):IPromise<ICatListData<T>>;
+    resolve<T>(endpointName:string, defaultSort?:Sort):IPromise<ICatListData<T>>;
 }
 
 class CatListDataLoadingService implements ICatListDataLoadingService {
@@ -27,13 +27,13 @@ class CatListDataLoadingService implements ICatListDataLoadingService {
 
     }
 
-    load(endpoint:ICatApiEndpoint, searchRequest):IPromise<ICatListData> {
+    load<T>(endpoint:ICatApiEndpoint, searchRequest):IPromise<ICatListData<T>> {
         return endpoint
             .list(searchRequest)
             .then((data) => {
                 let pagination = searchRequest.pagination();
 
-                let result:ICatListData = {
+                let result:ICatListData<T> = {
                     count: data.totalCount,
                     collection: data.elements,
                     pagination: pagination,
@@ -58,7 +58,7 @@ class CatListDataLoadingService implements ICatListDataLoadingService {
      * @param {String} endpointName
      * @param {Object} [defaultSort={property:'name',isDesc:false}]
      */
-    resolve(endpointName, defaultSort:Sort = {property: 'name', isDesc: false}):IPromise<ICatListData> {
+    resolve<T>(endpointName, defaultSort:Sort = {property: 'name', isDesc: false}):IPromise<ICatListData<T>> {
         let searchRequest = this.catSearchService.fromLocation();
         if (!this.$location.search().sort) {
             searchRequest.sort(defaultSort);

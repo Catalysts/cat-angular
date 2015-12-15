@@ -54,7 +54,7 @@ interface ICatDetailConfig extends ICatBaseViewConfig {
 }
 
 interface ICatListConfig extends ICatBaseViewConfig {
-    listData?: any[];
+    listData?: ICatListData<any>;
     title: string;
     searchProps: any;
     listTemplateUrl: string;
