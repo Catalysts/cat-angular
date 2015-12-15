@@ -1,4 +1,3 @@
-import ILogService = angular.ILogService;
 /**
  * Created by tscheinecker on 21.10.2014.
  */
@@ -100,13 +99,7 @@ angular
      * A function which accepts a message and parameters and returns the resolved message
      */
     .value('catI18nMessageParameterResolver', (message, parameters) => {
-        var result = _.template(message, null, {interpolate: /{{([\s\S\d]+?)}}/g})(parameters || {});
-
-        // lodash >=3
-        if (_.isFunction(result)) {
-            return result();
-        }
-        return result;  // lodash <3
+        return _.template(message, {interpolate: /{{([\s\S\d]+?)}}/g})(parameters || {});
     })
 
 

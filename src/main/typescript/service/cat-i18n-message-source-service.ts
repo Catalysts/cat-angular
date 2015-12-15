@@ -76,9 +76,9 @@ class CatI18nMessageSourceService implements ICatI18nMessageSourceService {
     getMessage(key, locale) {
         var bundle = this._getMessages(locale);
         if (_.isUndefined(bundle) || _.isUndefined(bundle[key])) {
-            return $q.reject('No message found for key \'' + key + '\' and the given locale \'' + this._getLocale(locale) + '\'');
+            return this.$q.reject('No message found for key \'' + key + '\' and the given locale \'' + this._getLocale(locale) + '\'');
         }
-        return $q.when(bundle[key]);
+        return this.$q.when(bundle[key]);
     }
 
 
@@ -97,7 +97,7 @@ class CatI18nMessageSourceService implements ICatI18nMessageSourceService {
      */
     hasMessage(key, locale) {
         var bundle = this._getMessages(locale);
-        return $q.when(!_.isUndefined(bundle) && !_.isUndefined(bundle[key]));
+        return this.$q.when(!_.isUndefined(bundle) && !_.isUndefined(bundle[key]));
     };
 }
 
