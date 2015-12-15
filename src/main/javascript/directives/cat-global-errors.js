@@ -25,11 +25,13 @@ angular.module('cat.directives.globalErrors', ['cat.service.validation'])
             controller: function CatGlobalErrorsController($scope, /* CatValidationService */  catValidationService) {
                 var that = this;
 
-                this.hasErrors = function () {
+                hasErrors()
+                {
                     return catValidationService.hasGlobalErrors(this.contextId);
                 };
 
-                this.getErrors = function () {
+                getErrors()
+                {
                     return catValidationService.getGlobalErrors(this.contextId);
                 };
             },

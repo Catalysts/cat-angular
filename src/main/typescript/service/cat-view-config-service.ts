@@ -47,7 +47,7 @@ interface ICatBaseViewConfig {
 }
 
 interface ICatDetailConfig extends ICatBaseViewConfig {
-    Model: Function;
+    Model: {new(data?:any):any};
     templateUrls: ICatTemplateUrls;
     tabs?: ICatTab[];
     detail?: any;

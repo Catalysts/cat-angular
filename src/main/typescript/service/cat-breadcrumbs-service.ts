@@ -1,8 +1,8 @@
 'use strict';
 
 interface CatBreadcrumb {
-    url: string;
-    title: string;
+    url?: string;
+    title?: string;
     key?: string;
 }
 

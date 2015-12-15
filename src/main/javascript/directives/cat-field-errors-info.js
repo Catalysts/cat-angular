@@ -25,7 +25,8 @@ angular.module('cat.directives.fieldErrors.info', ['cat.service.validation'])
             controller: function CatFieldErrorsController(/* CatValidationService */  catValidationService) {
                 var that = this;
 
-                this.hasErrors = function () {
+                hasErrors()
+                {
                     return catValidationService.hasAnyFieldErrors(that.contextId);
                 };
             },

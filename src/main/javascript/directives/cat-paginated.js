@@ -151,7 +151,8 @@ angular.module('cat.directives.paginated',
 
             $scope.$watch('listData.search', updateSearch, true);
 
-            this.sort = function (newVal, oldVal) {
+            sort(newVal, oldVal)
+            {
                 // TODO check wheter or not this is necessary with angular >= 1.3
                 if (angular.equals(newVal, oldVal)) {
                     return;
@@ -162,11 +163,13 @@ angular.module('cat.directives.paginated',
                 reload();
             };
 
-            this.getSearch = function () {
+            getSearch()
+            {
                 return searchRequest.search();
             };
 
-            this.getSearchRequest = function () {
+            getSearchRequest()
+            {
                 return searchRequest;
             };
 

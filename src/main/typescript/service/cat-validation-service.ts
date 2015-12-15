@@ -35,7 +35,22 @@ interface CatRejectionData {
     globalErrors: Array<string>;
 }
 
-class CatValidationService {
+interface ICatValidationService {
+    getContext(contextId?:string):ValidationContext;
+    createContext():string;
+    destroyContext(contextId:string):void;
+    updateFromRejection(rejection:CatHttpPromiseCallbackArg<CatRejectionData>):void;
+    clearValidationErrors(contextId?:string):void;
+    hasGlobalErrors(contextId?:string):boolean;
+    getGlobalErrors(contextId?:string):string[];
+    hasFieldErrors(fieldName:string, contextId?:string):boolean;
+    hasAnyFieldErrors(contextId?:string):boolean;
+    getFieldErrors(fieldName:string, contextId?:string):CatFieldError[];
+    hasErrors(contextId?:string):boolean;
+    prepareConfig(contextId:string, config:any):any;
+}
+
+class CatValidationService implements ICatValidationService {
     constructor(private $log,
                 private $globalMessages:CatMessageService,
                 private catValidations,
@@ -49,7 +64,7 @@ class CatValidationService {
      * @param {string} contextId context identifier
      * @returns {ValidationContext} validation context
      */
-    getContext(contextId):ValidationContext {
+    getContext(contextId?:string):ValidationContext {
         if (contextId !== undefined) {
             let validations = this.catValidationContexts[contextId];
             if (validations === undefined) {

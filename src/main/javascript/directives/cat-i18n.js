@@ -6,10 +6,12 @@
  */
 angular.module('cat.directives.i18n', ['cat.service.i18n'])
     .service('catI18nResponseHandler', ['$log', function CatI18nResponseHandler($log) {
-        this.handleTranslationSuccess = function (translation, scope, element) {
+        handleTranslationSuccess(translation, scope, element)
+        {
             element.text(translation);
         };
-        this.handleTranslationError = function (reason, scope, element) {
+        handleTranslationError(reason, scope, element)
+        {
             element.text('##missingkey: ' + scope.key);
         };
     }])

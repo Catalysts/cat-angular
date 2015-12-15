@@ -7,7 +7,8 @@ function CatValidationController($scope, catValidationService) {
      * Retuns the context identifier
      * @returns {string} context identifier
      */
-    this.getContextId = function () {
+    getContextId()
+    {
         return contextId;
     };
 

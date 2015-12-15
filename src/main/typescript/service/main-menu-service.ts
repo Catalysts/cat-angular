@@ -133,6 +133,10 @@ class Menu implements IMenuEntry {
     }
 }
 
+interface ICatMainMenuService {
+    getMenus():Menu[];
+}
+
 class MenuBar {
     private menus:{[key:string]:Menu} = {};
 
