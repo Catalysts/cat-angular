@@ -1,4 +1,5 @@
 interface CatUtils {
+    defaultListSearchProps?:string[];
     /**
      * Pluralizes a string
      * @param string

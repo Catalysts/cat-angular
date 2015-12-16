@@ -1,3 +1,20 @@
+interface CatSelectOptions {
+    endpoint:string|ICatApiEndpoint|Function;
+    searchRequestAdapter?:Function|Object;
+    size?:number;
+    sort?:Sort;
+
+    filter?(term:string):boolean;
+    search?(term:string, page:number, context:any):any;
+}
+
+interface CatSelectScope<T> extends IScope {
+    elements:T[];
+    selectOptions:Select2Options;
+    config?:string;
+    options?:CatSelectOptions;
+}
+
 function CatSelectLink(scope:IScope,
                        element:IAugmentedJQuery,
                        attrs:IAttributes,
@@ -8,13 +25,96 @@ function CatSelectLink(scope:IScope,
     ngModel.$formatters = [];
 }
 
-function CatSelectController($scope:IScope,
-                             $log:ILogService,
-                             catApiService:ICatApiService,
-                             catSelectConfigService:ICatSelectConfigService) {
-    function fetchElements(endpoint, sort, searchRequestAdapter) {
+class CatSelectController {
+    constructor($scope:CatSelectScope<any>,
+                private $log:ILogService,
+                catApiService:ICatApiService,
+                catSelectConfigService:ICatSelectConfigService) {
+
+
+        let options:CatSelectOptions = catSelectConfigService.getConfig($scope.config, $scope.options);
+
+        if (_.isUndefined(options)) {
+            throw new Error('At least one of "config" or "options" has to be specified');
+        }
+
+        let searchRequestAdapter = options.searchRequestAdapter || {};
+
+        let transport,
+            quietMillis,
+            searchRequestFunc = options.search || function (term, page) {
+                    return {
+                        'search.name': term,
+                        page: page
+                    };
+                },
+            filterFunc = options.filter || function (term) {
+                    return true;
+                };
+        let endpoint:any = options.endpoint;
+        if (_.isArray(endpoint)) {
+            transport = function (queryParams) {
+                return queryParams.success({
+                    elements: options.endpoint
+                });
+            };
+            quietMillis = 0;
+        } else if (_.isFunction(endpoint)) {
+            transport = endpoint;
+            quietMillis = 500;
+        } else if (_.isObject(endpoint)) {
+            transport = this.fetchElements(endpoint, options.sort, searchRequestAdapter);
+            quietMillis = 500;
+        } else if (_.isString(endpoint)) {
+            let api = catApiService['' + endpoint];
+            if (!api) {
+                $log.error('No api endpoint "' + endpoint + '" defined');
+                $scope.elements = [];
+                return;
+            }
+            transport = this.fetchElements(api, options.sort, searchRequestAdapter);
+            quietMillis = 500;
+        } else {
+            $log.error('The given endpoint has to be one of the following types: array, object, string or function - but was ' + (typeof endpoint));
+            $scope.elements = [];
+            return;
+        }
+
+        $scope.selectOptions = _.assign({
+            placeholder: ' ', // space in default placeholder is required, otherwise allowClear property does not work
+            minimumInputLength: 0,
+            adaptDropdownCssClass: function (cssClass) {
+                if (_.contains(['ng-valid', 'ng-invalid', 'ng-pristine', 'ng-dirty'], cssClass)) {
+                    return cssClass;
+                }
+                return null;
+            },
+            ajax: {
+                data: searchRequestFunc,
+                quietMillis: quietMillis,
+                transport: transport,
+                results: (data:CatPagedResponse<any>, page:number) => {
+                    let more = (page * (options.size || 100)) < data.totalCount;
+                    return {
+                        results: _.filter(data.elements, filterFunc),
+                        more: more
+                    };
+                }
+            },
+            formatResult: (element) => {
+                return element.name;
+            },
+            formatSelection: (element) => {
+                return element.name;
+            }
+        }, options['ui-select2']);
+    }
+
+    private fetchElements(endpoint:ICatApiEndpoint,
+                          sort?:Sort,
+                          searchRequestAdapter?:Function|Object) {
         return function (queryParams) {
-            var searchRequest = new window.cat.SearchRequest(queryParams.data);
+            let searchRequest = new window.cat.SearchRequest(queryParams.data);
             searchRequest.sort(sort || {property: 'name', isDesc: false});
 
             if (_.isFunction(searchRequestAdapter)) {
@@ -22,89 +122,12 @@ function CatSelectController($scope:IScope,
             } else if (_.isObject(searchRequestAdapter)) {
                 _.assign(searchRequest, searchRequestAdapter);
             } else {
-                $log.warn('searchRequestAdapter has to be either a function or an object but was ' + (typeof searchRequestAdapter));
+                this.$log.warn('searchRequestAdapter has to be either a function or an object but was ' + (typeof searchRequestAdapter));
             }
 
             return endpoint.list(searchRequest).then(queryParams.success);
         };
     }
-
-
-    var options = catSelectConfigService.getConfig($scope.config, $scope.options);
-
-    if (_.isUndefined(options)) {
-        throw new Error('At least one of "config" or "options" has to be specified');
-    }
-
-    var searchRequestAdapter = options.searchRequestAdapter || {};
-
-    var transport,
-        quietMillis,
-        searchRequestFunc = options.search || function (term, page) {
-                return {
-                    'search.name': term,
-                    page: page
-                };
-            },
-        filterFunc = options.filter || function (term) {
-                return true;
-            };
-    if (_.isArray(options.endpoint)) {
-        transport = function (queryParams) {
-            return queryParams.success({
-                elements: options.endpoint
-            });
-        };
-        quietMillis = 0;
-    } else if (_.isFunction(options.endpoint)) {
-        transport = options.endpoint;
-        quietMillis = 500;
-    } else if (_.isObject(options.endpoint)) {
-        transport = fetchElements(options.endpoint, options.sort, searchRequestAdapter);
-        quietMillis = 500;
-    } else if (_.isString(options.endpoint)) {
-        var api = catApiService[options.endpoint];
-        if (!api) {
-            $log.error('No api endpoint "' + options.endpoint + '" defined');
-            $scope.elements = [];
-            return;
-        }
-        transport = fetchElements(api, options.sort, searchRequestAdapter);
-        quietMillis = 500;
-    } else {
-        $log.error('The given endpoint has to be one of the following types: array, object, string or function - but was ' + (typeof options.endpoint));
-        $scope.elements = [];
-        return;
-    }
-
-    $scope.selectOptions = _.assign({
-        placeholder: ' ', // space in default placeholder is required, otherwise allowClear property does not work
-        minimumInputLength: 0,
-        adaptDropdownCssClass: function (cssClass) {
-            if (_.contains(['ng-valid', 'ng-invalid', 'ng-pristine', 'ng-dirty'], cssClass)) {
-                return cssClass;
-            }
-            return null;
-        },
-        ajax: {
-            data: searchRequestFunc,
-            quietMillis: quietMillis,
-            transport: transport,
-            results: function (data, page) {
-                var more = (page * (options.size || 100)) < data.totalCount;
-                return {
-                    results: _.filter(data.elements, filterFunc),
-                    more: more
-                };
-            }
-        },
-        formatResult: function (element) {
-            return element.name;
-        },
-        formatSelection: function (element) {
-            return element.name;
-        }
-    }, options['ui-select2']);
 }
 
 /**
