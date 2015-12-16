@@ -1,5 +1,4 @@
 /**
- /**
  * @ngdoc function
  * @name cat.FacetTerm
  * @module cat
@@ -51,5 +50,5 @@ class Facet {
     }
 }
 
-window.cat.Facet = Facet.prototype.constructor;
-window.cat.FacetTerm = FacetTerm.prototype.constructor;
+window.cat.Facet = Facet;
+window.cat.FacetTerm = FacetTerm;
