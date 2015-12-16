@@ -1,6 +1,3 @@
-import IQService = angular.IQService;
-import IHttpInterceptor = angular.IHttpInterceptor;
-
 class CatErrorHttpInterceptor implements IHttpInterceptor {
 
     constructor(private $q:IQService,

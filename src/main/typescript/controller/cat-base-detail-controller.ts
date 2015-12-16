@@ -1,6 +1,3 @@
-import IScope = angular.IScope;
-import IWindowService = angular.IWindowService;
-
 interface ICatBaseDetailStateParams extends IStateParamsService {
     id:string|number;
 }

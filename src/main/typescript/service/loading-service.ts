@@ -1,6 +1,3 @@
-import IRootScopeService = angular.IRootScopeService;
-import ITimeoutService = angular.ITimeoutService;
-
 class CatLoadingService {
     private activeCount = 0;
     private startTime;

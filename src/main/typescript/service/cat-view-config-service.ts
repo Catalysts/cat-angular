@@ -1,5 +1,3 @@
-import IStateParamsService = angular.ui.IStateParamsService;
-import IControllerService = angular.IControllerService;
 /**
  * @author Thomas Scheinecker, Catalysts GmbH.
  */

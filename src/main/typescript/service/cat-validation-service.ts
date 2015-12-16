@@ -1,5 +1,3 @@
-import IHttpPromiseCallbackArg = angular.IHttpPromiseCallbackArg;
-import IRequestConfig = angular.IRequestConfig;
 /**
  * Validation Context which holds all information about a validation context
  */

@@ -1,3 +1,31 @@
+import IAttributes = angular.IAttributes;
+import INgModelController = angular.INgModelController;
+import IAugmentedJQuery = angular.IAugmentedJQuery;
+import IScope = angular.IScope;
+import IWindowService = angular.IWindowService;
+import IDirective = angular.IDirective;
+import IHttpPromise = angular.IHttpPromise;
+import IPromise = angular.IPromise;
+import ILocaleService = angular.ILocaleService;
+import ILocationService = angular.ILocationService;
+import IStateService = angular.ui.IStateService;
+import IState = angular.ui.IState;
+import ILogService = angular.ILogService;
+import IHttpPromiseCallbackArg = angular.IHttpPromiseCallbackArg;
+import IRequestConfig = angular.IRequestConfig;
+import IStateParamsService = angular.ui.IStateParamsService;
+import IControllerService = angular.IControllerService;
+import IServiceProvider = angular.IServiceProvider;
+import IQService = angular.IQService;
+import IHttpInterceptor = angular.IHttpInterceptor;
+import IRootScopeService = angular.IRootScopeService;
+import ITimeoutService = angular.ITimeoutService;
+
+
+interface ISelect2AugmentedJQuery extends IAugmentedJQuery {
+    select2(...args):ISelect2AugmentedJQuery;
+}
+
 interface CatRequestConfig extends IRequestConfig {
     catValidationContextId?:string;
 }

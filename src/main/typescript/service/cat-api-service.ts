@@ -1,6 +1,3 @@
-import IHttpPromise = angular.IHttpPromise;
-import IPromise = angular.IPromise;
-
 interface ICatApiService {
     [key:string]:ICatApiEndpoint;
 }

@@ -1,6 +1,3 @@
-import IState = angular.ui.IState;
-import ILogService = angular.ILogService;
-
 interface ICatRouteService extends Array<string> {
 
 }

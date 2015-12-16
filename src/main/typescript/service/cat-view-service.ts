@@ -1,5 +1,3 @@
-import IServiceProvider = angular.IServiceProvider;
-
 interface ICatViewServiceProvider extends IServiceProvider {
     listAndDetailView(baseUrl:string, name:string, config?:any):void;
 }

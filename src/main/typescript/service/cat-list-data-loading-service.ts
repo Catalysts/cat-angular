@@ -1,6 +1,3 @@
-import ILocationService = angular.ILocationService;
-import IStateService = angular.ui.IStateService;
-
 interface ICatListData<T> {
     count:number;
     collection:T[];

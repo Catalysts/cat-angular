@@ -1,13 +1,17 @@
-'use strict';
-
-function CatSelectLink(scope, element, attrs, ngModel) {
+function CatSelectLink(scope:IScope,
+                       element:IAugmentedJQuery,
+                       attrs:IAttributes,
+                       ngModel:INgModelController) {
     element.addClass('form-control');
     // clear formatters, otherwise $viewModel will be converted to a string
     // see https://github.com/angular/angular.js/commit/1eda18365a348c9597aafba9d195d345e4f13d1e
     ngModel.$formatters = [];
 }
 
-function CatSelectController($scope, $log, catApiService, catSelectConfigService) {
+function CatSelectController($scope:IScope,
+                             $log:ILogService,
+                             catApiService:ICatApiService,
+                             catSelectConfigService:ICatSelectConfigService) {
     function fetchElements(endpoint, sort, searchRequestAdapter) {
         return function (queryParams) {
             var searchRequest = new window.cat.SearchRequest(queryParams.data);
@@ -140,7 +144,7 @@ function CatSelectController($scope, $log, catApiService, catSelectConfigService
  * }}
  * @constructor
  */
-function CatSelectDirective() {
+function catSelectDirectiveFactory():IDirective {
     return {
         restrict: 'EA',
         replace: true,
@@ -158,4 +162,4 @@ function CatSelectDirective() {
 }
 
 angular.module('cat.directives.select', ['ui.select2', 'cat.service.api', 'cat.service.selectConfig'])
-    .directive('catSelect', CatSelectDirective);
+    .directive('catSelect', [catSelectDirectiveFactory]);

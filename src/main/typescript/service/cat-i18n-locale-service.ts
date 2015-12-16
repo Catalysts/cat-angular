@@ -1,5 +1,3 @@
-import ILocaleService = angular.ILocaleService;
-
 interface ICatI18nLocaleService {
     getLanguageOfLocale(locale?:string):string|void;
     getCurrentLocale():string;

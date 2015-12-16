@@ -1,5 +1,3 @@
-'use strict';
-
 interface CatBreadcrumb {
     url?: string;
     title?: string;

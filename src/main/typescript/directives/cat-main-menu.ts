@@ -1,5 +1,3 @@
-import IDirective = angular.IDirective;
-
 function catMainMenuDirectiveFactory($mainMenu:ICatMainMenuService,
                                      catElementVisibilityService:ICatElementVisibilityService,
                                      $location:ILocationService):IDirective {
