@@ -35,7 +35,7 @@ interface ICatTemplateUrls {
 
 
 interface ICatTab {
-
+    name: string;
 }
 
 interface ICatBaseViewConfig {
