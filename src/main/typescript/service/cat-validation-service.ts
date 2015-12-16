@@ -51,12 +51,12 @@ interface ICatValidationService {
 }
 
 class CatValidationService implements ICatValidationService {
-    constructor(private $log,
+    constructor(private $log:ILogService,
                 private $globalMessages:CatMessageService,
-                private catValidations,
-                private catValidationContexts,
-                private catMessagesConfig,
-                private catI18nService) {
+                private catValidations:ValidationContext,
+                private catValidationContexts:{[context:string]:ValidationContext},
+                private catMessagesConfig:CatMessagesConfig,
+                private catI18nService:ICatI18nService) {
     }
 
     /**
