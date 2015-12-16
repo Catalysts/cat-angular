@@ -108,7 +108,7 @@ class SearchRequest {
      * @param {Object} [sort] if given this object overrides the current 'sort' state
      * @returns {{}} the object representing the current sort state
      */
-    sort(sort) {
+    sort(sort?:Sort) {
         if (sort === undefined) {
             return this._sort;
         } else {
@@ -122,7 +122,7 @@ class SearchRequest {
      * @param {Object} [search] if given this object overrides the current 'search' state
      * @returns {{}} the object representing the current search state
      */
-    search(search) {
+    search(search?) {
         if (search === undefined) {
             return this._search;
         } else {
