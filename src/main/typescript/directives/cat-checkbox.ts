@@ -1,0 +1,30 @@
+interface CatCheckboxDirectiveScope extends IScope {
+    checked:boolean;
+}
+
+function catCheckboxDirectiveFactory():IDirective {
+    return {
+        replace: true,
+        restrict: 'E',
+        scope: {
+            checked: '='
+        },
+        link: function CatCheckboxLink(scope:CatCheckboxDirectiveScope,
+                                       element:IAugmentedJQuery) {
+            if (!!scope.checked) {
+                element.addClass('glyphicon glyphicon-check');
+            } else {
+                element.addClass('glyphicon glyphicon-unchecked');
+            }
+        }
+    };
+}
+
+
+/**
+ * @ngdoc directive
+ * @name cat.directives.checkbox:catCheckbox
+ */
+angular
+    .module('cat.directives.checkbox', [])
+    .directive('catCheckbox', [catCheckboxDirectiveFactory]);
