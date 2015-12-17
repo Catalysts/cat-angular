@@ -6,7 +6,7 @@ class CatValidationGroupController implements ICatValidationGroupController {
 
     private contextId:string;
 
-    constructor($scope,
+    constructor($scope:IScope,
                 catValidationService:ICatValidationService) {
         this.contextId = catValidationService.createContext();
 

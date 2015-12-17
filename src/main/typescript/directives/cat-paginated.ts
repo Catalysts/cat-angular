@@ -4,6 +4,13 @@ interface CatPaginatedScope<T> extends IScope {
     syncLocation?:boolean;
     searchProps:string[];
     searchPropertyPlaceholders:{[property:string]:string};
+    paginationText:{
+        previous: string,
+        next: string,
+        first: string,
+        last: string
+    };
+    $parent:ICatListScope<T>|ICatBaseDetailScope<any>;
 }
 
 interface CatPaginatedAttributes extends IAttributes {
@@ -19,7 +26,7 @@ interface ICatPaginatedController {
     getSearchRequest():SearchRequest;
 }
 
-class CatPaginatedController implements ICatPaginatedController {
+class CatPaginatedController<T> implements ICatPaginatedController {
 
     private searchTimeout = null;
     private searchRequest:SearchRequest;
@@ -30,13 +37,13 @@ class CatPaginatedController implements ICatPaginatedController {
     private static PAGINATION_FIRST_KEY = 'cc.catalysts.cat-paginated.pagination.first';
     private static PAGINATION_LAST_KEY = 'cc.catalysts.cat-paginated.pagination.last';
 
-    constructor(private $scope,
-                private $location,
-                private $timeout,
-                private $rootScope,
-                private catListDataLoadingService,
-                private catI18nService,
-                private catSearchService) {
+    constructor(private $scope:CatPaginatedScope<T>,
+                private $location:ILocationService,
+                private $timeout:ITimeoutService,
+                private $rootScope:IRootScopeService,
+                private catListDataLoadingService:ICatListDataLoadingService,
+                private catI18nService:ICatI18nService,
+                private catSearchService:ICatSearchService) {
         this.initScopeProperties();
         this.registerScopeEventHandlers();
         this.registerScopeWatches();
@@ -44,7 +51,7 @@ class CatPaginatedController implements ICatPaginatedController {
 
     private initScopeProperties() {
         if (_.isUndefined(this.$scope.listData)) {
-            this.$scope.listData = this.$scope.$parent.listData;
+            this.$scope.listData = this.$scope.$parent['listData'];
 
             if (_.isUndefined(this.$scope.listData)) {
                 throw new Error('listData was not defined and couldn\'t be found with default value');
@@ -52,7 +59,7 @@ class CatPaginatedController implements ICatPaginatedController {
         }
 
         if (_.isUndefined(this.$scope.syncLocation)) {
-            this.$scope.syncLocation = _.isUndefined(this.$scope.$parent.detail);
+            this.$scope.syncLocation = _.isUndefined(this.$scope.$parent['detail']);
         }
 
         this.$scope.paginationText = {
@@ -183,6 +190,27 @@ class CatPaginatedController implements ICatPaginatedController {
 function catPaginatedDirectiveFactory(catI18nService:ICatI18nService):IDirective {
     let SEARCH_PROP_KEY = 'cc.catalysts.cat-paginated.search.prop';
 
+    let catPaginatedLink:IDirectiveLinkFn = (scope:CatPaginatedScope<any>,
+                                             element:IAugmentedJQuery,
+                                             attrs:CatPaginatedAttributes) => {
+        if (!!attrs.searchProps) {
+            scope.searchProps = _.filter(attrs.searchProps.split(','), function (prop) {
+                return !!prop;
+            });
+
+            scope.searchPropertyPlaceholders = {};
+
+            _.forEach(scope.searchProps, function (searchProp) {
+                scope.searchPropertyPlaceholders[searchProp] = 'Search by ' + searchProp;
+                catI18nService.translate(SEARCH_PROP_KEY, {prop: searchProp})
+                    .then(function (message) {
+                        scope.searchPropertyPlaceholders[searchProp] = message;
+                    });
+            });
+        }
+    };
+
+
     return {
         replace: true,
         restrict: 'E',
@@ -192,27 +220,18 @@ function catPaginatedDirectiveFactory(catI18nService:ICatI18nService):IDirective
             syncLocation: '=?'
         },
         templateUrl: 'template/cat-paginated.tpl.html',
-        link: function CatPaginatedLink(scope:CatPaginatedScope<any>,
-                                        element:IAugmentedJQuery,
-                                        attrs:CatPaginatedAttributes) {
-            if (!!attrs.searchProps) {
-                scope.searchProps = _.filter(attrs.searchProps.split(','), function (prop) {
-                    return !!prop;
-                });
-
-                scope.searchPropertyPlaceholders = {};
-
-                _.forEach(scope.searchProps, function (searchProp) {
-                    scope.searchPropertyPlaceholders[searchProp] = 'Search by ' + searchProp;
-                    catI18nService.translate(SEARCH_PROP_KEY, {prop: searchProp})
-                        .then(function (message) {
-                            scope.searchPropertyPlaceholders[searchProp] = message;
-                        });
-                });
-            }
-        },
+        link: catPaginatedLink,
         controllerAs: 'catPaginatedController',
-        controller: CatPaginatedController
+        controller: [
+            '$scope',
+            '$location',
+            '$timeout',
+            '$rootScope',
+            'catListDataLoadingService',
+            'catI18nService',
+            'catSearchService',
+            CatPaginatedController
+        ]
     };
 }
 

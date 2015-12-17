@@ -137,7 +137,9 @@ angular.module('cat.service.search', [])
      * A small helper service which encapsulates the url encoding of an object.
      * In it's default version it just delegates to jQuery.param
      */
-    .service('catUrlEncodingService', CatUrlEncodingService)
+    .service('catUrlEncodingService', [
+        CatUrlEncodingService
+    ])
     /**
      * @ngdoc service
      * @name cat.service.search:catSearchService
@@ -147,4 +149,8 @@ angular.module('cat.service.search', [])
      * @descripton
      * A helper service which encapsulates several operations which can be performed on a cat.SearchRequest
      */
-    .service('catSearchService', CatSearchService);
+    .service('catSearchService', [
+        '$location',
+        'catUrlEncodingService',
+        CatSearchService
+    ]);

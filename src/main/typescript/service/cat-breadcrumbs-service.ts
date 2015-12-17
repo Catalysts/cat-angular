@@ -82,24 +82,24 @@ class CatBreadcrumbsService implements ICatBreadcrumbsService {
      */
     generateFromConfig(config:ICatBaseViewConfig):CatBreadcrumb[] {
         this.clear();
-        var uiStack:CatBreadcrumb[] = [];
+        let uiStack:CatBreadcrumb[] = [];
 
-        var currentState = this.$state.$current['parent'];
-        var currentEndpoint:ICatApiEndpoint = config.endpoint;
-        var count:number = 0;
-        var parents:string = '^';
+        let currentState = this.$state.$current['parent'];
+        let currentEndpoint:ICatApiEndpoint = config.endpoint;
+        let count:number = 0;
+        let parents:string = '^';
 
         while (!!currentState && !!currentState.parent) {
-            var stateName = currentState.name;
+            let stateName = currentState.name;
 
             if (!/\.tab$/g.test(stateName)) {
-                var href = this.$state.href(parents);
+                let href = this.$state.href(parents);
 
-                var breadcrumb:CatBreadcrumb;
+                let breadcrumb:CatBreadcrumb;
 
                 if (config.parents.length > count) {
-                    var parent = config.parents[count++];
-                    var regex = new RegExp('/' + window.cat.util.pluralize(currentEndpoint.getEndpointName()) + '$');
+                    let parent = config.parents[count++];
+                    let regex = new RegExp('/' + window.cat.util.pluralize(currentEndpoint.getEndpointName()) + '$');
                     href = href.replace(regex, '?tab=' + currentEndpoint.getEndpointName());
 
                     breadcrumb = {
@@ -134,4 +134,8 @@ angular.module('cat.service.breadcrumbs', [])
      * @name cat.service.breadcrumbs:catBreadcrumbs
      */
     .value('catBreadcrumbs', [])
-    .service('catBreadcrumbsService', CatBreadcrumbsService);
+    .service('catBreadcrumbsService', [
+        'catBreadcrubms',
+        '$state',
+        CatBreadcrumbsService
+    ]);

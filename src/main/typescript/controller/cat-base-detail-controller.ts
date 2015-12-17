@@ -80,8 +80,8 @@ class CatBaseDetailController {
 
         $scope.config = config;
         let endpoint = config.endpoint;
-        var templateUrls = config.templateUrls;
-        var Model = config.Model;
+        let templateUrls = config.templateUrls;
+        let Model = config.Model;
 
         $scope.uiStack = catBreadcrumbsService.generateFromConfig(config);
 
@@ -106,15 +106,15 @@ class CatBaseDetailController {
         /**
          * @returns {String|Number} A title of the current object or the 'id' as fallback
          */
-        $scope.title = function () {
-            var data = $scope.detail;
+        $scope.title = () => {
+            let data = $scope.detail;
             if (_.isUndefined(data)) {
                 return '';
             }
             return !!data.breadcrumbTitle ? data.breadcrumbTitle() : (!!data.name ? data.name : data.id);
         };
 
-        var update = function () {
+        let update = () => {
             catBreadcrumbsService.replaceLast({
                 title: $scope.title()
             });
@@ -123,7 +123,7 @@ class CatBaseDetailController {
         /**
          * reloads the current object from the server
          */
-        $scope.reloadDetails = function () {
+        $scope.reloadDetails = () => {
             endpoint.get($stateParams.id).then(function (data) {
                 $scope.detail = data;
                 update();
@@ -136,7 +136,7 @@ class CatBaseDetailController {
          * Creates a new copy of the given model and sets its parent if applicable.
          * Triggers a switch into the edit mode
          */
-        $scope.add = function () {
+        $scope.add = () => {
             $scope.editDetail = new Model();
             if (_.isFunction($scope.editDetail.setParent)) {
                 $scope.editDetail.setParent(config.parents[0]);
@@ -146,7 +146,7 @@ class CatBaseDetailController {
         /**
          * Creates a copy of the current object and triggers a switch into edit mode
          */
-        $scope.edit = function () {
+        $scope.edit = () => {
             if (_.isFunction($scope.detail.setParent)) {
                 $scope.detail.setParent(config.parents[0]);
             }
@@ -157,7 +157,7 @@ class CatBaseDetailController {
          * Either cancels the current edit of an object by resetting it or triggers a history back event if the 'new' mode
          * is active
          */
-        $scope.cancelEdit = function () {
+        $scope.cancelEdit = () => {
             catValidationService.clearValidationErrors();
             $scope.$broadcast('formReset');
             if ($scope.exists) {
@@ -171,7 +171,7 @@ class CatBaseDetailController {
         /**
          * Calls the copy function of the current endpoint and redirects to the detail page of the copied object upon success
          */
-        $scope.copy = function () {
+        $scope.copy = () => {
             endpoint.copy($scope.detail.id).then(function (data) {
                 //Note: here we go to the detail state of the copied object although we have all the data of the copied object here,
                 // but otherwise we would have to change the url and this leads to problems with browser back and so on
@@ -187,7 +187,7 @@ class CatBaseDetailController {
                 if (_.isEmpty($scope.uiStack)) {
                     $state.go('^.list');
                 } else {
-                    var url = $state.href('^.^');
+                    let url = $state.href('^.^');
                     $location.url(url.substring(1, url.length));
                     $location.search('tab', endpoint.getEndpointName());
                 }
@@ -226,7 +226,7 @@ class CatBaseDetailController {
         };
 
         // TABS
-        $scope.baseTabsController = ['$scope', function ($tabsScope) {
+        $scope.baseTabsController = ['$scope', ($tabsScope) => {
             $controller('CatBaseTabsController', {
                 $scope: $tabsScope,
                 config: config

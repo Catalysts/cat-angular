@@ -30,7 +30,7 @@ class CatI18nService implements ICatI18nService {
      * @returns {promise} Returns a promise of the translated key
      */
     translate(key, parameters, locale) {
-        var model = parameters;
+        let model = parameters;
 
         if (_.isArray(parameters)) {
             parameters.forEach((value, idx) => {
@@ -44,12 +44,12 @@ class CatI18nService implements ICatI18nService {
                 if (canTranslate) {
                     return this.catI18nMessageSourceService.getMessage(key, locale)
                 } else {
-                    var reason = 'No translation for key \'' + key + '\' available!';
+                    let reason = 'No translation for key \'' + key + '\' available!';
                     return this.$q.reject(reason);
                 }
             })
             .then((message) => {
-                var translation = this.catI18nMessageParameterResolver(message, model);
+                let translation = this.catI18nMessageParameterResolver(message, model);
                 if (_.isString(translation)) {
                     return translation;
                 } else {

@@ -56,13 +56,13 @@ class CatFacetsController<T> {
 }
 
 function catFacetsDirectiveFactory() {
-    function _initDefaults(scope:CatFacetsScope<any>) {
+    function _initDefaults(scope:CatFacetsScope<any>):void {
         if (_.isUndefined(scope.listData)) {
             scope.listData = scope.$parent['listData'];
         }
     }
 
-    function _checkConditions(scope:CatFacetsScope<any>) {
+    function _checkConditions(scope:CatFacetsScope<any>):void {
         if (_.isUndefined(scope.listData)) {
             throw new Error('listData was not defined and couldn\'t be found with default value');
         }
@@ -71,6 +71,16 @@ function catFacetsDirectiveFactory() {
             throw new Error('No facets are available within given listData');
         }
     }
+
+    let catFacetsLink:IDirectiveLinkFn = (scope:CatFacetsScope<any>,
+                                          element:IAugmentedJQuery,
+                                          attrs:IAttributes,
+                                          catPaginatedController:ICatPaginatedController) => {
+        _initDefaults(scope);
+        _checkConditions(scope);
+
+        scope.catPaginatedController = catPaginatedController;
+    };
 
     return {
         replace: true,
@@ -81,15 +91,7 @@ function catFacetsDirectiveFactory() {
         },
         require: '^catPaginated',
         templateUrl: 'template/cat-facets.tpl.html',
-        link: function CatFacetsLink(scope:CatFacetsScope<any>,
-                                     element:IAugmentedJQuery,
-                                     attrs:IAttributes,
-                                     catPaginatedController:ICatPaginatedController) {
-            _initDefaults(scope);
-            _checkConditions(scope);
-
-            scope.catPaginatedController = catPaginatedController;
-        },
+        link: catFacetsLink,
         controller: [
             '$scope',
             CatFacetsController

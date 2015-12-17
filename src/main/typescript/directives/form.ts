@@ -8,7 +8,7 @@ function catFormDirectiveFactory($timeout:ITimeoutService) {
                                         element:IAugmentedJQuery,
                                         attrs:CatFormAttributes,
                                         formCtrl:IFormController) => {
-        var warningMessage = attrs.eocsWarnOnNavIfDirty || 'You have unsaved changes. Leave the page?';
+        let warningMessage = attrs.eocsWarnOnNavIfDirty || 'You have unsaved changes. Leave the page?';
 
         // TODO - remove this ugly hack if ui-select2 fixes this problem...
         $timeout(function () {

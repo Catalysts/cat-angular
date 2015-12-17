@@ -31,9 +31,9 @@ class CatI18nMessageSourceService implements ICatI18nMessageSourceService {
     }
 
     private _getMessages(locale) {
-        var localeId = this._getLocale(locale);
+        let localeId = this._getLocale(locale);
 
-        var messages = window.cat.i18n[localeId];
+        let messages = window.cat.i18n[localeId];
         if (_.isUndefined(messages)) {
             messages = this._getMessages(this.catI18nLocaleService.getDefaultLocale());
         }
@@ -74,7 +74,7 @@ class CatI18nMessageSourceService implements ICatI18nMessageSourceService {
      * @returns {Promise} a promise holding the retrieved message
      */
     getMessage(key, locale) {
-        var bundle = this._getMessages(locale);
+        let bundle = this._getMessages(locale);
         if (_.isUndefined(bundle) || _.isUndefined(bundle[key])) {
             return this.$q.reject('No message found for key \'' + key + '\' and the given locale \'' + this._getLocale(locale) + '\'');
         }
@@ -96,7 +96,7 @@ class CatI18nMessageSourceService implements ICatI18nMessageSourceService {
      * @returns {Promise} a promise holding <code>TRUE</code> if the key can be resolved for the given locale
      */
     hasMessage(key, locale) {
-        var bundle = this._getMessages(locale);
+        let bundle = this._getMessages(locale);
         return this.$q.when(!_.isUndefined(bundle) && !_.isUndefined(bundle[key]));
     };
 }

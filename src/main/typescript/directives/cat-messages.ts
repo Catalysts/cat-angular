@@ -22,6 +22,15 @@ class CatMessagesController {
     }
 }
 function catMessagesDirectiveFactory():IDirective {
+    let catMessagesLink:IDirectiveLinkFn = (scope:CatMessagesDirectiveScope,
+                                            elem:IAugmentedJQuery,
+                                            attr:IAttributes,
+                                            catValidationGroupCtrl:ICatValidationGroupController) => {
+        if (!!catValidationGroupCtrl) {
+            scope.contextId = catValidationGroupCtrl.getContextId();
+        }
+    };
+
     return {
         restrict: 'A',
         templateUrl: 'template/cat-messages.tpl.html',
@@ -29,15 +38,12 @@ function catMessagesDirectiveFactory():IDirective {
             type: '=?'
         },
         require: '?^^catValidationGroup',
-        link: (scope:CatMessagesDirectiveScope,
-               elem:IAugmentedJQuery,
-               attr:IAttributes,
-               catValidationGroupCtrl:ICatValidationGroupController) => {
-            if (!!catValidationGroupCtrl) {
-                scope.contextId = catValidationGroupCtrl.getContextId();
-            }
-        },
-        controller: [CatMessagesController]
+        link: catMessagesLink,
+        controller: [
+            '$scope',
+            'catValidationService',
+            CatMessagesController
+        ]
     };
 }
 

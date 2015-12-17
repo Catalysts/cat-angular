@@ -70,9 +70,14 @@ class CatViewServiceProvider implements ICatViewServiceProvider {
     }];
 }
 
-angular.module('cat.service.view',
-    [
+angular
+    .module('cat.service.view', [
         'cat.service.api',
         'cat.service.route',
         'cat.service.view.config'
-    ]).provider('catViewService', CatViewServiceProvider);
+    ])
+    .provider('catViewService', [
+        'catRouteServiceProvider',
+        'catApiServiceProvider',
+        CatViewServiceProvider
+    ]);

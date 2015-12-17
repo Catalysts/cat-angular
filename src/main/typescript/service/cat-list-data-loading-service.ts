@@ -1,4 +1,5 @@
 interface ICatListData<T> {
+    search?:any;
     count:number;
     collection:T[];
     pagination:Pagination;

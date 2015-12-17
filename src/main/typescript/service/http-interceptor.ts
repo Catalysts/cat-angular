@@ -1,3 +1,4 @@
+import IHttpProvider = angular.IHttpProvider;
 class CatErrorHttpInterceptor implements IHttpInterceptor {
 
     constructor(private $q:IQService,
@@ -33,18 +34,21 @@ function catErrorHttpInterceptorFactory($q:IQService,
     return new CatErrorHttpInterceptor($q, loadingService, catValidationMessageHandler);
 }
 
-angular.module('cat.service.httpIntercept', ['cat.service.loading', 'cat.service.validation'])
-
-/**
- * @ngdoc service
- * @name cat.service.httpIntercept:errorHttpInterceptor
- */
+angular
+    .module('cat.service.httpIntercept', [
+        'cat.service.loading',
+        'cat.service.validation'
+    ])
+    /**
+     * @ngdoc service
+     * @name cat.service.httpIntercept:errorHttpInterceptor
+     */
     .factory('errorHttpInterceptor', [
         '$q',
         'loadingService',
         'catValidationMessageHandler',
         catErrorHttpInterceptorFactory
     ])
-    .config(function ($httpProvider) {
+    .config(['$httpProvider', ($httpProvider:IHttpProvider) => {
         $httpProvider.interceptors.push('errorHttpInterceptor');
-    });
+    }]);

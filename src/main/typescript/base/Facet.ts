@@ -44,7 +44,7 @@ class Facet {
 
     constructor(data:any = {}) {
         this.name = data.name;
-        this.terms = _.map(data.facets, function (facet) {
+        this.terms = _.map(data.facets, (facet) => {
             return new FacetTerm(facet);
         });
     }

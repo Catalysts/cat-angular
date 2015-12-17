@@ -161,7 +161,7 @@ class CatViewConfigService implements ICatViewConfigService {
 
         let tabs;
 
-        var defaultViewUrl = parentUrl + endpointName + '/' + parentTemplateNamePrefix + endpointName + '-details-view.tpl.html';
+        let defaultViewUrl = parentUrl + endpointName + '/' + parentTemplateNamePrefix + endpointName + '-details-view.tpl.html';
         let templateUrls:ICatTemplateUrls = {
             edit: parentUrl + endpointName + '/' + parentTemplateNamePrefix + endpointName + '-details-edit.tpl.html',
             view: defaultViewUrl
@@ -251,4 +251,9 @@ angular
         'cat.service.api',
         'cat.service.listDataLoading'
     ])
-    .service('catViewConfigService', CatViewConfigService);
+    .service('catViewConfigService', [
+        '$q',
+        'catApiService',
+        'catListDataLoadingService',
+        CatViewConfigService
+    ]);

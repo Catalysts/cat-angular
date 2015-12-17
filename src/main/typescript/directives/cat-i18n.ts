@@ -24,6 +24,20 @@ function catI18nDirectiveFactory($log:ILogService,
             );
     }
 
+    let catI18nLink:IDirectiveLinkFn = (scope:CatI18nScope,
+                                        element:IAugmentedJQuery) => {
+        _translate(scope, element);
+
+        if (!!scope.params && scope.watchParams === true) {
+            scope.$watch('params', () => {
+                _translate(scope, element);
+            }, true);
+        }
+
+        $rootScope.$on('cat-i18n-refresh', () => {
+            _translate(scope, element);
+        });
+    };
 
     return {
         restrict: 'A',
@@ -32,20 +46,7 @@ function catI18nDirectiveFactory($log:ILogService,
             params: '=?i18nParams',
             watchParams: '=?i18nWatchParams'
         },
-        link: function CatI18nLink(scope:CatI18nScope,
-                                   element:IAugmentedJQuery) {
-            _translate(scope, element);
-
-            if (!!scope.params && scope.watchParams === true) {
-                scope.$watch('params', () => {
-                    _translate(scope, element);
-                }, true);
-            }
-
-            $rootScope.$on('cat-i18n-refresh', () => {
-                _translate(scope, element);
-            });
-        }
+        link: catI18nLink
     };
 }
 

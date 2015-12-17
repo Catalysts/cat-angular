@@ -4,17 +4,20 @@ interface CatElementVisibleScope extends IScope {
 }
 
 function catElementVisibleDirectiveFactory(catElementVisibilityService):IDirective {
+    let catElementVisibleLink:IDirectiveLinkFn = (scope:CatElementVisibleScope,
+                                                  element:IAugmentedJQuery) => {
+        if (!catElementVisibilityService.isVisible(scope.identifier, scope.data)) {
+            element.hide();
+        }
+    };
+
     return {
         restrict: 'A',
         scope: {
             identifier: '@catElementVisible',
             data: '=?catElementData'
         },
-        link: function CatElementVisibleLink(scope:CatElementVisibleScope, element) {
-            if (!catElementVisibilityService.isVisible(scope.identifier, scope.data)) {
-                element.hide();
-            }
-        }
+        link: catElementVisibleLink
     };
 }
 

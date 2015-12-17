@@ -15,16 +15,6 @@ interface CatSelectScope<T> extends IScope {
     options?:CatSelectOptions;
 }
 
-function CatSelectLink(scope:IScope,
-                       element:IAugmentedJQuery,
-                       attrs:IAttributes,
-                       ngModel:INgModelController) {
-    element.addClass('form-control');
-    // clear formatters, otherwise $viewModel will be converted to a string
-    // see https://github.com/angular/angular.js/commit/1eda18365a348c9597aafba9d195d345e4f13d1e
-    ngModel.$formatters = [];
-}
-
 class CatSelectController {
     constructor($scope:CatSelectScope<any>,
                 private $log:ILogService,
@@ -168,6 +158,17 @@ class CatSelectController {
  * @constructor
  */
 function catSelectDirectiveFactory():IDirective {
+    let catSelectLink:IDirectiveLinkFn = (scope:IScope,
+                                          element:IAugmentedJQuery,
+                                          attrs:IAttributes,
+                                          ngModel:INgModelController) => {
+        element.addClass('form-control');
+        // clear formatters, otherwise $viewModel will be converted to a string
+        // see https://github.com/angular/angular.js/commit/1eda18365a348c9597aafba9d195d345e4f13d1e
+        ngModel.$formatters = [];
+    };
+
+
     return {
         restrict: 'EA',
         replace: true,
@@ -178,8 +179,14 @@ function catSelectDirectiveFactory():IDirective {
             id: '@',
             config: '@?'
         },
-        link: CatSelectLink,
-        controller: CatSelectController,
+        link: catSelectLink,
+        controller: [
+            '$scope',
+            '$log',
+            'catApiService',
+            'catSelectConfigService',
+            CatSelectController
+        ],
         template: '<input type="text" ui-select2="selectOptions">'
     };
 }

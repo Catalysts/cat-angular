@@ -158,12 +158,14 @@ class CatBaseTabsController<T> {
                 };
 
                 $tabScope.loadListData = () => {
-                    catListDataLoadingService.load($tabScope.getEndpoint(), $tabScope.getSearchRequest()).then(function (data) {
-                        $tabScope.listData = data;
-                    });
+                    catListDataLoadingService
+                        .load($tabScope.getEndpoint(), $tabScope.getSearchRequest())
+                        .then((data) => {
+                            $tabScope.listData = data;
+                        });
                 };
 
-                $tabScope.$on('tab-' + activeTab.name + '-active', function () {
+                $tabScope.$on('tab-' + activeTab.name + '-active', () => {
                     if (_.isUndefined($tabScope.listData)) {
                         $tabScope.loadListData();
                     }

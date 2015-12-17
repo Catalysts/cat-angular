@@ -15,6 +15,17 @@ class CatFieldErrorsController {
 }
 
 function catFieldErrorsDirectiveFactory() {
+    let catFieldErrorsLink:IDirectiveLinkFn = (scope:IScope,
+                                               elem:IAugmentedJQuery,
+                                               attr:IAttributes,
+        [catFieldErrorsController,catValidationGroupController]:[CatFieldErrorsController, ICatValidationGroupController]) => {
+        elem.addClass('cat-field-errors');
+
+        if (!!catValidationGroupController) {
+            catFieldErrorsController.contextId = catValidationGroupController.getContextId();
+        }
+    };
+
     return {
         replace: 'true',
         restrict: 'EA',
@@ -24,16 +35,7 @@ function catFieldErrorsDirectiveFactory() {
         bindToController: true,
         controllerAs: 'catFieldErrors',
         require: ['catFieldErrors', '?^^catValidationGroup'],
-        link: function (scope:IScope,
-                        elem:IAugmentedJQuery,
-                        attr:IAttributes,
-            [catFieldErrorsController,catValidationGroupController]:[CatFieldErrorsController, ICatValidationGroupController]) {
-            elem.addClass('cat-field-errors');
-
-            if (!!catValidationGroupController) {
-                catFieldErrorsController.contextId = catValidationGroupController.getContextId();
-            }
-        },
+        link: catFieldErrorsLink,
         controller: CatFieldErrorsController,
         templateUrl: 'template/cat-field-errors.tpl.html'
     };

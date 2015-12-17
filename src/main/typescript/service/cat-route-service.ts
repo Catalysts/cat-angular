@@ -1,3 +1,4 @@
+import IStateProvider = angular.ui.IStateProvider;
 interface ICatRouteService extends Array<string> {
 
 }
@@ -30,7 +31,7 @@ interface ICatRouteServiceProvider extends IServiceProvider {
 class CatRouteServiceProvider implements ICatRouteServiceProvider {
     private viewNames:string[] = [];
 
-    constructor(private $stateProvider) {
+    constructor(private $stateProvider:IStateProvider) {
 
     }
 

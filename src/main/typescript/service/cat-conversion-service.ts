@@ -47,8 +47,8 @@ function _convertToClientData(serverData, context) {
     }
 
     if (_.isNumber(serverData.totalCount)) {
-        var copy = _.clone(serverData);
-        var facets = [];
+        let copy = _.clone(serverData);
+        let facets = [];
 
         if (!!serverData.facets) {
             facets = _.map(serverData.facets, function (facet) {
@@ -56,7 +56,7 @@ function _convertToClientData(serverData, context) {
             });
         }
 
-        var result = {
+        let result = {
             totalCount: serverData.totalCount,
             facets: facets,
             elements: _.map(serverData.elements, function (elem) {
@@ -95,4 +95,7 @@ angular.module('cat.service.conversion', [])
             return clientData;
         }
     })
-    .service('catConversionService', CatConversionService);
+    .service('catConversionService', [
+        'catConversionFunctions',
+        CatConversionService
+    ]);

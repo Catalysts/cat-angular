@@ -33,7 +33,7 @@ window.cat.util = window.cat.util || {
             if (_.isUndefined(string) || string.length === 0) {
                 return '';
             }
-            var lastChar = string[string.length - 1];
+            let lastChar = string[string.length - 1];
 
             switch (lastChar) {
                 case 'y':
@@ -54,8 +54,8 @@ window.cat.util = window.cat.util || {
         generateUUID: () => {
             // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
             /* jshint ignore:start */
-            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-                var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+                let r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
                 return v.toString(16);
             });
             /* jshint ignore:end */

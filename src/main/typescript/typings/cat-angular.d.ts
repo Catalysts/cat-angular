@@ -22,6 +22,7 @@ import IRootScopeService = angular.IRootScopeService;
 import ITimeoutService = angular.ITimeoutService;
 import IFormController = angular.IFormController;
 import IAngularEvent = angular.IAngularEvent;
+import ICompileService = angular.ICompileService;
 
 interface ISelect2AugmentedJQuery extends IAugmentedJQuery {
     select2(...args):ISelect2AugmentedJQuery;

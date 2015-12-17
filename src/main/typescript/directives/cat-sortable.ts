@@ -30,13 +30,13 @@ interface CatSortableAttributes extends IAttributes {
 }
 
 function catSortableDirectiveFactory($compile:ICompileService):IDirective {
-    let catSortableLink = (scope:CatSortableScope<any>,
-                           element:IAugmentedJQuery,
-                           attrs:CatSortableAttributes,
-                           catPaginatedController) => {
-        var title = element.text();
-        var property = attrs.catSortable || title.toLowerCase().trim();
-        var i18n = 'cc.catalysts.cat-sortable.sort.' + property;
+    let catSortableLink:IDirectiveLinkFn = (scope:CatSortableScope<any>,
+                                            element:IAugmentedJQuery,
+                                            attrs:CatSortableAttributes,
+                                            catPaginatedController) => {
+        let title = element.text();
+        let property = attrs.catSortable || title.toLowerCase().trim();
+        let i18n = 'cc.catalysts.cat-sortable.sort.' + property;
 
         if (!!attrs.catI18nKey) {
             i18n = attrs.catI18nKey;
@@ -45,7 +45,7 @@ function catSortableDirectiveFactory($compile:ICompileService):IDirective {
         // todo - make configurable
         scope.sort = scope.listData.searchRequest.sort();
         scope.catPaginatedController = catPaginatedController;
-        var icon = 'glyphicon-sort-by-attributes';
+        let icon = 'glyphicon-sort-by-attributes';
 
         if (!!attrs.sortMode) {
             if (attrs.sortMode === 'numeric') {

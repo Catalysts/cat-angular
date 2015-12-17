@@ -224,4 +224,8 @@ class MainMenuProvider implements IMainMenuProvider {
     }
 }
 
-angular.module('cat.service.menu', []).provider('$mainMenu', MainMenuProvider);
+angular
+    .module('cat.service.menu', [])
+    .provider('$mainMenu', [
+        MainMenuProvider
+    ]);

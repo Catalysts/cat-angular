@@ -3,20 +3,22 @@ interface CatCheckboxDirectiveScope extends IScope {
 }
 
 function catCheckboxDirectiveFactory():IDirective {
+    let catCheckboxLink:IDirectiveLinkFn = (scope:CatCheckboxDirectiveScope,
+                                            element:IAugmentedJQuery) => {
+        if (!!scope.checked) {
+            element.addClass('glyphicon glyphicon-check');
+        } else {
+            element.addClass('glyphicon glyphicon-unchecked');
+        }
+    };
+
     return {
         replace: true,
         restrict: 'E',
         scope: {
             checked: '='
         },
-        link: function CatCheckboxLink(scope:CatCheckboxDirectiveScope,
-                                       element:IAugmentedJQuery) {
-            if (!!scope.checked) {
-                element.addClass('glyphicon glyphicon-check');
-            } else {
-                element.addClass('glyphicon glyphicon-unchecked');
-            }
-        }
+        link: catCheckboxLink
     };
 }
 

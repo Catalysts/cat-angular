@@ -14,7 +14,7 @@ function catInputDirectiveFactory():IDirective {
                     return;
                 }
 
-                var valid = !fieldErrors[attrs.id];
+                let valid = !fieldErrors[attrs.id];
                 ctrl.$setValidity(attrs.id, valid);
             });
         }

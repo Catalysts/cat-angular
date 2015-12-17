@@ -64,7 +64,7 @@ class CatMessageService implements ICatMessagesService {
     }
 
     clearDeadMessages() {
-        for (var type in this.messages) {
+        for (let type in this.messages) {
             this.messages[type] = _.filter(this.messages[type], (message:Message) => {
                 return message.timeToLive > 0;
             });
@@ -88,7 +88,7 @@ class CatMessageService implements ICatMessagesService {
     }
 
     decreaseTimeToLive() {
-        for (var type in this.messages) {
+        for (let type in this.messages) {
             _.forEach(this.messages[type], (message) => {
                 message.timeToLive--;
             });
@@ -124,15 +124,16 @@ class CatMessageService implements ICatMessagesService {
  */
 class CatValidationMessageHandler {
 
-    constructor(private $globalMessages:ICatMessagesService, private catValidationService) {
+    constructor(private $globalMessages:ICatMessagesService,
+                private catValidationService:ICatValidationService) {
 
     }
 
     handleRejectedResponse(rejection) {
         this.$globalMessages.clearMessages('error');
 
-        if (!!rejection.data.error) {
-            var error = '[' + rejection.status + ' - ' + rejection.statusText + '] ' + rejection.data.error;
+        if (!!rejection.data && !!rejection.data.error) {
+            let error = '[' + rejection.status + ' - ' + rejection.statusText + '] ' + rejection.data.error;
             if (!!rejection.data.cause) {
                 error += '\n' + rejection.data.cause;
             }
@@ -148,5 +149,12 @@ angular
     .module('cat.service.message', [
         'cat.config.messages'
     ])
-    .service('catValidationMessageHandler', CatValidationMessageHandler)
-    .service('$globalMessages', ['$rootScope', CatMessageService]);
+    .service('catValidationMessageHandler', [
+        '$globalMessages',
+        'catValidationService',
+        CatValidationMessageHandler
+    ])
+    .service('$globalMessages', [
+        '$rootScope',
+        CatMessageService
+    ]);

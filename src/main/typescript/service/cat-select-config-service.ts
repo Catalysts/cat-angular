@@ -37,7 +37,7 @@ class CatSelectConfigService implements ICatSelectConfigService {
      * @returns {*} the named config object (with applied defaults) or undefined
      */
     getConfig(name, options) {
-        var config = this.configs[name];
+        let config = this.configs[name];
 
         if (_.isUndefined(config) && _.isUndefined(options)) {
             return undefined;
@@ -89,4 +89,6 @@ class CatSelectConfigServiceProvider implements ICatSelectConfigServiceProvider 
 
 angular
     .module('cat.service.selectConfig', [])
-    .provider('catSelectConfigService', CatSelectConfigServiceProvider);
+    .provider('catSelectConfigService', [
+        CatSelectConfigServiceProvider
+    ]);

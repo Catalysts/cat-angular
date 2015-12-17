@@ -315,7 +315,7 @@ class CatApiEndpoint implements ICatApiEndpoint {
      * from the backend
      */
     save(object) {
-        var t = _<number>([34, 342]).value();
+        let t = _<number>([34, 342]).value();
         if (!!object.id) {
             return this.$http.put(this._endpointUrl + '/' + object.id, this._removeEndpoints(object)).then((response) => {
                 return this._mapResponse(response.data);
@@ -456,7 +456,7 @@ class CatApiServiceProvider implements ICatApiServiceProvider {
 angular
     .module('cat.service.api', ['cat.service.conversion', 'cat.service.search'])
     .constant('CAT_API_SERVICE_DEFAULTS', {endpointUrlPrefix: 'api/'})
-    .provider('catApiService', CatApiServiceProvider);
+    .provider('catApiService', [CatApiServiceProvider]);
 
 /**
  * @ngdoc service
@@ -471,4 +471,6 @@ angular
  * @constructor
  */
 // $api is deprecated, will be removed in a future release
-angular.module('cat.service.api').provider('$api', CatApiServiceProvider);
+angular
+    .module('cat.service.api')
+    .provider('$api', [CatApiServiceProvider]);

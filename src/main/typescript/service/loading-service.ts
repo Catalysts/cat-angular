@@ -1,3 +1,8 @@
+interface CatLoadingServiceOptions {
+    timeout:number;
+    animationDuration:number;
+}
+
 class CatLoadingService {
     private activeCount = 0;
     private startTime;
@@ -49,19 +54,14 @@ class CatLoadingService {
                 this.$timeout.cancel(this.startTimer);
                 this.startTimer = undefined;
             }
-            var now = new Date().getTime();
-            var stopTimeout = this.CAT_LOADING_SERVICE_DEFAULTS.timeout + (Math.max((this.CAT_LOADING_SERVICE_DEFAULTS.animationDuration - (now - this.startTime)), 0));
+            let now = new Date().getTime();
+            let stopTimeout = this.CAT_LOADING_SERVICE_DEFAULTS.timeout + (Math.max((this.CAT_LOADING_SERVICE_DEFAULTS.animationDuration - (now - this.startTime)), 0));
             this.stopTimer = this.$timeout(() => {
                 this.usSpinnerService.stop('loading-spinner');
                 this.$rootScope['loading'] = false;
             }, stopTimeout);
         }
     }
-}
-
-interface CatLoadingServiceOptions {
-    timeout:number;
-    animationDuration:number;
 }
 
 /**

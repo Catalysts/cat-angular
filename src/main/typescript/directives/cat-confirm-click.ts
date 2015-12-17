@@ -4,19 +4,21 @@ interface CatConfirmClickAttributes extends IAttributes {
 }
 
 function catConfirmClickDirectiveFactory():IDirective {
+    let catConfirmClickLink:IDirectiveLinkFn = (scope:IScope,
+                                                element:IAugmentedJQuery,
+                                                attr:CatConfirmClickAttributes) => {
+        let msg = attr.catConfirmClick || 'Are you sure?';
+        let clickAction = attr.catOnConfirm;
+        element.bind('click', () => {
+            if (window.confirm(msg)) {
+                scope.$eval(clickAction);
+            }
+        });
+    };
+
     return {
         restrict: 'A',
-        link: function CatConfirmClickLink(scope:IScope,
-                                           element:IAugmentedJQuery,
-                                           attr:CatConfirmClickAttributes) {
-            var msg = attr.catConfirmClick || 'Are you sure?';
-            var clickAction = attr.catOnConfirm;
-            element.bind('click', () => {
-                if (window.confirm(msg)) {
-                    scope.$eval(clickAction);
-                }
-            });
-        }
+        link: catConfirmClickLink
     };
 }
 /**

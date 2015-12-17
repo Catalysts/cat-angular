@@ -8,13 +8,13 @@ interface ICatUrlResolverService {
 
 class CatUrlResolverService implements ICatUrlResolverService {
     getTabTemplate(tab:string, config:ICatDetailConfig) {
-        var parentUrl = config.endpoint.getEndpointName();
-        var parentTemplateNamePrefix = config.endpoint.getEndpointName();
-        var currentEndpoint = config.endpoint;
+        let parentUrl = config.endpoint.getEndpointName();
+        let parentTemplateNamePrefix = config.endpoint.getEndpointName();
+        let currentEndpoint = config.endpoint;
 
         while (!_.isUndefined(currentEndpoint.parentEndpoint)) {
             currentEndpoint = config.endpoint.parentEndpoint;
-            var parentEndpointName = currentEndpoint.getEndpointName();
+            let parentEndpointName = currentEndpoint.getEndpointName();
 
             parentUrl = parentEndpointName + '/' + parentUrl;
 
@@ -27,5 +27,7 @@ class CatUrlResolverService implements ICatUrlResolverService {
 
 angular
     .module('cat.url.resolver.service', [])
-    .service('urlResolverService', [CatUrlResolverService]);
+    .service('urlResolverService', [
+        CatUrlResolverService
+    ]);
 
