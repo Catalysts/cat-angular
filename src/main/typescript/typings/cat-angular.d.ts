@@ -20,7 +20,7 @@ import IQService = angular.IQService;
 import IHttpInterceptor = angular.IHttpInterceptor;
 import IRootScopeService = angular.IRootScopeService;
 import ITimeoutService = angular.ITimeoutService;
-
+import IFormController = angular.IFormController;
 
 interface ISelect2AugmentedJQuery extends IAugmentedJQuery {
     select2(...args):ISelect2AugmentedJQuery;

@@ -12,10 +12,13 @@
       "commit": "220716d99a77df1654fb4f6cd760dc134ffa8e89"
     },
     "jquery/jquery.d.ts": {
-      "commit": "220716d99a77df1654fb4f6cd760dc134ffa8e89"
+      "commit": "11322524f8db9cdb921427cad84cd22fe2d4f965"
     },
     "angular-ui-router/angular-ui-router.d.ts": {
       "commit": "f41ada9c304fb97bec036514e462441f3a12f9f0"
+    },
+    "select2/select2.d.ts": {
+      "commit": "11322524f8db9cdb921427cad84cd22fe2d4f965"
     }
   }
 }
