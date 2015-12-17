@@ -88,7 +88,8 @@ class CatI18nService implements ICatI18nService {
 
 angular
     .module('cat.service.i18n', [
-        'cat.service.i18n.message'
+        'cat.service.i18n.message',
+        'cat.service.i18n.responseHandler'
     ])
     /**
      * @ngdoc service
@@ -116,4 +117,10 @@ angular
      * @param {object} catI18nMessageParameterResolver DOCTODO
      * @constructor
      */
-    .service('catI18nService', ['$q', '$log', 'catI18nMessageSourceService', 'catI18nMessageParameterResolver', CatI18nService]);
+    .service('catI18nService', [
+        '$q',
+        '$log',
+        'catI18nMessageSourceService',
+        'catI18nMessageParameterResolver',
+        CatI18nService
+    ]);
