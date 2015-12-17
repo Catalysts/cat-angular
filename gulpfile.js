@@ -1,5 +1,7 @@
 'use strict';
 
+require('./cat-angular-typescript.js');
+
 var gulp = require('gulp');
 gulp.ngHtml2js = require('gulp-ng-html2js');
 gulp.ngAnnotate = require('gulp-ng-annotate');
@@ -232,7 +234,7 @@ function jshint(src, env) {
     };
 }
 
-gulp.task('jshint-main', jshint('<%= paths.src %>/**/*.js'));
+gulp.task('jshint-main', ['typescript'], jshint('<%= paths.src %>/**/*.js'));
 gulp.task('jshint-test', jshint('<%= paths.test %>/**/*.js'));
 gulp.task('jshint', ['jshint-main', 'jshint-test']);
 gulp.task('jshint-main-prod', jshint('<%= paths.src %>/**/*.js', 'prod'));

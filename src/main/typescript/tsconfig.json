@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "declaration": false,
+    "declaration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "mapRoot": "",
@@ -9,8 +9,6 @@
     "noEmitOnError": true,
     "noImplicitAny": false,
     "rootDir": ".",
-    "sourceMap": true,
-    "sourceRoot": "./",
     "target": "es5"
   }
 }
