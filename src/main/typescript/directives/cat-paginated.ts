@@ -1,4 +1,5 @@
 interface CatPaginatedScope<T> extends IScope {
+    catPaginatedController:ICatPaginatedController
     listData?:ICatListData<T>;
     syncLocation?:boolean;
     searchProps:string[];
