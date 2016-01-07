@@ -78,4 +78,5 @@ angular.module('cat.service.loading', ['angularSpinner'])
         '$timeout',
         'usSpinnerService',
         'CAT_LOADING_SERVICE_DEFAULTS',
+        CatLoadingService
     ]);

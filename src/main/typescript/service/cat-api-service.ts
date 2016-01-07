@@ -1,3 +1,4 @@
+import MemoizedFunction = _.MemoizedFunction;
 interface ICatApiService {
     [key:string]:ICatApiEndpoint;
 }
@@ -10,6 +11,8 @@ interface CatApiEndpointSettings {
 }
 
 interface CatApiEndpointConfig {
+    url: string;
+    list?: any;
     name: string;
     model:new(data?:any)=>any;
 }
@@ -76,11 +79,11 @@ class CatApiEndpoint implements ICatApiEndpoint {
                 private $http,
                 private catConversionService,
                 private catSearchService) {
-        let config = endpointConfig.config;
+        this.config = endpointConfig.config;
         this._endpointName = endpointConfig.name;
-        this._endpointUrl = `${url}${config.url || endpointConfig.name}`;
+        this._endpointUrl = `${url}${this.config.url || endpointConfig.name}`;
         this._childEndpointSettings = endpointConfig.children;
-        this._endpointListConfig = config.list || {};
+        this._endpointListConfig = this.config.list || {};
 
 
         /**
@@ -129,7 +132,7 @@ class CatApiEndpoint implements ICatApiEndpoint {
      * @return {object} a object holding all resolved child endpoints for the given id
      * @private
      */
-    private _res = _.memoize((id) => {
+    private _res:any = _.memoize((id) => {
 
         let url = this._endpointUrl + '/' + id + '/';
         let ret = {};
@@ -168,11 +171,11 @@ class CatApiEndpoint implements ICatApiEndpoint {
         }
 
         if (_.isArray(object)) {
-            _.forEach(object, this._addChildEndpoints);
+            _.forEach(object, (item) => this._addChildEndpoints(item));
         }
 
         if (_.isArray(object.elements)) {
-            _.forEach(object.elements, this._addChildEndpoints);
+            _.forEach(object.elements, (item) => this._addChildEndpoints(item));
         }
 
         return object;
@@ -246,7 +249,7 @@ class CatApiEndpoint implements ICatApiEndpoint {
      * instances of the configured model or a wrapper object which holds not only the list but pagination information
      * as well
      */
-    list(searchRequest) {
+    list(searchRequest):IPromise<CatPagedResponse<any>> {
         let url = !!this._endpointListConfig.endpoint ? this._endpointListConfig.endpoint : '';
         return this.$http.get(this._endpointUrl + url + this._getSearchQuery(searchRequest)).then((response) => {
             return this._mapResponse(response.data);
@@ -259,7 +262,7 @@ class CatApiEndpoint implements ICatApiEndpoint {
      * @return [{object}] a promise wrapping an array of new instances of the configured model initialized with the data retrieved from
      * the backend
      */
-    all() {
+    all():any[] {
         return this.$http.get(this._endpointUrl + '/all').then((response) => {
             return _.map(response.data, (elem) => {
                 return this._mapResponse(elem);
@@ -314,7 +317,7 @@ class CatApiEndpoint implements ICatApiEndpoint {
      * @return {object} a promise wrapping a new instance of the configured model initialized with the data retrieved
      * from the backend
      */
-    save(object) {
+    save(object):IPromise<any> {
         let t = _<number>([34, 342]).value();
         if (!!object.id) {
             return this.$http.put(this._endpointUrl + '/' + object.id, this._removeEndpoints(object)).then((response) => {
@@ -401,7 +404,7 @@ class CatApiServiceProvider implements ICatApiServiceProvider {
             this._endpoints[name] = new EndpointConfig(name, settings);
         }
         return this._endpoints[name];
-    };
+    }
 
     /**
      * @return {object} returns a map from names to CatApiEndpoints
@@ -417,7 +420,7 @@ class CatApiServiceProvider implements ICatApiServiceProvider {
          * @param {object} [settings] if given a new {EndpointConfig} will be created with the given settings
          * @returns {CatApiEndpoint}
          */
-        catApiService['dynamicEndpoint'] = (name, settings) => {
+        catApiService['dynamicEndpoint'] = (name:string|any, settings?:any) => {
             if (typeof name === 'object' && _.isUndefined(settings)) {
                 settings = name;
                 name = settings.url;

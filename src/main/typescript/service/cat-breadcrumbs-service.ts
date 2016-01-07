@@ -127,15 +127,15 @@ class CatBreadcrumbsService implements ICatBreadcrumbsService {
     }
 }
 
-angular.module('cat.service.breadcrumbs', [])
-
+angular
+    .module('cat.service.breadcrumbs', [])
     /**
      * @ngdoc overview
      * @name cat.service.breadcrumbs:catBreadcrumbs
      */
     .value('catBreadcrumbs', [])
     .service('catBreadcrumbsService', [
-        'catBreadcrubms',
+        'catBreadcrumbs',
         '$state',
         CatBreadcrumbsService
     ]);

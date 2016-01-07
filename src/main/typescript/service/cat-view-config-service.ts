@@ -214,7 +214,7 @@ class CatViewConfigService implements ICatViewConfigService {
         );
 
         return deferred.promise;
-    };
+    }
 
 
     private getListDataPromise(config:ICatListViewConfig, name:string) {
@@ -243,7 +243,7 @@ class CatViewConfigService implements ICatViewConfigService {
         );
 
         return deferredConfig.promise;
-    };
+    }
 }
 
 angular

@@ -26,8 +26,8 @@ interface CatUtils {
     defaultModelResolver(name:string):{new(data?:any):any};
 }
 
+window.cat = window.cat || {};
 window.cat.models = window.cat.models || {};
-
 window.cat.util = window.cat.util || {
         pluralize: (string):string => {
             if (_.isUndefined(string) || string.length === 0) {

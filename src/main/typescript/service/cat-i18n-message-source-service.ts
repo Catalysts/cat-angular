@@ -98,7 +98,7 @@ class CatI18nMessageSourceService implements ICatI18nMessageSourceService {
     hasMessage(key, locale) {
         let bundle = this._getMessages(locale);
         return this.$q.when(!_.isUndefined(bundle) && !_.isUndefined(bundle[key]));
-    };
+    }
 }
 
 angular

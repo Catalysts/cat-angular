@@ -14,7 +14,7 @@ describe('CatViewServiceProvider', function () {
     it('returns right URL', function () {
         module(function (catViewServiceProvider) {
             catViewServiceProvider.listAndDetailView('baseUrl', 'name', 'config');
-            result = catViewServiceProvider.$get();
+            result = catViewServiceProvider.$get[0]();
         });
 
         inject(function (catViewService) {

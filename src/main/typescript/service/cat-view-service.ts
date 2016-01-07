@@ -55,7 +55,7 @@ class CatViewServiceProvider implements ICatViewServiceProvider {
 
         this.catApiServiceProvider.endpoint(name.toLowerCase(), endpoint);
         this.catRouteServiceProvider.listAndDetailRoute(baseUrl, name, config);
-    };
+    }
 
     /**
      * This service simply exposes the created view and endpoint names, as the provider basically only delegates

@@ -41,7 +41,7 @@ function _convertToClientData(serverData, context) {
     }
 
     if (_.isArray(serverData)) {
-        return _.map(serverData, function (data) {
+        return _.map(serverData, (data) => {
             return _convertToClientModel(data, context);
         });
     }
@@ -91,7 +91,7 @@ angular.module('cat.service.conversion', [])
  */
     .value('catConversionFunctions', {
         toClient: _convertToClientData,
-        toServer: function (clientData, context) {
+        toServer: (clientData, context) => {
             return clientData;
         }
     })

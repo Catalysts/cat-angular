@@ -52,3 +52,10 @@ angular.module('cat', [
     'cat.controller',
     'ui.bootstrap'
 ]);
+
+
+declare module catAngular {
+    interface Test {
+        test:string;
+    }
+}

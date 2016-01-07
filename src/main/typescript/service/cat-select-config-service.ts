@@ -44,7 +44,7 @@ class CatSelectConfigService implements ICatSelectConfigService {
         }
 
         return assignDeep(_.clone(config) || {}, options);
-    };
+    }
 }
 
 interface ICatSelectConfigServiceProvider extends IServiceProvider {

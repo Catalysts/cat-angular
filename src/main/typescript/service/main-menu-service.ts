@@ -208,15 +208,15 @@ class MainMenuProvider implements IMainMenuProvider {
     }
 
     $get() {
-        _.forEach(this.menus, function (menu) {
+        _.forEach(this.menus, (menu) => {
             this.mainMenu.addMenu(menu.menuId, menu.options);
         });
 
-        _.forEach(this._groups, function (group) {
+        _.forEach(this._groups, (group) => {
             this.mainMenu.addMenuGroup(group.menuId, group.groupId, group.options);
         });
 
-        _.forEach(this._entries, function (entry) {
+        _.forEach(this._entries, (entry) => {
             this.mainMenu.addMenuEntry(entry.menuId, entry.groupId, entry.entryId, entry.options);
         });
 

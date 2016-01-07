@@ -36,7 +36,7 @@ class CatMessageService implements ICatMessagesService {
         });
     }
 
-    getMessages(type?:string) {
+    getMessages(type?:string):Array<string> {
         if (!type) {
             return [];
         }
@@ -100,7 +100,7 @@ class CatMessageService implements ICatMessagesService {
             return;
         }
 
-        _.forEach(messages, function (message) {
+        _.forEach(messages, (message) => {
             this.addMessage(type, message);
         });
     }

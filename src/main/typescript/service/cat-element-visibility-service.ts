@@ -25,8 +25,11 @@ interface ICatElementVisibilityService {
 class CatElementVisibilityService implements ICatElementVisibilityService {
     isVisible() {
         return true;
-    };
+    }
 }
 
-angular.module('cat.service.elementVisibility', [])
-    .service('catElementVisibilityService', [CatElementVisibilityService]);
+angular
+    .module('cat.service.elementVisibility', [])
+    .service('catElementVisibilityService', [
+        CatElementVisibilityService
+    ]);

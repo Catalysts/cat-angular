@@ -21,7 +21,7 @@ class CatUrlResolverService implements ICatUrlResolverService {
             parentTemplateNamePrefix = parentEndpointName + '-' + parentTemplateNamePrefix;
         }
         return parentUrl + '/' + tab + '/' + parentTemplateNamePrefix + '-' + tab + '-list.tpl.html';
-    };
+    }
 }
 
 

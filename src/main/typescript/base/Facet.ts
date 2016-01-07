@@ -50,5 +50,6 @@ class Facet {
     }
 }
 
+window.cat = window.cat || {};
 window.cat.Facet = Facet;
 window.cat.FacetTerm = FacetTerm;

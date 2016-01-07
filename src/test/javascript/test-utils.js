@@ -5,10 +5,6 @@
 (function () {
     'use strict';
 
-    // test model class
-
-    window.cat = window.cat || {};
-    window.cat.util = window.cat.util || {};
     window.cat.util.test = window.cat.util.test || {};
 
     function Test(data) {

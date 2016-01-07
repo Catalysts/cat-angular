@@ -177,4 +177,5 @@ class SearchRequest {
     }
 }
 
+window.cat = window.cat || {};
 window.cat.SearchRequest = SearchRequest;

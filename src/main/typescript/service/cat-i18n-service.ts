@@ -61,7 +61,7 @@ class CatI18nService implements ICatI18nService {
                 this.$log.warn(reason);
                 return this.$q.reject(reason);
             });
-    };
+    }
 
     /**
      * @name catI18nService#canTranslate
@@ -83,7 +83,7 @@ class CatI18nService implements ICatI18nService {
             .then((messages) => {
                 return !_.isUndefined(messages) && !_.isUndefined(messages[key]);
             });
-    };
+    }
 }
 
 angular

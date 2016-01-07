@@ -227,7 +227,7 @@ angular.module('cat.service.validation', [
      */
     .service('catValidationService', [
         '$log',
-        'CatMessageService',
+        '$globalMessages',
         'catValidations',
         'catValidationContexts',
         'catMessagesConfig',

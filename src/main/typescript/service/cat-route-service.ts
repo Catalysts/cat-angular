@@ -166,7 +166,7 @@ class CatRouteServiceProvider implements ICatRouteServiceProvider {
 
         this._registerAbstractState(listUrl, stateName);
         this._registerDetailState(_.assign({}, config, viewData), name);
-    };
+    }
 
     /**
      * @ngdoc function
@@ -193,7 +193,7 @@ class CatRouteServiceProvider implements ICatRouteServiceProvider {
         this._registerAbstractState(listUrl, stateName);
         this._registerDetailState(_.assign({}, config.details, viewData), name);
         this._registerListState(_.assign({}, config.list, viewData), name);
-    };
+    }
 
     /**
      * @ngdoc service

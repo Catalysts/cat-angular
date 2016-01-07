@@ -53,13 +53,13 @@ interface CatI18nTranslations {
 
 interface CatGlobals {
     i18n:{[language:string]:CatI18nTranslations}
-    SearchRequest: new(data?:any)=>SearchRequest;
-    Facet: new(data?:any)=>Facet;
-    FacetTerm: new(data?:any)=>FacetTerm;
+    SearchRequest: SearchRequest;
+    Facet: Facet;
+    FacetTerm: FacetTerm;
     util: CatUtils;
     models:{[name:string]:new(data?:any)=>any};
 }
 
 interface Window {
-    cat: CatGlobals;
+    cat: any;
 }
