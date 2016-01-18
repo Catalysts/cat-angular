@@ -16,8 +16,7 @@ function CatValidationController($scope, catValidationService) {
     });
 }
 
-angular.module('cat.directives.validation')
-
+angular.module('cat.directives.validation', ['cat.service.validation'])
 /**
  * @ngdoc directive
  * @name cat.directives.validation.inputs:catValidationGroup

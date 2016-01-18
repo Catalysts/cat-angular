@@ -1,4 +1,3 @@
-angular.module('cat.filters.replaceText', []);
 angular.module('cat.filters', ['cat.filters.replaceText']);
 
 angular.module('cat.service', [
@@ -20,9 +19,6 @@ angular.module('cat.service', [
 
 angular.module('cat.controller', ['cat.controller.base.detail', 'cat.controller.base.list']);
 
-angular.module('cat.directives.validation', ['cat.service.validation']);
-
-
 angular.module('cat.directives', [
     'cat.directives.autofocus',
     'cat.directives.checkbox',
@@ -42,7 +38,8 @@ angular.module('cat.directives', [
     'cat.directives.sortable',
     'cat.directives.form',
     'cat.directives.numbersOnly',
-    'cat.directives.breadcrumbs'
+    'cat.directives.breadcrumbs',
+    'cat.directives.validation'
 ]);
 
 angular.module('cat', [
