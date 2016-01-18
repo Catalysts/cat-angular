@@ -38,7 +38,7 @@ function catValidationGroupDirectiveFactory():IDirective {
 }
 
 angular
-    .module('cat.directives.validation')
+    .module('cat.directives.validation', ['cat.service.validation'])
     /**
      * @ngdoc directive
      * @name cat.directives.validation.inputs:catValidationGroup
