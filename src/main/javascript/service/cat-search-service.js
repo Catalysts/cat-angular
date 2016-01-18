@@ -49,14 +49,6 @@ angular.module('cat.service.search', [])
             return catUrlEncodingService.encodeAsUrl(_search);
         };
 
-        var urlEndoded = function (searchRequest) {
-            return _([
-                _encodePagination(searchRequest.pagination()),
-                _encodeSort(searchRequest.sort()),
-                _encodeSearch(searchRequest.search())
-            ]).reduce(_concatenate);
-        };
-
         var _concatenate = function (result, next) {
             if (!result) {
                 return next;
@@ -66,6 +58,14 @@ angular.module('cat.service.search', [])
                 return result;
             }
             return result + '&' + next;
+        };
+
+        var urlEndoded = function (searchRequest) {
+            return _([
+                _encodePagination(searchRequest.pagination()),
+                _encodeSort(searchRequest.sort()),
+                _encodeSearch(searchRequest.search())
+            ]).reduce(_concatenate);
         };
 
 

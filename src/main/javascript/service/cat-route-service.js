@@ -37,29 +37,6 @@ function CatRouteServiceProvider($stateProvider) {
         return name;
     }
 
-    function _registerDetailState(config, name) {
-        var stateName = _getStateName(name, config);
-        var detailConfig = _getDetailConfig(config, name);
-
-        $stateProvider
-            .state(stateName + '.detail', detailConfig);
-
-        if (!!config && config.additionalViewTemplate === 'tabs') {
-            $stateProvider
-                .state(stateName + '.tab', {
-                    abstract: true,
-                    template: '<ui-view></ui-view>',
-                    url: '/:' + name.toLowerCase() + 'Id'
-                });
-        }
-    }
-
-    function _registerListState(config, name) {
-        var stateName = _getStateName(name, config);
-        var listConfig = _getListConfig(config, name);
-        $stateProvider
-            .state(stateName + '.list', listConfig);
-    }
 
     /**
      * A helper function for detail routes which applies a few optimizations and some auto configuration.
@@ -68,6 +45,7 @@ function CatRouteServiceProvider($stateProvider) {
      * (templateUrls, parents, detail, endpoint, etc.) this function also takes care of providing the correct 'resolve'
      * object which pre-loads all the necessary data.
      * @param {Object} config the route config object which will be used to generate the actual route configuration
+     * @param name the name used to resolve default values like templates, etc.
      * @returns {{templateUrl: (string), controller: string, reloadOnSearch: (boolean), resolve: {config: (object)}}}
      */
     function _getDetailConfig(config, name) {
@@ -87,6 +65,23 @@ function CatRouteServiceProvider($stateProvider) {
         };
     }
 
+    function _registerDetailState(config, name) {
+        var stateName = _getStateName(name, config);
+        var detailConfig = _getDetailConfig(config, name);
+
+        $stateProvider
+            .state(stateName + '.detail', detailConfig);
+
+        if (!!config && config.additionalViewTemplate === 'tabs') {
+            $stateProvider
+                .state(stateName + '.tab', {
+                    abstract: true,
+                    template: '<ui-view></ui-view>',
+                    url: '/:' + name.toLowerCase() + 'Id'
+                });
+        }
+    }
+
     /**
      * A helper function for list routes which applies a few optimizations and some auto configuration.
      * In the current state it handles 4 settings:
@@ -96,6 +91,7 @@ function CatRouteServiceProvider($stateProvider) {
      * * resolve - a object with a 'listData' property is returned which is resolved via the correct endpoint
      *
      * @param {Object} config the route config object which will be used to generate the actual route configuration
+     * @param name the name used to resolve default values like templates, etc.
      * @return {{reloadOnSearch: boolean, controller: string, templateUrl: (string), resolve: {config: Object}}}
      */
     function _getListConfig(config, name) {
@@ -114,6 +110,14 @@ function CatRouteServiceProvider($stateProvider) {
             }
         };
     }
+
+    function _registerListState(config, name) {
+        var stateName = _getStateName(name, config);
+        var listConfig = _getListConfig(config, name);
+        $stateProvider
+            .state(stateName + '.list', listConfig);
+    }
+
 
     /**
      * @ngdoc function
