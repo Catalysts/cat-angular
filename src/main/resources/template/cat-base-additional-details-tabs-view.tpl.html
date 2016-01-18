@@ -2,7 +2,7 @@
     <tab active="activeTab[tab.name]" select="selectTab(tab.name)" ng-repeat="tab in tabs">
         <tab-heading>
             <span ng-if="tab.icon" ng-class="'glyphicon glyphicon-'+tab.icon"></span> <span
-                cat-i18n="{{getTabKey(tab.name)}}">{{getTabName(tab.name)}}</span>
+                cat-i18n="{{getTabKey(tab.name)}}">{{getTabName(tab).value}}</span>
         </tab-heading>
         <div ng-include="getTabTemplate(tab.name)" ng-controller="tabController"></div>
     </tab>
