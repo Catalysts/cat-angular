@@ -1,6 +1,6 @@
 {
   "name": "cat-angular",
-  "version": "1.0.0-ts-alpha-2",
+  "version": "1.0.0-SNAPSHOT",
   "license": "Apache-2.0",
   "description": "Common Catalysts angular js code (written in ts)",
   "repository": {
