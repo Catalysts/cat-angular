@@ -1,6 +1,6 @@
 {
     "name": "cat-angular",
-    "version": "1.0.0-SNAPSHOT",
+    "version": "1.0.0-ts-alpha-2",
     "homepage": "https://github.com/Catalysts/cat-angular",
     "authors": [
         "Thomas Scheinecker <thomas.scheinecker@catalysts.cc>"
