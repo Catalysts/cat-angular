@@ -52,7 +52,7 @@ class MenuGroup implements IMenuEntry {
     }
 
     getEntries() {
-        return _.sortBy(this.menuEntries, function (entry) {
+        return _.sortBy(this.menuEntries, (entry) => {
             return entry.getOptions().sortOrder || 10000;
         });
     }
@@ -95,7 +95,7 @@ class Menu implements IMenuEntry {
     getGroups():Array<MenuGroup> {
         return _.sortBy(_.map(this.menuGroups, (menuGroup:MenuGroup) => {
             return menuGroup;
-        }), function (menuGroup:MenuGroup) {
+        }), (menuGroup:MenuGroup) => {
             return menuGroup.getOptions().sortOrder || 10000;
         });
     }
@@ -157,7 +157,7 @@ class MenuBar {
     }
 
     getMenus() {
-        return _.map(this.menus, function (menu) {
+        return _.map(this.menus, (menu) => {
             return menu;
         });
     }

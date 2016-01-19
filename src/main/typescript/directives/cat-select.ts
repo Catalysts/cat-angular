@@ -32,18 +32,18 @@ class CatSelectController {
 
         let transport,
             quietMillis,
-            searchRequestFunc = options.search || function (term, page) {
+            searchRequestFunc = options.search || ((term, page) => {
                     return {
                         'search.name': term,
                         page: page
                     };
-                },
-            filterFunc = options.filter || function (term) {
+                }),
+            filterFunc = options.filter || ((term) => {
                     return true;
-                };
+                });
         let endpoint:any = options.endpoint;
         if (_.isArray(endpoint)) {
-            transport = function (queryParams) {
+            transport = (queryParams) => {
                 return queryParams.success({
                     elements: options.endpoint
                 });
@@ -73,7 +73,7 @@ class CatSelectController {
         $scope.selectOptions = _.assign({
             placeholder: ' ', // space in default placeholder is required, otherwise allowClear property does not work
             minimumInputLength: 0,
-            adaptDropdownCssClass: function (cssClass) {
+            adaptDropdownCssClass: (cssClass) => {
                 if (_.contains(['ng-valid', 'ng-invalid', 'ng-pristine', 'ng-dirty'], cssClass)) {
                     return cssClass;
                 }
@@ -103,7 +103,7 @@ class CatSelectController {
     private fetchElements(endpoint:ICatApiEndpoint,
                           sort?:Sort,
                           searchRequestAdapter?:Function|Object) {
-        return function (queryParams) {
+        return (queryParams) => {
             let searchRequest = new window.cat.SearchRequest(queryParams.data);
             searchRequest.sort(sort || {property: 'name', isDesc: false});
 

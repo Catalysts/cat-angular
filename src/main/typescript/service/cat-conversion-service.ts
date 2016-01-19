@@ -51,7 +51,7 @@ function _convertToClientData(serverData, context) {
         let facets = [];
 
         if (!!serverData.facets) {
-            facets = _.map(serverData.facets, function (facet) {
+            facets = _.map(serverData.facets, (facet) => {
                 return new window.cat.Facet(facet);
             });
         }
@@ -59,7 +59,7 @@ function _convertToClientData(serverData, context) {
         let result = {
             totalCount: serverData.totalCount,
             facets: facets,
-            elements: _.map(serverData.elements, function (elem) {
+            elements: _.map(serverData.elements, (elem) => {
                 return _convertToClientData(elem, context);
             })
         };

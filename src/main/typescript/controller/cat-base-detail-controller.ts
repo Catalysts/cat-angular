@@ -124,7 +124,7 @@ class CatBaseDetailController {
          * reloads the current object from the server
          */
         $scope.reloadDetails = () => {
-            endpoint.get($stateParams.id).then(function (data) {
+            endpoint.get($stateParams.id).then((data) => {
                 $scope.detail = data;
                 update();
             });
@@ -172,7 +172,7 @@ class CatBaseDetailController {
          * Calls the copy function of the current endpoint and redirects to the detail page of the copied object upon success
          */
         $scope.copy = () => {
-            endpoint.copy($scope.detail.id).then(function (data) {
+            endpoint.copy($scope.detail.id).then((data) => {
                 //Note: here we go to the detail state of the copied object although we have all the data of the copied object here,
                 // but otherwise we would have to change the url and this leads to problems with browser back and so on
                 $state.go('.', {id: data.id});
@@ -183,7 +183,7 @@ class CatBaseDetailController {
          * Calls the remove function of the current endpoint and redirects to the ^.list upon success
          */
         $scope.remove = () => {
-            endpoint.remove($scope.detail.id).then(function () {
+            endpoint.remove($scope.detail.id).then(() => {
                 if (_.isEmpty($scope.uiStack)) {
                     $state.go('^.list');
                 } else {
@@ -205,7 +205,7 @@ class CatBaseDetailController {
          */
         $scope.save = (stayInEdit:boolean) => {
             // When passing data to an asynchronous method, it makes sense to clone it.
-            endpoint.save(angular.copy($scope.editDetail)).then(function (data) {
+            endpoint.save(angular.copy($scope.editDetail)).then((data) => {
                 $globalMessages.clearMessages();
                 catValidationService.clearValidationErrors();
                 if (stayInEdit) {

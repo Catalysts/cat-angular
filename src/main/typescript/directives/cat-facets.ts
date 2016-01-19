@@ -17,7 +17,7 @@ class CatFacetsController<T> {
         $scope.isActive = (facet) => {
             return !!$scope.catPaginatedController.getSearch()[facet.name];
         };
-        $scope.facetName = function (facet) {
+        $scope.facetName = (facet) => {
             if ($scope.names !== undefined && $scope.names[facet.name] !== undefined) {
                 return $scope.names[facet.name];
             } else {
@@ -31,7 +31,7 @@ class CatFacetsController<T> {
             return $scope.catPaginatedController.getSearchRequest().search(search);
         };
 
-        $scope.facetChanged = function (facet) {
+        $scope.facetChanged = (facet) => {
             let search = _search();
             let value = $scope.facets[facet.name];
             if (!!value) {
@@ -41,8 +41,8 @@ class CatFacetsController<T> {
             }
         };
 
-        $scope.initFacets = function () {
-            _.forEach($scope.listData.facets, function (facet) {
+        $scope.initFacets = () => {
+            _.forEach($scope.listData.facets, (facet) => {
                 if ($scope.isActive(facet)) {
                     $scope.facets[facet.name] = $scope.catPaginatedController.getSearch()[facet.name];
                 }

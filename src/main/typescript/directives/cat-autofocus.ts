@@ -1,7 +1,7 @@
 function catAutofocusDirectiveFactory($timeout:ITimeoutService):IDirective {
     let catAutofocusLink:IDirectiveLinkFn = (scope:IScope,
                                              element:ISelect2AugmentedJQuery) => {
-        $timeout(function () {
+        $timeout(() => {
             if (!_.isUndefined(element.data('select2'))) {
                 element.select2('open');
             } else {

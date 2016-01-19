@@ -110,7 +110,7 @@ class CatValidationService implements ICatValidationService {
             this.$log.warn(rejection);
             this.catI18nService
                 .translate('cc.catalysts.cat-validation-service.networkError')
-                .then(function (message) {
+                .then((message) => {
                     context.global = [message];
                 });
             return;

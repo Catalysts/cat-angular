@@ -135,7 +135,7 @@ class CatRouteServiceProvider implements ICatRouteServiceProvider {
             controllerAs: 'catBaseListController',
             templateUrl: _config.templateUrl || 'template/cat-base-list.tpl.html',
             resolve: {
-                config: function (catViewConfigService) {
+                config: (catViewConfigService) => {
                     return catViewConfigService.getListConfig(_config);
                 }
             }
@@ -223,12 +223,12 @@ angular
          $globalMessages:ICatMessagesService,
          catBreadcrumbsService:ICatBreadcrumbsService,
          catValidationService) => {
-            $rootScope.$on('$stateChangeError', function () {
+            $rootScope.$on('$stateChangeError', () => {
                 let exception:string = arguments[arguments.length - 1];
                 $globalMessages.addMessage('warning', exception);
                 $log.warn(exception);
             });
-            $rootScope.$on('$stateChangeSuccess', function () {
+            $rootScope.$on('$stateChangeSuccess', () => {
                 catBreadcrumbsService.clear();
                 catValidationService.clearValidationErrors();
             });

@@ -144,8 +144,8 @@ class CatBaseTabsController<T> {
         $scope.tabController = [
             '$scope',
             'catListDataLoadingService',
-            function ($tabScope:ICatBaseTabScope<any>,
-                      catListDataLoadingService:ICatListDataLoadingService) {
+            ($tabScope:ICatBaseTabScope<any>,
+                      catListDataLoadingService:ICatListDataLoadingService) => {
                 let activeTab = $scope.tabs[tabIndex++];
                 let tabControllerName = _getTabControllerName(activeTab);
 

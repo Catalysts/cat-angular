@@ -3,7 +3,7 @@ function catNumbersOnlyDirectiveFactory():IDirective {
                                                element:IAugmentedJQuery,
                                                attrs:IAttributes,
                                                modelCtrl:INgModelController) => {
-        modelCtrl.$parsers.push(function (inputValue) {
+        modelCtrl.$parsers.push((inputValue) => {
             if (!inputValue) return '';
 
             let pattern = '[^0-9]';

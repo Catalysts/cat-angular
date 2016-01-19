@@ -25,7 +25,7 @@ function catLoadMoreDirectiveFactory():IDirective {
         if (!element.parent().next().length && scope.$parent.elements.length > scope.$parent.elementsCount) {
             let elt = $('<a href="#">Show more</a>');
             elt.on({
-                click: function () {
+                click: () => {
                     scope.$parent.elementsCount += initialCount;
                     if (scope.$parent.elements.length <= scope.$parent.elementsCount) {
                         elt.addClass('hidden');

@@ -78,7 +78,7 @@ class CatPaginatedController<T> implements ICatPaginatedController {
     }
 
     private registerScopeWatches() {
-        this.$scope.$watch('listData.sort', function (newVal) {
+        this.$scope.$watch('listData.sort', (newVal) => {
             if (!!newVal) {
                 console.log('broadcasting sort changed: ' + angular.toJson(newVal));
                 this.$scope.$parent.$broadcast('SortChanged', newVal);
@@ -109,7 +109,7 @@ class CatPaginatedController<T> implements ICatPaginatedController {
         });
 
 
-        this.$scope.$on('SortChanged', function (event, value) {
+        this.$scope.$on('SortChanged', (event, value) => {
             this.sort(value);
         });
     }
@@ -194,16 +194,16 @@ function catPaginatedDirectiveFactory(catI18nService:ICatI18nService):IDirective
                                              element:IAugmentedJQuery,
                                              attrs:CatPaginatedAttributes) => {
         if (!!attrs.searchProps) {
-            scope.searchProps = _.filter(attrs.searchProps.split(','), function (prop) {
+            scope.searchProps = _.filter(attrs.searchProps.split(','), (prop) => {
                 return !!prop;
             });
 
             scope.searchPropertyPlaceholders = {};
 
-            _.forEach(scope.searchProps, function (searchProp) {
+            _.forEach(scope.searchProps, (searchProp) => {
                 scope.searchPropertyPlaceholders[searchProp] = 'Search by ' + searchProp;
                 catI18nService.translate(SEARCH_PROP_KEY, {prop: searchProp})
-                    .then(function (message) {
+                    .then((message) => {
                         scope.searchPropertyPlaceholders[searchProp] = message;
                     });
             });
