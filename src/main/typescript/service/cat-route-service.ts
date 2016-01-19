@@ -223,7 +223,7 @@ angular
          $globalMessages:ICatMessagesService,
          catBreadcrumbsService:ICatBreadcrumbsService,
          catValidationService) => {
-            $rootScope.$on('$stateChangeError', () => {
+            $rootScope.$on('$stateChangeError', function() {
                 let exception:string = arguments[arguments.length - 1];
                 $globalMessages.addMessage('warning', exception);
                 $log.warn(exception);
