@@ -6,7 +6,7 @@ angular.module('cat.service.httpIntercept', ['cat.service.message', 'cat.service
  * @ngdoc service
  * @name cat.service.httpIntercept:errorHttpInterceptor
  */
-    .factory('errorHttpInterceptor', function CatErrorHttpInterceptor($q, $globalMessages, loadingService, catValidationMessageHandler) {
+    .factory('errorHttpInterceptor', function CatErrorHttpInterceptor($q, $globalMessages, loadingService, $injector) {
         return {
             'request': function (config) {
                 loadingService.start();
@@ -22,7 +22,7 @@ angular.module('cat.service.httpIntercept', ['cat.service.message', 'cat.service
             },
             'responseError': function (rejection) {
                 loadingService.stop();
-                catValidationMessageHandler.handleRejectedResponse(rejection);
+                $injector.get('catValidationMessageHandler').handleRejectedResponse(rejection);
                 return $q.reject(rejection);
             }
         };

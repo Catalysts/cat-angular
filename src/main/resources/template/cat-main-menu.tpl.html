@@ -1,10 +1,10 @@
 <ul class="nav navbar-nav">
-    <li class="dropdown" ng-repeat="menu in getMenus()" dropdown="">
-        <a href="" class="dropdown-toggle" ng-if="isVisible(menu)" dropdown-toggle="">
+    <li class="dropdown" ng-repeat="menu in getMenus()" uib-dropdown="">
+        <a href="" class="dropdown-toggle" ng-if="isVisible(menu)" uib-dropdown-toggle="">
             <span cat-i18n="cc.catalysts.cat-menu.menu.{{menu.completeId}}">{{menu.getOptions().name}}</span>
             <b class="caret"></b>
         </a>
-        <ul class="dropdown-menu" ng-if="isVisible(menu)">
+        <ul class="dropdown-menu" uib-dropdown-menu="" ng-if="isVisible(menu)">
             <li ng-repeat="entry in menu.getFlattened() track by entry.id" ng-if="isVisible(entry)"
                 ng-class="{'dropdown-header': entry.isGroup() && !entry.isSubMenu(), 'dropdown dropdown-submenu' : entry.isSubMenu()}">
                 <a ng-if="!entry.isGroup()" ng-href="#{{entry.getOptions().path}}">
@@ -18,7 +18,7 @@
                 <a ng-if="isVisible(entry) && entry.isGroup() && entry.isSubMenu()" href="" class="dropdown-toggle"
                    data-toggle="dropdown">
                     <span cat-i18n="cc.catalysts.cat-menu.group.{{entry.completeId}}">{{entry.getOptions().name}}</span>
-                    <ul ng-if="isVisible(entry) && entry.isGroup() && entry.isSubMenu()" class="dropdown-menu">
+                    <ul ng-if="isVisible(entry) && entry.isGroup() && entry.isSubMenu()" class="dropdown-menu" uib-dropdown-menu="">
                         <li ng-repeat="entry in entry.subEntries track by entry.id" ng-if="isVisible(entry)">
                             <a ng-href="#{{entry.getOptions().path}}" ng-if="!entry.isGroup()">
                                 <span cat-i18n="cc.catalysts.cat-menu.entry.{{entry.completeId}}">
