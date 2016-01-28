@@ -22,9 +22,9 @@ angular.module('cat.directives.icon', [])
  * @ngdoc directive
  * @name cat.directives.icon:catIcon
  *
- * @param icon name of the icon
- * @param title title of the icon
- * @param size size of the icon [undefined | '': normal, 'xs': small]
+ * @param {string} icon name of the icon
+ * @param {string} title title of the icon
+ * @param {string} size size of the icon [undefined | '': normal, 'xs': small]
  */
     .directive('catIcon', function CatIcon() {
         return {
