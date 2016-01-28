@@ -303,6 +303,14 @@ gulp.task('bump-patch', function () {
     return bumpVersion('patch');
 });
 
+gulp.task('bump-minor', function () {
+    return bumpVersion('minor');
+});
+
+gulp.task('bump-major', function () {
+    return bumpVersion('major');
+});
+
 function preRelease(cb) {
     gulp.git.tag('pre-release', 'pre-release', {args: '-f'}, cb);
 }
