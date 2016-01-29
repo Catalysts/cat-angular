@@ -1,10 +1,10 @@
-<tabset>
-    <tab active="activeTab[tab.name]" select="selectTab(tab.name)" ng-repeat="tab in tabs">
-        <tab-heading>
+<uib-tabset vertical="true" type="pills">
+    <uib-tab active="activeTab[tab.name]" select="selectTab(tab.name)" ng-repeat="tab in tabs">
+        <uib-tab-heading>
             <span ng-if="tab.icon" ng-class="'glyphicon glyphicon-'+tab.icon"></span> <span
                 cat-i18n="{{getTabKey(tab.name)}}">{{getTabName(tab.name)}}</span>
-        </tab-heading>
+        </uib-tab-heading>
         <div ng-include="getTabTemplate(tab.name)" ng-controller="tabController"></div>
-    </tab>
-</tabset>
+    </uib-tab>
+</uib-tabset>
 

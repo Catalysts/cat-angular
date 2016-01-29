@@ -6,14 +6,14 @@
         </div>
     </div>
     <div class="text-center" ng-if="!listData.isSinglePageList && listData.count !== 0">
-        <pagination total-items="listData.count" items-per-page="listData.pagination.size"
+        <uib-pagination total-items="listData.count" items-per-page="listData.pagination.size"
                     ng-model="listData.pagination.page" max-size="10"
                     class="pagination-sm" boundary-links="true" rotate="false"
                     previous-text="{{paginationText.previous}}"
                     next-text="{{paginationText.next}}"
                     first-text="{{paginationText.first}}"
                     last-text="{{paginationText.last}}">
-        </pagination>
+        </uib-pagination>
     </div>
     <div class="text-center">
         <div class="alert alert-info" style="margin: 20px 0;" ng-if="listData.count !== 0"
@@ -27,13 +27,13 @@
     </div>
     <div ng-transclude></div>
     <div class="text-center" ng-if="!listData.isSinglePageList && listData.count !== 0">
-        <pagination total-items="listData.count" items-per-page="listData.pagination.size"
+        <uib-pagination total-items="listData.count" items-per-page="listData.pagination.size"
                     ng-model="listData.pagination.page" max-size="10"
                     class="pagination-sm" boundary-links="true" rotate="false"
                     previous-text="{{paginationText.previous}}"
                     next-text="{{paginationText.next}}"
                     first-text="{{paginationText.first}}"
                     last-text="{{paginationText.last}}">
-        </pagination>
+        </uib-pagination>
     </div>
 </div>
