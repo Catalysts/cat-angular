@@ -32,13 +32,12 @@ function CatValidationService($log,
     var that = this;
 
     /**
-     * Adds a field error to the given fieldErrors
+     * Adds a field error to the context
      * @param fieldName name of the faulty field
      * @param errorMessage associated error message to display
      * @param context affected context
-     * @private
      */
-    var _addFieldError = function (fieldName, errorMessage, context) {
+    function appendFieldErrorToContext(fieldName, errorMessage, context) {
         if (catMessagesConfig.knownFieldsActive === true) {
             // If the error is for a known field, show the error at the field.
             // If not, display it as a global error.
@@ -54,7 +53,7 @@ function CatValidationService($log,
             context.fieldErrors[fieldName] = context.fieldErrors[fieldName] || [];
             context.fieldErrors[fieldName].push(errorMessage);
         }
-    };
+    }
 
     /**
      * Returns the validations context for a specific context identifier.
@@ -100,7 +99,7 @@ function CatValidationService($log,
     this.addFieldError = function (fieldName, errorMessage, contextId) {
         var context = that.getContext(contextId);
         context.fieldErrors = context.fieldErrors || {};
-        _addFieldError(fieldName, errorMessage, context);
+        appendFieldErrorToContext(fieldName, errorMessage, context);
     };
 
     this.updateFromRejection = function (rejection) {
@@ -130,7 +129,7 @@ function CatValidationService($log,
             // group by field
             _.forEach(rejection.data.fieldErrors, function (fieldError) {
                 // Allow config to switch between displaying errors at the field and displaying errors at known fields or globally
-                _addFieldError(fieldError.field, fieldError.message, context);
+                appendFieldErrorToContext(fieldError.field, fieldError.message, context);
             });
         }
 
