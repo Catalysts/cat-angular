@@ -32,6 +32,31 @@ function CatValidationService($log,
     var that = this;
 
     /**
+     * Adds a field error to the given fieldErrors
+     * @param fieldName name of the faulty field
+     * @param errorMessage associated error message to display
+     * @param context affected context
+     * @private
+     */
+    var _addFieldError = function (fieldName, errorMessage, context) {
+        if (catMessagesConfig.knownFieldsActive === true) {
+            // If the error is for a known field, show the error at the field.
+            // If not, display it as a global error.
+            if (_.contains(context.knownFields, fieldName)) {
+                context.fieldErrors[fieldName] = context.fieldErrors[fieldName] || [];
+                context.fieldErrors[fieldName].push(errorMessage);
+            } else {
+                context.global = [errorMessage];
+                // TODO is this also context dependend? or even necessary?
+                $globalMessages.addMessages('error', context.global, context);
+            }
+        } else {
+            context.fieldErrors[fieldName] = context.fieldErrors[fieldName] || [];
+            context.fieldErrors[fieldName].push(errorMessage);
+        }
+    };
+
+    /**
      * Returns the validations context for a specific context identifier.
      * @param {string} contextId context identifier
      * @returns {ValidationContext} validation context
@@ -66,6 +91,18 @@ function CatValidationService($log,
         delete catValidationContexts[contextId];
     };
 
+    /**
+     * Adds a error message for a specific field to the context.
+     * @param fieldName name of the faulty field
+     * @param errorMessage associated error message
+     * @param contextId id of the affected context
+     */
+    this.addFieldError = function (fieldName, errorMessage, contextId) {
+        var context = that.getContext(contextId);
+        context.fieldErrors = context.fieldErrors || {};
+        _addFieldError(fieldName, errorMessage, context);
+    };
+
     this.updateFromRejection = function (rejection) {
         var contextId;
         if (!!rejection.config) {
@@ -73,8 +110,7 @@ function CatValidationService($log,
         }
 
         var context = that.getContext(contextId);
-
-        var fieldErrors = context.fieldErrors = {};
+        context.fieldErrors = {};
 
         var rejectionData = rejection.data;
         context.global = undefined;
@@ -94,20 +130,7 @@ function CatValidationService($log,
             // group by field
             _.forEach(rejection.data.fieldErrors, function (fieldError) {
                 // Allow config to switch between displaying errors at the field and displaying errors at known fields or globally
-                if (catMessagesConfig.knownFieldsActive === true) {
-                    // If the error is for a known field, show the error at the field.
-                    // If not, display it as a global error.
-                    if (_.includes(context.knownFields, fieldError.field)) {
-                        fieldErrors[fieldError.field] = fieldErrors[fieldError.field] || [];
-                        fieldErrors[fieldError.field].push(fieldError.message);
-                    } else {
-                        rejection.data.globalErrors = rejection.data.globalErrors || [];
-                        rejection.data.globalErrors.push(fieldError.message);
-                    }
-                } else {
-                    fieldErrors[fieldError.field] = fieldErrors[fieldError.field] || [];
-                    fieldErrors[fieldError.field].push(fieldError.message);
-                }
+                _addFieldError(fieldError.field, fieldError.message, context);
             });
         }
 
@@ -123,6 +146,16 @@ function CatValidationService($log,
         var context = that.getContext(contextId);
         delete context.global;
         context.fieldErrors = {};
+    };
+
+    /**
+     * Clears existing errors for the field of the specified context
+     * @param fieldName name of the field
+     * @param contextId id of the affected context
+     */
+    this.clearFieldError = function (fieldName, contextId) {
+        var context = that.getContext(contextId);
+        delete context.fieldErrors[fieldName];
     };
 
     this.hasGlobalErrors = function (contextId) {

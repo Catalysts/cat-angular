@@ -117,6 +117,34 @@ describe('CatValidationService', function () {
         expect(catValidationService.getFieldErrors('name', contextId)).toBeDefined();
     });
 
+    it('should handle specific field errors', function () {
+        var contextId = catValidationService.createContext();
+
+        catValidationService.addFieldError('file', 'exceeded allowed file size', contextId);
+        expect(catValidationService.hasGlobalErrors()).toBe(false);
+        expect(catValidationService.hasGlobalErrors(contextId)).toBe(false);
+        expect(catValidationService.hasFieldErrors('file')).toBe(false);
+        expect(catValidationService.getFieldErrors('file')).toBeUndefined();
+        expect(catValidationService.hasFieldErrors('file', contextId)).toBe(true);
+        expect(catValidationService.getFieldErrors('file', contextId)).toBeDefined();
+    });
+
+    it('should handle specific field errors without context', function () {
+        catValidationService.addFieldError('file', 'exceeded allowed file size');
+        expect(catValidationService.hasGlobalErrors()).toBe(false);
+        expect(catValidationService.hasFieldErrors('file')).toBe(true);
+        expect(catValidationService.getFieldErrors('file')).toBeDefined();
+    });
+
+    it('should clear specific field errors', function () {
+        var contextId = catValidationService.createContext();
+
+        catValidationService.addFieldError('file', 'exceeded allowed file size', contextId);
+        expect(catValidationService.hasFieldErrors('file', contextId)).toBe(true);
+        catValidationService.clearFieldError('file', contextId);
+        expect(catValidationService.hasFieldErrors('file', contextId)).toBe(false);
+    });
+
     describe('with knownFieldsActive flag', function () {
 
         beforeEach(function () {
