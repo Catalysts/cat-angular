@@ -45,7 +45,7 @@ function CatValidationService($log,
                 context.fieldErrors[fieldName] = context.fieldErrors[fieldName] || [];
                 context.fieldErrors[fieldName].push(errorMessage);
             } else {
-                context.global = [ errorMessage ];
+                context.global = [errorMessage];
                 // TODO is this also context dependend? or even necessary?
                 $globalMessages.addMessages('error', context.global, context);
             }
