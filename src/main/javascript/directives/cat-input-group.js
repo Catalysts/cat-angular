@@ -2,10 +2,10 @@
 
 angular.module('cat.directives.inputGroup', [])
 
-/**
- * @ngdoc directive
- * @name cat.directives.inputGroup:catInputGroup
- */
+    /**
+     * @ngdoc directive
+     * @name cat.directives.inputGroup:catInputGroup
+     */
     .directive('catInputGroup', function CatInputGroupDirective(catValidationService) {
         return {
             restrict: 'A',

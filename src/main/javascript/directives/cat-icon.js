@@ -2,10 +2,10 @@
 
 angular.module('cat.directives.icon', [])
 
-/**
- * @description
- * Configuration for cat-icon.
- */
+    /**
+     * @description
+     * Configuration for cat-icon.
+     */
     .constant('catIconConfig', {
         icons: {
             config: {
@@ -18,14 +18,14 @@ angular.module('cat.directives.icon', [])
         }
     })
 
-/**
- * @ngdoc directive
- * @name cat.directives.icon:catIcon
- *
- * @param icon name of the icon
- * @param title title of the icon
- * @param size size of the icon [undefined | '': normal, 'xs': small]
- */
+    /**
+     * @ngdoc directive
+     * @name cat.directives.icon:catIcon
+     *
+     * @param icon name of the icon
+     * @param title title of the icon
+     * @param size size of the icon [undefined | '': normal, 'xs': small]
+     */
     .directive('catIcon', function CatIcon() {
         return {
             restrict: 'A',

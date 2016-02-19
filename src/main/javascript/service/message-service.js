@@ -100,13 +100,13 @@ function CatGlobalMessages($rootScope) {
 }
 
 angular.module('cat.service.message', [
-    'cat.config.messages'
-])
+        'cat.config.messages'
+    ])
 
-/**
- * @ngdoc service
- * @name cat.service.message:catValidationMessageHandler
- */
+    /**
+     * @ngdoc service
+     * @name cat.service.message:catValidationMessageHandler
+     */
     .service('catValidationMessageHandler', function CatValidationMessageHandler($globalMessages, catValidationService) {
         this.handleRejectedResponse = function (rejection) {
             $globalMessages.clearMessages('error');
@@ -123,8 +123,8 @@ angular.module('cat.service.message', [
         };
     })
 
-/**
- * @ngdoc service
- * @name cat.service.message:$globalMessages
- */
+    /**
+     * @ngdoc service
+     * @name cat.service.message:$globalMessages
+     */
     .service('$globalMessages', ['$rootScope', CatGlobalMessages]);

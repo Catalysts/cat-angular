@@ -2,10 +2,10 @@
 
 angular.module('cat.service.httpIntercept', ['cat.service.message', 'cat.service.loading', 'cat.service.validation'])
 
-/**
- * @ngdoc service
- * @name cat.service.httpIntercept:errorHttpInterceptor
- */
+    /**
+     * @ngdoc service
+     * @name cat.service.httpIntercept:errorHttpInterceptor
+     */
     .factory('errorHttpInterceptor', function CatErrorHttpInterceptor($q, $globalMessages, loadingService, catValidationMessageHandler) {
         return {
             'request': function (config) {

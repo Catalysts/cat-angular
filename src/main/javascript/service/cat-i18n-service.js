@@ -94,14 +94,14 @@ function CatI18nService($q, $log, catI18nMessageSourceService, catI18nMessagePar
 }
 
 angular.module('cat.service.i18n', ['cat.service.i18n.message'])
-/**
- * @ngdoc service
- * @name cat.service.i18n:catI18nMessageParameterResolver
- * @value
- *
- * @description
- * A function which accepts a message and parameters and returns the resolved message
- */
+    /**
+     * @ngdoc service
+     * @name cat.service.i18n:catI18nMessageParameterResolver
+     * @value
+     *
+     * @description
+     * A function which accepts a message and parameters and returns the resolved message
+     */
     .value('catI18nMessageParameterResolver', function (message, parameters) {
         var result = _.template(message, null, {interpolate: /{{([\s\S\d]+?)}}/g})(parameters || {});
 

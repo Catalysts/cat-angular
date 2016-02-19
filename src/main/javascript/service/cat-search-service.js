@@ -9,15 +9,15 @@
  * @name cat.service.search
  */
 angular.module('cat.service.search', [])
-/**
- * @ngdoc service
- * @name cat.service.search:catUrlEncodingService
- * @module cat.service.search
- *
- * @description
- * A small helper service which encapsulates the url encoding of an object.
- * In it's default version it just delegates to jQuery.param
- */
+    /**
+     * @ngdoc service
+     * @name cat.service.search:catUrlEncodingService
+     * @module cat.service.search
+     *
+     * @description
+     * A small helper service which encapsulates the url encoding of an object.
+     * In it's default version it just delegates to jQuery.param
+     */
     .service('catUrlEncodingService', function () {
         this.encodeAsUrl = function (params) {
             if (!!params && !_.isEmpty(params)) {

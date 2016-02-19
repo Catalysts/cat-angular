@@ -1,14 +1,14 @@
 'use strict';
 
 angular.module('cat.directives.messages', [
-    'cat.config.messages',
-    'cat.service.validation'
-])
+        'cat.config.messages',
+        'cat.service.validation'
+    ])
 
-/**
- * @ngdoc directive
- * @name cat.directives.messages:catMessages
- */
+    /**
+     * @ngdoc directive
+     * @name cat.directives.messages:catMessages
+     */
     .directive('catMessages', function () {
         return {
             restrict: 'A',

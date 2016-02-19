@@ -119,7 +119,7 @@ function CatValidationService($log,
             $log.warn(rejection);
             catI18nService
                 .translate('cc.catalysts.cat-validation-service.networkError')
-                .then(function(message) {
+                .then(function (message) {
                     context.global = [message];
                 });
             return;

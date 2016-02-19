@@ -2,18 +2,18 @@
 
 angular.module('cat.directives.breadcrumbs', ['cat.service.breadcrumbs'])
 
-/**
- * @description
- * Configuration for cat-breadcrumbs.
- */
+    /**
+     * @description
+     * Configuration for cat-breadcrumbs.
+     */
     .constant('catBreadcrumbsConfig', {
         homeState: 'dashboard'
     })
 
-/**
- * @ngdoc directive
- * @name cat.directives.breadcrumbs:catBreadcrumbs
- */
+    /**
+     * @ngdoc directive
+     * @name cat.directives.breadcrumbs:catBreadcrumbs
+     */
     .directive('catBreadcrumbs', function CatBreadcrumbsDirective(catBreadcrumbsConfig, catBreadcrumbs) {
         return {
             restrict: 'A',

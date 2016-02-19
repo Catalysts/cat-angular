@@ -33,11 +33,11 @@ angular.module('cat.directives.fieldErrors', ['cat.service.validation'])
                     });
                 }
 
-                this.hasErrors = function() {
+                this.hasErrors = function () {
                     return catValidationService.hasFieldErrors(that.name, this.contextId);
                 };
 
-                this.getErrors = function() {
+                this.getErrors = function () {
                     return catValidationService.getFieldErrors(that.name, this.contextId);
                 };
             },

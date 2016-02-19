@@ -2,10 +2,10 @@
 
 angular.module('cat.directives.input', [])
 
-/**
- * @ngdoc directive
- * @name cat.directives.input:input
- */
+    /**
+     * @ngdoc directive
+     * @name cat.directives.input:input
+     */
     .directive('input', function CatInputDirective() {
         return {
             require: '?ngModel',

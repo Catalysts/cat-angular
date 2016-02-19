@@ -28,13 +28,13 @@ function CatI18nLocaleService($q, $locale, CAT_I18N_DEFAULT_LOCALE) {
 }
 
 angular.module('cat.service.i18n.locale', [])
-/**
- * @ngdoc overview
- * @name cat.service.i18n:CAT_I18N_DEFAULT_LOCALE
- * @constant
- *
- * @description
- * The default locale used for message translation
- */
+    /**
+     * @ngdoc overview
+     * @name cat.service.i18n:CAT_I18N_DEFAULT_LOCALE
+     * @constant
+     *
+     * @description
+     * The default locale used for message translation
+     */
     .constant('CAT_I18N_DEFAULT_LOCALE', 'de')
     .service('catI18nLocaleService', ['$q', '$locale', 'CAT_I18N_DEFAULT_LOCALE', CatI18nLocaleService]);

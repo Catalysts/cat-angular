@@ -113,9 +113,9 @@ function CatBreadcrumbsService(catBreadcrumbs, $state) {
 
 angular.module('cat.service.breadcrumbs', [])
 
-/**
- * @ngdoc overview
- * @name cat.service.breadcrumbs:catBreadcrumbs
- */
+    /**
+     * @ngdoc overview
+     * @name cat.service.breadcrumbs:catBreadcrumbs
+     */
     .value('catBreadcrumbs', [])
     .service('catBreadcrumbsService', CatBreadcrumbsService);

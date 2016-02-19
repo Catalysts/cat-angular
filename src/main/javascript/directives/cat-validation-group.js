@@ -17,14 +17,14 @@ function CatValidationController($scope, catValidationService) {
 }
 
 angular.module('cat.directives.validation', ['cat.service.validation'])
-/**
- * @ngdoc directive
- * @name cat.directives.validation.inputs:catValidationGroup
- *
- * @description
- * This directive provides a container which defines a new validation context. Via the controller the context can be
- * retrieved.
- */
+    /**
+     * @ngdoc directive
+     * @name cat.directives.validation.inputs:catValidationGroup
+     *
+     * @description
+     * This directive provides a container which defines a new validation context. Via the controller the context can be
+     * retrieved.
+     */
     .directive('catValidationGroup', function CatValidationGroup() {
         return {
             restrict: 'A',
