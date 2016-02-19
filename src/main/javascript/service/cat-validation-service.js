@@ -17,7 +17,7 @@ function ValidationContext(uuid) {
      * @param {string} name name of the field
      */
     this.registerField = function (name) {
-        if (!_.includes(that.knownFields, name)) {
+        if (!_.contains(that.knownFields, name)) {
             that.knownFields.push(name);
         }
     };
