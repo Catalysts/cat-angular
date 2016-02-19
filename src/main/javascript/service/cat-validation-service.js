@@ -41,7 +41,7 @@ function CatValidationService($log,
         if (catMessagesConfig.knownFieldsActive === true) {
             // If the error is for a known field, show the error at the field.
             // If not, display it as a global error.
-            if (_.contains(context.knownFields, fieldName)) {
+            if (_.includes(context.knownFields, fieldName)) {
                 context.fieldErrors[fieldName] = context.fieldErrors[fieldName] || [];
                 context.fieldErrors[fieldName].push(errorMessage);
             } else {
