@@ -17,7 +17,7 @@ function ValidationContext(uuid) {
      * @param {string} name name of the field
      */
     this.registerField = function (name) {
-        if (!_.contains(that.knownFields, name)) {
+        if (!_.includes(that.knownFields, name)) {
             that.knownFields.push(name);
         }
     };
@@ -97,7 +97,7 @@ function CatValidationService($log,
                 if (catMessagesConfig.knownFieldsActive === true) {
                     // If the error is for a known field, show the error at the field.
                     // If not, display it as a global error.
-                    if (_.contains(context.knownFields, fieldError.field)) {
+                    if (_.includes(context.knownFields, fieldError.field)) {
                         fieldErrors[fieldError.field] = fieldErrors[fieldError.field] || [];
                         fieldErrors[fieldError.field].push(fieldError.message);
                     } else {

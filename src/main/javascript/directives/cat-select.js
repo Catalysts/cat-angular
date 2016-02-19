@@ -77,7 +77,7 @@ function CatSelectController($scope, $log, catApiService, catSelectConfigService
         placeholder: ' ', // space in default placeholder is required, otherwise allowClear property does not work
         minimumInputLength: 0,
         adaptDropdownCssClass: function (cssClass) {
-            if (_.contains(['ng-valid', 'ng-invalid', 'ng-pristine', 'ng-dirty'], cssClass)) {
+            if (_.includes(['ng-valid', 'ng-invalid', 'ng-pristine', 'ng-dirty'], cssClass)) {
                 return cssClass;
             }
             return null;
