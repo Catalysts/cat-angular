@@ -15,6 +15,10 @@ window.cat.util.pluralize = function (string) {
 
     switch (lastChar) {
         case 'y':
+            // Exception if the word ends with 'ay' e.g. 'gateway'
+            if (string[string.length - 2] === 'a') {
+                return string + 's';
+            }
             return string.substring(0, string.length - 1) + 'ies';
         case 's':
             return string + 'es';
