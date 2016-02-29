@@ -1,7 +1,6 @@
 'use strict';
 
 /**
- /**
  * @ngdoc function
  * @name cat.FacetTerm
  * @module cat
