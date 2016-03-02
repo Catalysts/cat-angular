@@ -7,9 +7,32 @@
 <div class="description"><div class="cat-service-i18n-page cat-service-i18n-cati18nmessagesourceservice-page"><p>A service to retrieve message templates for a given key and locale</p>
 </div></div>
 <h2 id="usage">Usage</h2>
-<div class="usage"><pre class="prettyprint linenums">catI18nMessageSourceService($q, $$locale, $CAT_I18N_DEFAULT_LOCALE);</pre>
+<div class="usage"><pre class="prettyprint linenums">catI18nMessageSourceService($q, catI18nLocaleService, CAT_I18N_DEFAULT_LOCALE);</pre>
 <h4 id="usage_parameters">Parameters</h4><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>$q</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="cat-service-i18n-page cat-service-i18n-cati18nmessagesourceservice-page"><p>DOCTODO</p>
-</div></td></tr><tr><td>$$locale</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="cat-service-i18n-page cat-service-i18n-cati18nmessagesourceservice-page"><p>DOCTODO</p>
-</div></td></tr><tr><td>$CAT_I18N_DEFAULT_LOCALE</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="cat-service-i18n-page cat-service-i18n-cati18nmessagesourceservice-page"><p>DOCTODO</p>
+</div></td></tr><tr><td>catI18nLocaleService</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="cat-service-i18n-page cat-service-i18n-cati18nmessagesourceservice-page"><p>DOCTODO</p>
+</div></td></tr><tr><td>CAT_I18N_DEFAULT_LOCALE</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="cat-service-i18n-page cat-service-i18n-cati18nmessagesourceservice-page"><p>DOCTODO</p>
 </div></td></tr></tbody></table></div>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_getmessage">getMessage(key, [locale)</h3>
+<div class="getmessage"><div class="getmessage-page"><p>Function which retrieves a message for a given key and locale</p>
+</div><h5 id="methods_getmessage_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>key</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="getmessage-page"><p>the key of the message to retrieve</p>
+</div></td></tr><tr><td>[locale</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="getmessage-page"><p>= CAT_I18N_DEFAULT_LOCALE] the locale in which the messages should be retrieved</p>
+</div></td></tr></tbody></table><h5 id="methods_getmessage_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-promise">Promise</a></td><td><div class="getmessage-page"><p>a promise holding the retrieved message</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_getmessages">getMessages([locale])</h3>
+<div class="getmessages"><div class="getmessages-page"><p>Function which retrieves a message bundle for a given locale</p>
+</div><h5 id="methods_getmessages_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>[locale]</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="getmessages-page"><p>the locale in which the messages should be retrieved</p>
+</div></td></tr></tbody></table><h5 id="methods_getmessages_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-promise">Promise</a></td><td><div class="getmessages-page"><p>a promise holding the retrieved message bundle</p>
+</div></td></tr></table></div>
+</li>
+<li><h3 id="methods_hasmessage">hasMessage(key, [locale)</h3>
+<div class="hasmessage"><div class="hasmessage-page"><p>Function which checks whether or not a message for a given key and locale exists</p>
+</div><h5 id="methods_hasmessage_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>key</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="hasmessage-page"><p>the key of the message to retrieve</p>
+</div></td></tr><tr><td>[locale</td><td><a href="" class="label type-hint type-hint-string">String</a></td><td><div class="hasmessage-page"><p>= CAT_I18N_DEFAULT_LOCALE] the locale in which the messages should be available</p>
+</div></td></tr></tbody></table><h5 id="methods_hasmessage_returns">Returns</h5><table class="variables-matrix"><tr><td><a href="" class="label type-hint type-hint-promise">Promise</a></td><td><div class="hasmessage-page"><p>a promise holding <code>TRUE</code> if the key can be resolved for the given locale</p>
+</div></td></tr></table></div>
+</li>
+</ul>
+</div>
 </div>

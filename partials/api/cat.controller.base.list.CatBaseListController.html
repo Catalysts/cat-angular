@@ -8,15 +8,18 @@
 of every list page. It also instantiates the controller given via the config.controller parameter and shares
 the same scope with it. In addition it has a common template &#39;cat-base-list.tpl.html&#39; which shows a title,
 new button and provides the cat-paginated directive.</p>
-<p>Common properties include:
-<em> listData - the listData to be used by cat-paginated
-</em> title - the title of the view
-<em> searchProps - the list of search properties passed on to the cat-paginated directive
-</em> config - the config object used to instantiate this view</p>
+<p>Common properties include:</p>
+<ul>
+<li>listData - the listData to be used by cat-paginated</li>
+<li>title - the title of the view</li>
+<li>searchProps - the list of search properties passed on to the cat-paginated directive</li>
+<li>config - the config object used to instantiate this view</li>
+</ul>
 </div></div>
 <h2 id="usage">Usage</h2>
-<div class="usage"><pre class="prettyprint linenums">CatBaseListController($scope, $controller, $log, catBreadcrumbsService, catListDataLoadingService, config);</pre>
+<div class="usage"><pre class="prettyprint linenums">CatBaseListController($scope, $state, $controller, $log, catBreadcrumbsService, catListDataLoadingService, config);</pre>
 <h4 id="usage_parameters">Parameters</h4><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>$scope</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="cat-controller-base-list-page cat-controller-base-list-catbaselistcontroller-page"><p>scope</p>
+</div></td></tr><tr><td>$state</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="cat-controller-base-list-page cat-controller-base-list-catbaselistcontroller-page"><p>state service</p>
 </div></td></tr><tr><td>$controller</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="cat-controller-base-list-page cat-controller-base-list-catbaselistcontroller-page"><p>controller</p>
 </div></td></tr><tr><td>$log</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="cat-controller-base-list-page cat-controller-base-list-catbaselistcontroller-page"><p>log</p>
 </div></td></tr><tr><td>catBreadcrumbsService</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="cat-controller-base-list-page cat-controller-base-list-catbaselistcontroller-page"><p>catBreadcrumbsService</p>
