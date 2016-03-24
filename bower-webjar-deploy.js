@@ -33,12 +33,15 @@ function executeWebjarDeployment(name, version, cb) {
 
     var eventHandlers = {};
 
-    function unbindEventHandlers() {
+    function unsubscribe() {
         gulp.util.log('-- Unbinding event listeners');
         channel
             .unbind('update', eventHandlers.update)
             .unbind('success', eventHandlers.success)
             .unbind('failure', eventHandlers.failure);
+
+        gulp.util.log('-- Usubscribing from channel');
+        channel.unsubscribe(channelId);
     }
 
     eventHandlers.update = function (data) {
@@ -48,13 +51,13 @@ function executeWebjarDeployment(name, version, cb) {
     eventHandlers.success = function (data) {
         gulp.util.log(data);
         gulp.util.log('Received success message of webjar deployment!');
-        unbindEventHandlers();
+        unsubscribe();
         cb();
     };
 
     eventHandlers.failure = function (data) {
         gulp.util.log('Received failure during webjar deployment!');
-        unbindEventHandlers();
+        unsubscribe();
         cb(data);
     };
 
