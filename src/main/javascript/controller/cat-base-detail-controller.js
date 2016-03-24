@@ -83,6 +83,7 @@ function CatBaseDetailController($scope, $state, $stateParams, $location, $windo
         catBreadcrumbsService.replaceLast({
             title: $scope.title()
         });
+        $scope.$broadcast('cat-detail-updated', $scope.detail);
     };
 
     /**

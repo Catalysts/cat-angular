@@ -19,11 +19,21 @@
 function CatBaseTabsController($scope, $controller, $stateParams, $location, catElementVisibilityService, config, urlResolverService) {
     var endpoint = config.endpoint;
 
-    $scope.tabs = _.filter(config.tabs, function (tab) {
-        var visible = catElementVisibilityService.isVisible('cat.base.tab', tab);
-        
-        return visible && (!_.isFunction(tab.isVisible) || tab.isVisible(config));
+    function initTabs() {
+        $scope.tabs = _.filter(config.tabs, function (tab) {
+            var visible = catElementVisibilityService.isVisible('cat.base.tab', tab);
+
+            return visible && (!_.isFunction(tab.isVisible) || tab.isVisible(config));
+        });
+    }
+
+    initTabs();
+    $scope.$on('cat-detail-updated', function (event, detail) {
+        // #61 update visible tabs if details object changed
+        config.detail = detail;
+        initTabs();
     });
+
     $scope.tabNames = _.map($scope.tabs, 'name');
     $scope.activeTab = {};
 
