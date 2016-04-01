@@ -185,6 +185,7 @@ function CatBaseDetailController($scope, $state, $stateParams, $location, $windo
                 } else {
                     $scope.editDetail = undefined;
                     $scope.detail = data;
+                    config.detail = data;
                     update();
                 }
             }
