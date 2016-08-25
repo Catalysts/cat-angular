@@ -7,21 +7,33 @@ angular.module('cat.service.httpIntercept', ['cat.service.message', 'cat.service
  * @name cat.service.httpIntercept:errorHttpInterceptor
  */
     .factory('errorHttpInterceptor', function CatErrorHttpInterceptor($q, $globalMessages, loadingService, $injector) {
+        function toBeIgnored(config) {
+            return !!config && config.skipLoadingService;
+        }
+
         return {
             'request': function (config) {
-                loadingService.start();
+                if (!toBeIgnored(config)) {
+                    loadingService.start();
+                }
                 return config;
             },
             'requestError': function (rejection) {
-                loadingService.stop();
+                if (!toBeIgnored(rejection.config)) {
+                    loadingService.stop();
+                }
                 return $q.reject(rejection);
             },
             'response': function (success) {
-                loadingService.stop();
+                if (!toBeIgnored(success.config)) {
+                    loadingService.stop();
+                }
                 return success;
             },
             'responseError': function (rejection) {
-                loadingService.stop();
+                if (!toBeIgnored(rejection.config)) {
+                    loadingService.stop();
+                }
                 $injector.get('catValidationMessageHandler').handleRejectedResponse(rejection);
                 return $q.reject(rejection);
             }

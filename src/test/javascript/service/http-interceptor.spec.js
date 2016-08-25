@@ -5,49 +5,50 @@
 describe('CatHttpInterceptorService', function () {
     'use strict';
 
-    var $rootScope;
-    var $timeout;
     var $globalMessages;
     var errorHttpInterceptor;
+    var loadingService = {
+        start: function(){},
+        stop: function(){}
+    };
 
     beforeEach(function () {
-        angular.module('cat.service.httpIntercept.test', []);
+        angular.module('cat.service.httpIntercept.test', [])
+            .factory('loadingService', function(){
+                return loadingService;
+            });
 
         module('cat.service.httpIntercept');
         module('cat.service.httpIntercept.test');
 
-        inject(function (_$rootScope_, _$timeout_, _$globalMessages_, _errorHttpInterceptor_) {
-            $rootScope = _$rootScope_;
-            $timeout = _$timeout_;
+        inject(function (_$globalMessages_, _errorHttpInterceptor_) {
             $globalMessages = _$globalMessages_;
             errorHttpInterceptor = _errorHttpInterceptor_;
         });
+
+        spyOn(loadingService, 'start');
+        spyOn(loadingService, 'stop');
     });
 
     it('should start and stop loading service', function () {
         errorHttpInterceptor.request();
-        $timeout.flush();
-        expect($rootScope.loading).toBe(true);
+        expect(loadingService.start).toHaveBeenCalled();
 
-        errorHttpInterceptor.response();
-        $timeout.flush();
-        expect($rootScope.loading).toBe(false);
+        errorHttpInterceptor.response({});
+        expect(loadingService.start.calls.count()).toEqual(1);
     });
 
     it('should stop loading service on request error', function () {
         errorHttpInterceptor.request();
-        $timeout.flush();
-        expect($rootScope.loading).toBe(true);
+        expect(loadingService.start).toHaveBeenCalled();
 
-        errorHttpInterceptor.requestError();
-        $timeout.flush();
-        expect($rootScope.loading).toBe(false);
+        errorHttpInterceptor.requestError({});
+        expect(loadingService.start.calls.count()).toEqual(1);
     });
 
     it('should handle response errors', function () {
         errorHttpInterceptor.request();
-        $timeout.flush();
-        expect($rootScope.loading).toBe(true);
+        expect(loadingService.start).toHaveBeenCalled();
 
         errorHttpInterceptor.responseError({
             data: {
@@ -58,8 +59,19 @@ describe('CatHttpInterceptorService', function () {
             statusText: 'Page not found'
         });
         expect($globalMessages.hasMessages('error')).toBe(true);
-        $timeout.flush();
-        expect($rootScope.loading).toBe(false);
+        expect(loadingService.start.calls.count()).toBe(1);
     });
 
+    it('should ignore calling loadingService if skipLoadingService is set to true', function () {
+        var ignoreLoadingConfig = {
+            skipLoadingService: true
+        };
+
+        errorHttpInterceptor.request(ignoreLoadingConfig);
+        expect(loadingService.start).not.toHaveBeenCalled();
+
+        errorHttpInterceptor.request();
+        expect(loadingService.start).toHaveBeenCalled();
+
+    });
 });
