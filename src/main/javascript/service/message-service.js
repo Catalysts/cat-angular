@@ -111,7 +111,7 @@ angular.module('cat.service.message', [
         this.handleRejectedResponse = function (rejection) {
             $globalMessages.clearMessages('error');
 
-            if (!!rejection.data.error) {
+            if (!!rejection.data && !!rejection.data.error) {
                 var error = '[' + rejection.status + ' - ' + rejection.statusText + '] ' + rejection.data.error;
                 if (!!rejection.data.cause) {
                     error += '\n' + rejection.data.cause;
