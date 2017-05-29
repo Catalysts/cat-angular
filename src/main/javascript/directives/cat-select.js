@@ -95,10 +95,10 @@ function CatSelectController($scope, $log, catApiService, catSelectConfigService
             }
         },
         formatResult: function (element) {
-            return element.name;
+            return _.escape(element.name);
         },
         formatSelection: function (element) {
-            return element.name;
+            return _.escape(element.name);
         }
     }, options['ui-select2']);
 }
