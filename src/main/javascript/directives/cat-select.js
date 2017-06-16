@@ -89,16 +89,18 @@ function CatSelectController($scope, $log, catApiService, catSelectConfigService
             results: function (data, page) {
                 var more = (page * (options.size || 100)) < data.totalCount;
                 return {
-                    results: _.filter(data.elements, filterFunc),
+                    results: _.map(_.filter(data.elements, filterFunc), function (e) {
+                        return Object.assign({}, e, {name: _.escape(e.name)});
+                    }),
                     more: more
                 };
             }
         },
         formatResult: function (element) {
-            return element.name;
+            return _.escape(element.name);
         },
         formatSelection: function (element) {
-            return element.name;
+            return _.escape(element.name);
         }
     }, options['ui-select2']);
 }
