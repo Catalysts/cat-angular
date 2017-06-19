@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "gulp-git": {
+      "version": "=1.4.0",
+      "from": "gulp-git@1.4.0",
+      "dependencies": {
+        "require-dir": {
+          "version": "=0.3.2",
+          "from": "require-dir@^0.1.0"
+        }
+      }
+    }
+  }
+}
