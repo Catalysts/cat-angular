@@ -90,7 +90,7 @@ function CatSelectController($scope, $log, catApiService, catSelectConfigService
                 var more = (page * (options.size || 100)) < data.totalCount;
                 return {
                     results: _.map(_.filter(data.elements, filterFunc), function (e) {
-                        return Object.assign({}, e, {name: _.escape(e.name)});
+                        return _.assign({}, e, {name: _.escape(e.name)});
                     }),
                     more: more
                 };
