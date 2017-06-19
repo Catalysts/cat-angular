@@ -55,9 +55,11 @@ function CatBaseListController($scope, $state, $controller, $log, catBreadcrumbs
         return this.getUrlForId('new');
     };
 
-    this.remove = function (id) {
+    this.remove = function (id, message) {
+        message = message || 'Successfully deleted entry.';
         config.listData.endpoint.remove(id)
             .then(function () {
+                $globalMessages.addMessage('success', message, true);
                 catListDataLoadingService.load(config.listData.endpoint, config.listData.searchRequest).then(
                     function (data) {
                         _.assign($scope.listData, data);
